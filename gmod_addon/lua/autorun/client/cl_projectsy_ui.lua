@@ -4,7 +4,7 @@
 ]]
 
 local htmlPanel = nil
-local BASE_URL = "https://miumiv6-lg.github.io/projectsy/gmod_ingame/"
+local BASE_URL = "https://miumiv6-lg.github.io/projectsy/dist/gmod.html"
 
 -- Создание HTML панели
 local function ShowProjectSYUI()
