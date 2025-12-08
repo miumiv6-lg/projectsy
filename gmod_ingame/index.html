@@ -20,10 +20,6 @@
 
     .container {
       width: 100%; height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
       position: relative;
     }
 
@@ -32,7 +28,7 @@
       inset: 0;
       width: 100%; height: 100%;
       object-fit: cover;
-      opacity: 0.5;
+      opacity: 0.6;
     }
 
     .overlay {
@@ -41,164 +37,224 @@
       background: rgba(0,0,0,0.4);
     }
 
-    .content {
-      position: relative;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
     /* Animations */
-    @keyframes fadeIn {
+    @keyframes ios-slide-up {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
+    .animate-ios-slide-up {
+      animation: ios-slide-up 0.6s cubic-bezier(0.32, 0.72, 0, 1) forwards;
     }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    .animate-in { animation: fadeIn 0.6s ease-out forwards; }
 
     /* Screens */
-    .screen { display: none; width: 100%; height: 100%; }
-    .screen.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-
-    /* Click Screen */
-    .logo {
-      width: 100px; height: 100px;
-      border-radius: 24px;
-      object-fit: cover;
-      margin-bottom: 24px;
-      border: 1px solid rgba(255,255,255,0.1);
+    .screen {
+      display: none;
+      position: absolute;
+      inset: 0;
+      z-index: 50;
     }
+    .screen.active { display: flex; }
 
-    .title { font-size: 32px; font-weight: 700; margin-bottom: 4px; }
-    .title span { color: #007AFF; }
-    .subtitle { font-size: 14px; color: #007AFF; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 48px; }
-
-    .click-icon {
-      width: 60px; height: 90px;
-      margin-bottom: 24px;
-      animation: bounce 2s ease-in-out infinite;
-    }
-
-    .click-text {
-      font-size: 22px;
-      font-weight: 500;
-      color: rgba(255,255,255,0.8);
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    .click-hint { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 8px; }
-
-    /* Spawn Screen */
-    .spawn-title { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
-    .spawn-subtitle { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 32px; }
-
-    .filters { display: flex; gap: 12px; margin-bottom: 24px; }
-
-    .filter-btn {
-      padding: 10px 24px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.05);
-      color: rgba(255,255,255,0.6);
-      font-size: 13px;
-      font-weight: 500;
+    /* ========== CLICK TO START ========== */
+    #clickScreen {
       cursor: pointer;
-      transition: all 0.2s;
-      font-family: inherit;
+      align-items: center;
+      justify-content: center;
     }
 
-    .filter-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
-    .filter-btn.active { background: #007AFF; border-color: #007AFF; color: #fff; }
-
-    .spawn-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 12px;
-      max-width: 900px;
-      width: 100%;
-      padding: 0 20px;
-    }
-
-    .spawn-card {
-      background: rgba(28, 28, 30, 0.95);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px;
-      padding: 20px;
-      cursor: pointer;
-      transition: all 0.2s;
+    .top-logo {
+      position: absolute;
+      top: 32px;
+      right: 32px;
       display: flex;
       align-items: center;
       gap: 16px;
+      background: #1C1C1E;
+      padding: 12px 20px;
+      border-radius: 16px;
     }
 
-    .spawn-card:hover {
-      background: rgba(44, 44, 46, 0.95);
-      border-color: rgba(255,255,255,0.15);
-      transform: translateY(-2px);
-    }
+    .top-logo-text { text-align: right; }
+    .top-logo-text .name { font-size: 20px; font-weight: 700; }
+    .top-logo-text .mode { font-size: 12px; color: #007AFF; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; }
+    .top-logo img { width: 48px; height: 48px; border-radius: 12px; object-fit: cover; }
 
-    .spawn-card.driver { border-left: 3px solid #007AFF; }
-    .spawn-card.passenger { border-left: 3px solid #34C759; }
+    .click-center { text-align: center; }
 
-    .spawn-icon {
-      width: 44px; height: 44px;
-      border-radius: 12px;
+    .click-icon-box {
+      width: 96px; height: 96px;
+      background: #1C1C1E;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
-      flex-shrink: 0;
+      margin: 0 auto 24px;
+      transition: background 0.2s;
     }
 
-    .spawn-card.driver .spawn-icon { background: rgba(0,122,255,0.2); }
-    .spawn-card.passenger .spawn-icon { background: rgba(52,199,89,0.2); }
+    .click-center:hover .click-icon-box { background: #2C2C2E; }
 
-    .spawn-info { flex: 1; text-align: left; }
-    .spawn-info h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-    .spawn-info p { font-size: 12px; color: rgba(255,255,255,0.5); }
+    .click-title {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
 
-    .spawn-type {
-      font-size: 10px;
+    .click-subtitle {
+      color: #007AFF;
+      font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      padding: 4px 10px;
-      border-radius: 6px;
-      flex-shrink: 0;
+      letter-spacing: 4px;
+      font-size: 14px;
     }
 
-    .spawn-card.driver .spawn-type { background: rgba(0,122,255,0.2); color: #007AFF; }
-    .spawn-card.passenger .spawn-type { background: rgba(52,199,89,0.2); color: #34C759; }
+    /* ========== SPAWN SELECTION ========== */
+    #spawnScreen {
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
 
-    /* Top Right Logo */
-    .top-logo {
+    .spawn-top-left {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .spawn-top-left img { width: 40px; height: 40px; border-radius: 12px; }
+    .spawn-top-left .name { font-weight: 700; }
+    .spawn-top-left .mode { font-size: 12px; color: #6B6B6B; }
+
+    .spawn-top-right {
       position: absolute;
       top: 24px;
       right: 24px;
       display: flex;
-      align-items: center;
       gap: 12px;
-      background: rgba(28,28,30,0.9);
-      padding: 12px 20px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.08);
     }
 
-    .top-logo img { width: 40px; height: 40px; border-radius: 10px; }
-    .top-logo-text { text-align: right; }
-    .top-logo-text .name { font-size: 14px; font-weight: 600; }
-    .top-logo-text .mode { font-size: 11px; color: #007AFF; text-transform: uppercase; letter-spacing: 1px; }
+    .stat-box {
+      background: #1C1C1E;
+      border-radius: 12px;
+      padding: 8px 16px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stat-box .dot { width: 8px; height: 8px; border-radius: 50%; background: #34C759; }
+
+    .spawn-bottom-right {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      text-align: right;
+    }
+
+    .spawn-bottom-right .date { font-size: 14px; color: #6B6B6B; }
+    .spawn-bottom-right .time { font-size: 32px; font-weight: 300; }
+
+    /* Spawn Modal */
+    .spawn-modal {
+      width: 100%;
+      max-width: 500px;
+      background: #1C1C1E;
+      border-radius: 16px;
+      padding: 24px;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .spawn-header { text-align: center; margin-bottom: 20px; }
+    .spawn-header h2 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+    .spawn-header p { font-size: 14px; color: #6B6B6B; }
+
+    /* Filter Tabs */
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      background: #2C2C2E;
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 16px;
+    }
+
+    .filter-tab {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      color: #6B6B6B;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .filter-tab:hover { color: #fff; }
+    .filter-tab.active { background: #007AFF; color: #fff; }
+    .filter-tab.active.green { background: #34C759; }
+
+    /* Spawn List */
+    .spawn-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .spawn-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: #2C2C2E;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+      color: #fff;
+    }
+
+    .spawn-item:hover { background: #007AFF; }
+
+    .spawn-item-icon {
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .spawn-item.driver .spawn-item-icon { background: rgba(0,122,255,0.2); color: #007AFF; }
+    .spawn-item.passenger .spawn-item-icon { background: rgba(52,199,89,0.2); color: #34C759; }
+    .spawn-item:hover .spawn-item-icon { background: rgba(255,255,255,0.2); color: #fff; }
+
+    .spawn-item-info { flex: 1; }
+    .spawn-item-info .title { font-weight: 500; margin-bottom: 2px; }
+    .spawn-item-info .desc { font-size: 13px; color: #6B6B6B; }
+    .spawn-item:hover .spawn-item-info .desc { color: rgba(255,255,255,0.7); }
+
+    .spawn-item-arrow { color: #3C3C3E; font-size: 18px; }
+    .spawn-item:hover .spawn-item-arrow { color: #fff; }
   </style>
 </head>
 <body>
@@ -208,122 +264,232 @@
     </video>
     <div class="overlay"></div>
 
-    <!-- Top Logo -->
-    <div class="top-logo">
-      <div class="top-logo-text">
-        <div class="name">Project SY</div>
-        <div class="mode">Metrostroi NoRank</div>
-      </div>
-      <img src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Logo">
-    </div>
+    <!-- AUDIO -->
+    <audio id="bgMusic" preload="auto"></audio>
 
 
-    <!-- CLICK TO START -->
-    <div class="screen active content animate-in" id="clickScreen" onclick="showSpawn()">
-      <img class="logo" src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Logo">
-      <h1 class="title">Project <span>SY</span></h1>
-      <p class="subtitle">Metrostroi NoRank</p>
-      
-      <svg class="click-icon" viewBox="0 0 24 36" fill="none">
-        <rect x="2" y="2" width="20" height="32" rx="10" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
-        <path d="M12 2V14" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
-        <path d="M2 14H22" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
-        <path d="M2 12C2 6.47715 6.47715 2 12 2V14H2V12Z" fill="#007AFF"/>
-      </svg>
-      
-      <p class="click-text">Нажмите ЛКМ чтобы начать</p>
-      <p class="click-hint">Click to continue</p>
-    </div>
-
-    <!-- SPAWN SELECTION -->
-    <div class="screen content" id="spawnScreen">
-      <h1 class="spawn-title">Выбор точки спавна</h1>
-      <p class="spawn-subtitle">Выберите где вы хотите появиться</p>
-
-      <div class="filters">
-        <button class="filter-btn active" onclick="filter('all', this)">Все</button>
-        <button class="filter-btn" onclick="filter('driver', this)">Машинист</button>
-        <button class="filter-btn" onclick="filter('passenger', this)">Пассажир</button>
+    <!-- ========== CLICK TO START ========== -->
+    <div class="screen active animate-ios-slide-up" id="clickScreen" onclick="showSpawnScreen()">
+      <div class="top-logo">
+        <div class="top-logo-text">
+          <div class="name">Project SY</div>
+          <div class="mode">Metrostroi NoRank</div>
+        </div>
+        <img src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Logo">
       </div>
 
-      <div class="spawn-grid" id="spawnGrid">
-        <div class="spawn-card driver" data-type="driver" onclick="spawn('ТЧ-1 Лихоборы')">
-          <div class="spawn-icon">🚇</div>
-          <div class="spawn-info">
-            <h3>ТЧ-1 «Лихоборы»</h3>
-            <p>Электродепо. Спавн составов.</p>
-          </div>
-          <span class="spawn-type">Машинист</span>
+      <div class="click-center">
+        <div class="click-icon-box">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+            <rect x="5" y="2" width="14" height="20" rx="7" stroke="white" stroke-width="2"/>
+            <path d="M12 2V10" stroke="white" stroke-width="2"/>
+            <path d="M5 10H19" stroke="white" stroke-width="2"/>
+            <path d="M5 9C5 5.13401 8.13401 2 12 2V10H5V9Z" fill="#007AFF"/>
+          </svg>
+        </div>
+        <h1 class="click-title">Нажмите ЛКМ</h1>
+        <p class="click-subtitle">Чтобы начать игру</p>
+      </div>
+    </div>
+
+    <!-- ========== SPAWN SELECTION ========== -->
+    <div class="screen" id="spawnScreen">
+      <div class="spawn-top-left">
+        <img src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Logo">
+        <div>
+          <div class="name">Project SY</div>
+          <div class="mode">Metrostroi</div>
+        </div>
+      </div>
+
+      <div class="spawn-top-right">
+        <div class="stat-box"><div class="dot"></div><span id="pingValue">24 ms</span></div>
+        <div class="stat-box">FPS <span id="fpsValue">120</span></div>
+      </div>
+
+      <div class="spawn-bottom-right">
+        <div class="date" id="dateValue"></div>
+        <div class="time" id="timeValue"></div>
+      </div>
+
+      <div class="spawn-modal animate-ios-slide-up">
+        <div class="spawn-header">
+          <h2>Выберите спавн</h2>
+          <p>Выберите место для появления на карте</p>
         </div>
 
-        <div class="spawn-card driver" data-type="driver" onclick="spawn('Тупик Физтех')">
-          <div class="spawn-icon">🔄</div>
-          <div class="spawn-info">
-            <h3>Тупик ст. Физтех</h3>
-            <p>Оборотный тупик. Смена кабины.</p>
-          </div>
-          <span class="spawn-type">Машинист</span>
+        <div class="filter-tabs">
+          <button class="filter-tab active" onclick="filterSpawns('all', this)">Все</button>
+          <button class="filter-tab" onclick="filterSpawns('driver', this)">🚇 Машинист</button>
+          <button class="filter-tab" onclick="filterSpawns('passenger', this)">👤 Пассажир</button>
         </div>
 
-        <div class="spawn-card passenger" data-type="passenger" onclick="spawn('Ст. Лианозово')">
-          <div class="spawn-icon">📍</div>
-          <div class="spawn-info">
-            <h3>Ст. Лианозово</h3>
-            <p>Пассажирская платформа</p>
-          </div>
-          <span class="spawn-type">Пассажир</span>
-        </div>
+        <div class="spawn-list" id="spawnList">
+          <button class="spawn-item driver" data-type="driver" onclick="selectSpawn('ТЧ-1 Лихоборы')">
+            <div class="spawn-item-icon">🚇</div>
+            <div class="spawn-item-info">
+              <div class="title">ТЧ-1 «Лихоборы»</div>
+              <div class="desc">Электродепо. Спавн составов.</div>
+            </div>
+            <div class="spawn-item-arrow">›</div>
+          </button>
 
-        <div class="spawn-card passenger" data-type="passenger" onclick="spawn('Ст. Физтех')">
-          <div class="spawn-icon">📍</div>
-          <div class="spawn-info">
-            <h3>Ст. Физтех</h3>
-            <p>Конечная станция</p>
-          </div>
-          <span class="spawn-type">Пассажир</span>
-        </div>
+          <button class="spawn-item driver" data-type="driver" onclick="selectSpawn('Тупик Физтех')">
+            <div class="spawn-item-icon">🚇</div>
+            <div class="spawn-item-info">
+              <div class="title">Тупик ст. Физтех</div>
+              <div class="desc">Оборотный тупик. Смена кабины.</div>
+            </div>
+            <div class="spawn-item-arrow">›</div>
+          </button>
 
-        <div class="spawn-card passenger" data-type="passenger" onclick="spawn('Ст. Яхромская')">
-          <div class="spawn-icon">📍</div>
-          <div class="spawn-info">
-            <h3>Ст. Яхромская</h3>
-            <p>Пассажирская платформа</p>
-          </div>
-          <span class="spawn-type">Пассажир</span>
+          <button class="spawn-item passenger" data-type="passenger" onclick="selectSpawn('Ст. Лианозово')">
+            <div class="spawn-item-icon">📍</div>
+            <div class="spawn-item-info">
+              <div class="title">Ст. Лианозово</div>
+              <div class="desc">Пассажирская платформа</div>
+            </div>
+            <div class="spawn-item-arrow">›</div>
+          </button>
+
+          <button class="spawn-item passenger" data-type="passenger" onclick="selectSpawn('Ст. Физтех')">
+            <div class="spawn-item-icon">📍</div>
+            <div class="spawn-item-info">
+              <div class="title">Ст. Физтех</div>
+              <div class="desc">Конечная станция</div>
+            </div>
+            <div class="spawn-item-arrow">›</div>
+          </button>
+
+          <button class="spawn-item passenger" data-type="passenger" onclick="selectSpawn('Ст. Яхромская')">
+            <div class="spawn-item-icon">📍</div>
+            <div class="spawn-item-info">
+              <div class="title">Ст. Яхромская</div>
+              <div class="desc">Пассажирская платформа</div>
+            </div>
+            <div class="spawn-item-arrow">›</div>
+          </button>
         </div>
       </div>
     </div>
   </div>
 
+
   <script>
-    function showSpawn() {
-      document.getElementById('clickScreen').classList.remove('active');
-      document.getElementById('spawnScreen').classList.add('active');
-      document.getElementById('spawnScreen').classList.add('animate-in');
+    // ========== MUSIC ==========
+    const MUSIC_TRACKS = [
+      "https://miumiv6-lg.github.io/projectsy/gmod_ingame/music/favela.mp3",
+      "https://miumiv6-lg.github.io/projectsy/gmod_ingame/music/nobatidao.flac",
+      "https://miumiv6-lg.github.io/projectsy/gmod_ingame/music/apart.mp3",
+      "https://miumiv6-lg.github.io/projectsy/gmod_ingame/music/scars.mp3",
+      "https://miumiv6-lg.github.io/projectsy/gmod_ingame/music/hotncold.mp3",
+      "https://miumiv6-lg.github.io/projectsy/gmod_ingame/music/fnaf.mp3",
+    ];
+
+    let playedTracks = [];
+    const audio = document.getElementById('bgMusic');
+    const TARGET_VOLUME = 0.15;
+    const FADE_DURATION = 3000;
+
+    function getRandomTrack() {
+      if (playedTracks.length >= MUSIC_TRACKS.length) {
+        playedTracks = [];
+      }
+      const available = MUSIC_TRACKS.filter(t => !playedTracks.includes(t));
+      const track = available[Math.floor(Math.random() * available.length)];
+      playedTracks.push(track);
+      return track;
     }
 
-    function filter(type, btn) {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    function fadeIn() {
+      audio.volume = 0;
+      const step = TARGET_VOLUME / (FADE_DURATION / 50);
+      const interval = setInterval(() => {
+        if (audio.volume < TARGET_VOLUME) {
+          audio.volume = Math.min(TARGET_VOLUME, audio.volume + step);
+        } else {
+          clearInterval(interval);
+        }
+      }, 50);
+    }
+
+    function playMusic() {
+      audio.src = getRandomTrack();
+      audio.play().catch(() => {});
+      fadeIn();
+    }
+
+    audio.addEventListener('ended', () => {
+      audio.src = getRandomTrack();
+      audio.play().catch(() => {});
+      fadeIn();
+    });
+
+    // Start music on first click
+    document.addEventListener('click', function startMusic() {
+      playMusic();
+      document.removeEventListener('click', startMusic);
+    }, { once: true });
+
+    // ========== TIME & STATS ==========
+    function updateTime() {
+      const now = new Date();
+      const time = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Moscow' });
+      const date = now.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Moscow' });
+      document.getElementById('timeValue').textContent = time;
+      document.getElementById('dateValue').textContent = date;
+    }
+
+    function updateStats() {
+      document.getElementById('pingValue').textContent = Math.floor(Math.random() * 25 + 15) + ' ms';
+      document.getElementById('fpsValue').textContent = Math.floor(Math.random() * 60 + 60);
+    }
+
+    updateTime();
+    updateStats();
+    setInterval(updateTime, 1000);
+    setInterval(updateStats, 2000);
+
+    // ========== SCREENS ==========
+    function showSpawnScreen() {
+      document.getElementById('clickScreen').classList.remove('active');
+      document.getElementById('spawnScreen').classList.add('active');
+      document.getElementById('spawnScreen').classList.add('animate-ios-slide-up');
+    }
+
+    function filterSpawns(type, btn) {
+      document.querySelectorAll('.filter-tab').forEach(b => {
+        b.classList.remove('active', 'green');
+      });
       btn.classList.add('active');
-      
-      document.querySelectorAll('.spawn-card').forEach(card => {
-        card.style.display = (type === 'all' || card.dataset.type === type) ? 'flex' : 'none';
+      if (type === 'passenger') btn.classList.add('green');
+
+      document.querySelectorAll('.spawn-item').forEach(item => {
+        if (type === 'all' || item.dataset.type === type) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
       });
     }
 
-    function spawn(name) {
-      // Вызываем Lua функцию в GMod
+    function selectSpawn(name) {
+      // Call GMod Lua
       if (typeof gmod !== 'undefined' && gmod.spawn) {
         gmod.spawn(name);
       } else {
-        alert('Спавн: ' + name);
+        console.log('Spawn:', name);
+        // Demo: just hide UI
+        document.getElementById('spawnScreen').classList.remove('active');
       }
     }
 
-    // ESC для закрытия
+    // ESC to close
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && typeof gmod !== 'undefined' && gmod.closeUI) {
-        gmod.closeUI();
+      if (e.key === 'Escape') {
+        if (typeof gmod !== 'undefined' && gmod.closeUI) {
+          gmod.closeUI();
+        }
       }
     });
   </script>

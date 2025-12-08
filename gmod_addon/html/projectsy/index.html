@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project SY - GMod Interface</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              ios: {
+                bg: '#000000',
+                card: '#1C1C1E',
+                cardHover: '#2C2C2E',
+                separator: '#38383A',
+                blue: '#007AFF',
+                blueHighlight: '#007AFF',
+                text: '#FFFFFF',
+                textSec: '#8E8E93',
+              },
+              brand: {
+                blue: '#007AFF',
+                dark: '#000000',
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'San Francisco', 'Helvetica Neue', 'sans-serif'],
+            },
+            animation: {
+              'ios-enter': 'ios-enter 0.5s cubic-bezier(0.32, 0.72, 0, 1) forwards',
+              'ios-slide-up': 'ios-slide-up 0.6s cubic-bezier(0.32, 0.72, 0, 1) forwards',
+              'fade-in': 'fade-in 0.2s ease-out forwards',
+              'zoom-in-95': 'zoom-in-95 0.2s ease-out forwards',
+            },
+            keyframes: {
+              'ios-enter': {
+                '0%': { opacity: '0', transform: 'scale(0.96) translateY(8px)' },
+                '100%': { opacity: '1', transform: 'scale(1) translateY(0)' },
+              },
+              'ios-slide-up': {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              'fade-in': {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              'zoom-in-95': {
+                '0%': { opacity: '0', transform: 'scale(0.95)' },
+                '100%': { opacity: '1', transform: 'scale(1)' },
+              },
+            }
+          }
+        }
+      }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html, body, #root {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #000000;
+        color: #FFFFFF;
+        font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      img {
+        -webkit-user-drag: none;
+        user-drag: none;
+      }
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #2C2C2E;
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #3C3C3E;
+      }
+    </style>
+    <script type="module" crossorigin src="gmod-E38QZ32Z.js"></script>
+    <link rel="modulepreload" crossorigin href="wifi-W1_FNkI9.js">
+  </head>
+  <body>
+    <div id="root"></div>
+
+  </body>
+</html>
