@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project SY - Metro Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              ios: {
+                bg: '#000000',
+                card: '#1C1C1E',
+                cardHover: '#2C2C2E',
+                separator: '#38383A',
+                blue: '#007AFF', // Classic iOS Blue / Brand Blue
+                blueHighlight: '#007AFF',
+                text: '#FFFFFF',
+                textSec: '#8E8E93',
+              },
+              brand: {
+                blue: '#007AFF', // Main logo color
+                dark: '#000000',
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'San Francisco', 'Helvetica Neue', 'sans-serif'],
+            },
+            borderRadius: {
+              '4xl': '2rem',
+              'ios': '20px', // Continuous curve feel
+            },
+            animation: {
+              'ios-enter': 'ios-enter 0.5s cubic-bezier(0.32, 0.72, 0, 1) forwards',
+              'ios-slide-up': 'ios-slide-up 0.6s cubic-bezier(0.32, 0.72, 0, 1) forwards',
+              'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'fade-in': 'fade-in 0.2s ease-out forwards',
+              'fade-out': 'fade-out 0.2s ease-out forwards',
+              'zoom-in-95': 'zoom-in-95 0.2s ease-out forwards',
+              'zoom-out': 'zoom-out 0.2s ease-out forwards',
+              'modal-enter': 'modal-enter 0.2s ease-out forwards',
+            },
+            keyframes: {
+              'ios-enter': {
+                '0%': { opacity: '0', transform: 'scale(0.96) translateY(8px)' },
+                '100%': { opacity: '1', transform: 'scale(1) translateY(0)' },
+              },
+              'ios-slide-up': {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              'fade-in': {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              'fade-out': {
+                '0%': { opacity: '1' },
+                '100%': { opacity: '0' },
+              },
+              'zoom-in-95': {
+                '0%': { opacity: '0', transform: 'scale(0.95)' },
+                '100%': { opacity: '1', transform: 'scale(1)' },
+              },
+              'zoom-out': {
+                '0%': { opacity: '1', transform: 'scale(1)' },
+                '100%': { opacity: '0', transform: 'scale(0.95)' },
+              },
+              'modal-enter': {
+                '0%': { opacity: '0', transform: 'scale(0.95)' },
+                '100%': { opacity: '1', transform: 'scale(1)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+      body {
+        background-color: #000000;
+        color: #FFFFFF;
+        font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        /* Disable selection */
+        -webkit-user-select: none; /* Safari */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* IE10+/Edge */
+        user-select: none; /* Standard */
+      }
+      
+      /* Disable image dragging */
+      img {
+        -webkit-user-drag: none;
+        -khtml-user-drag: none;
+        -moz-user-drag: none;
+        -o-user-drag: none;
+        user-drag: none;
+      }
+      /* iOS-like Scrollbar */
+      ::-webkit-scrollbar {
+        width: 0px;
+        background: transparent;
+      }
+      
+      .ios-blur {
+        background-color: rgba(28, 28, 30, 0.65);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+      
+      .glass-panel {
+        background: rgba(28, 28, 30, 0.6);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      
+      /* iOS 26 Liquid Glass Effects */
+      .liquid-glass {
+        background: rgba(255, 255, 255, 0.04);
+        backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(40px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      
+      .liquid-glass-hover:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.12);
+      }
+      
+      /* Animation fill mode */
+      .fill-mode-forwards { animation-fill-mode: forwards; }
+      
+      .active-scale:active {
+        transform: scale(0.96);
+        transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+      }
+
+      /* Stagger Delays */
+      .delay-100 { animation-delay: 100ms; }
+      .delay-200 { animation-delay: 200ms; }
+      .delay-300 { animation-delay: 300ms; }
+      .delay-400 { animation-delay: 400ms; }
+
+      /* Lenis Smooth Scroll CSS (v1+) */
+      html.lenis, html.lenis body {
+        height: auto;
+      }
+      .lenis.lenis-smooth {
+        scroll-behavior: auto !important;
+      }
+      .lenis.lenis-smooth [data-lenis-prevent] {
+        overscroll-behavior: contain;
+      }
+      .lenis.lenis-stopped {
+        overflow: hidden;
+      }
+      .lenis.lenis-scrolling iframe {
+        pointer-events: none;
+      }
+    </style>
+
+<link rel="stylesheet" href="/index.css">
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.1/",
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+    "lenis": "https://unpkg.com/lenis@1.1.19/dist/lenis.mjs"
+  }
+}
+</script>
+  <script type="module" crossorigin src="/assets/main-BLpuvia4.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/wifi-BKDfKPUx.js">
+</head>
+  <body>
+    <div id="root"></div>
+</body>
+</html>
