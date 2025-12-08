@@ -84,26 +84,26 @@ interface MapVote {
 }
 
 const VOTE_MAPS: MapVote[] = [
-  { 
-    id: 'mrl_v3', 
-    name: 'gm_metro_mrl_v3', 
+  {
+    id: 'mrl_v3',
+    name: 'gm_metro_mrl_v3',
     image: 'https://files.facepunch.com/garry/1083f274/2012-07-06_14-41-43.jpg',
     voters: [
       { id: 1, name: 'sleepus', avatar: 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg' },
       { id: 2, name: '//usonance\\\\', avatar: 'https://avatars.steamstatic.com/b5bd56c1aa4644a474a2e4a2e4e4e4e4e4e4e4e4_full.jpg' },
     ]
   },
-  { 
-    id: 'uf_line', 
-    name: 'gm_uf_line_v2', 
+  {
+    id: 'uf_line',
+    name: 'gm_uf_line_v2',
     image: 'https://steamuserimages-a.akamaihd.net/ugc/1644340994747088936/A8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8B8/',
     voters: [
       { id: 3, name: 'Юрий Свириденко', avatar: 'https://avatars.steamstatic.com/c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5_full.jpg' },
     ]
   },
-  { 
-    id: 'kalinin', 
-    name: 'gm_metro_kalinin', 
+  {
+    id: 'kalinin',
+    name: 'gm_metro_kalinin',
     image: 'https://steamuserimages-a.akamaihd.net/ugc/1644340994747088937/B9B9B9B9B9B9B9B9B9B9B9B9B9B9B9B9B9B9B9B9/',
     voters: []
   },
@@ -169,14 +169,14 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
   const [showScoreboard, setShowScoreboard] = useState(false);
   const [menuSelectedNews, setMenuSelectedNews] = useState<typeof NEWS_DATA[0] | null>(null);
   const [hoveredNews, setHoveredNews] = useState<number | null>(null); // 0 = первая новость, 1 = вторая
-  
+
   // Map Vote State
   const [showMapVote, setShowMapVote] = useState(false);
   const [mapVoteTime, setMapVoteTime] = useState(300); // 5 минут в секундах
   const [selectedMap, setSelectedMap] = useState<string | null>(null); // Выбранная карта (до голосования)
   const [hasVoted, setHasVoted] = useState(false); // Проголосовал ли игрок
   const [hoveredVoter, setHoveredVoter] = useState<{ name: string; x: number; y: number } | null>(null);
-  
+
   // Battle Pass State
   const [battlePassLevel, setBattlePassLevel] = useState(7);
   const [battlePassXP, setBattlePassXP] = useState(650);
@@ -204,29 +204,29 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
     if (playedTracksRef.current.length >= MUSIC_TRACKS.length) {
       playedTracksRef.current = [];
     }
-    
+
     // Доступные треки = все минус уже проигранные
     const available = MUSIC_TRACKS.filter(t => !playedTracksRef.current.includes(t));
     const randomIndex = Math.floor(Math.random() * available.length);
     const track = available[randomIndex] || MUSIC_TRACKS[0];
-    
+
     // Добавляем в список проигранных
     playedTracksRef.current.push(track);
-    
+
     return track;
   }, []);
 
   const playMusic = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    
+
     // Выбираем рандомный трек (без повторов)
     const track = getRandomTrack();
     currentTrackRef.current = track;
     audio.src = track;
     audio.volume = 0;
-    audio.play().catch(() => {});
-    
+    audio.play().catch(() => { });
+
     // Fade in за 3 секунды
     if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
     const step = TARGET_VOLUME / (FADE_IN_DURATION / 50);
@@ -243,7 +243,7 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    
+
     const checkForFadeOut = () => {
       if (audio.duration && audio.currentTime > 0) {
         const timeLeft = audio.duration - audio.currentTime;
@@ -254,23 +254,23 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
         }
       }
     };
-    
+
     const handleEnded = () => {
       // Если все треки проиграны - сбрасываем список
       if (playedTracksRef.current.length >= MUSIC_TRACKS.length) {
         playedTracksRef.current = [];
       }
-      
+
       // Выбираем следующий рандомный трек (без повторов)
       const available = MUSIC_TRACKS.filter(t => !playedTracksRef.current.includes(t));
       const nextTrack = available[Math.floor(Math.random() * available.length)] || MUSIC_TRACKS[0];
       playedTracksRef.current.push(nextTrack);
       currentTrackRef.current = nextTrack;
-      
+
       audio.src = nextTrack;
       audio.volume = 0;
-      audio.play().catch(() => {});
-      
+      audio.play().catch(() => { });
+
       // Fade in
       if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
       const step = TARGET_VOLUME / (FADE_IN_DURATION / 50);
@@ -282,10 +282,10 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
         }
       }, 50);
     };
-    
+
     const timeUpdateInterval = setInterval(checkForFadeOut, 50);
     audio.addEventListener('ended', handleEnded);
-    
+
     return () => {
       clearInterval(timeUpdateInterval);
       audio.removeEventListener('ended', handleEnded);
@@ -298,15 +298,15 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
     const isGMod = typeof window.DownloadingFile !== 'undefined' || typeof window.gmod !== 'undefined';
     const params = new URLSearchParams(window.location.search);
     const paramMode = params.get('gamemode');
-    
+
     if (paramMode === 'loading') setMode('loading');
     else if (paramMode === 'connecting') setMode('connecting');
-    else if (paramMode === 'ingame' || isGMod) { 
+    else if (paramMode === 'ingame' || isGMod) {
       // В GMod сразу показываем connecting (спиннер → нажмите ЛКМ)
-      setMode('connecting'); 
+      setMode('connecting');
     }
     else setMode('menu');
-    
+
     const handleClick = () => setContextMenu(null);
     window.addEventListener('click', handleClick);
     return () => window.removeEventListener('click', handleClick);
@@ -316,13 +316,13 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    
+
     // Играем музыку на экранах click_to_start, spawn_selection, battlepass
     if (mode === 'click_to_start' || mode === 'spawn_selection' || mode === 'battlepass') {
       if (audio.paused) {
         playMusic();
       }
-    } 
+    }
     // Останавливаем на других экранах
     else if (mode === 'ingame' || mode === 'menu' || mode === 'loading' || mode === 'queue') {
       if (!audio.paused) {
@@ -385,8 +385,8 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
   }, [mode]);
 
   const onLoadingComplete = () => { setMode('connecting'); };
-  const onConnectingComplete = () => { playMusic(); setMode('click_to_start'); };
-  const onClickToStart = () => { setSpawnFilter('all'); setMode('spawn_selection'); };
+  const onConnectingComplete = () => { setMode('click_to_start'); };
+  const onClickToStart = () => { playMusic(); setSpawnFilter('all'); setMode('spawn_selection'); };
   const onSpawnSelected = () => { setMode('ingame'); };
 
   return (
@@ -443,7 +443,7 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
               <div className="flex-1 flex flex-col gap-3 min-w-0">
                 {/* Featured News */}
                 {NEWS_DATA[0] && (
-                  <div 
+                  <div
                     onMouseEnter={() => setHoveredNews(0)}
                     onMouseLeave={() => setHoveredNews(null)}
                     style={{ flex: hoveredNews === 1 ? '0 0 100px' : '1 1 auto' }}
@@ -471,31 +471,31 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
 
                 {/* Second News */}
                 {NEWS_DATA[1] && (
-                  <div 
+                  <div
                     onMouseEnter={() => setHoveredNews(1)}
                     onMouseLeave={() => setHoveredNews(null)}
                     style={{ flex: hoveredNews === 1 ? '1 1 auto' : '0 0 100px' }}
                     className="bg-[#1C1C1E] rounded-2xl overflow-hidden cursor-pointer group relative transition-all duration-300 ease-out"
                   >
                     {/* Background Image */}
-                    <img 
-                      src={NEWS_DATA[1].imageUrl} 
-                      alt={NEWS_DATA[1].title} 
+                    <img
+                      src={NEWS_DATA[1].imageUrl}
+                      alt={NEWS_DATA[1].title}
                       className="absolute inset-0 w-full h-full object-cover transition-all duration-300"
                       style={{ opacity: hoveredNews === 1 ? 0.3 : 0 }}
                     />
                     <div className="absolute inset-0 bg-[#1C1C1E]/90 transition-opacity duration-300" style={{ opacity: hoveredNews === 1 ? 1 : 0 }} />
-                    
+
                     {/* Content */}
                     <div className="relative z-10 h-full flex">
                       {/* Thumbnail */}
-                      <div 
+                      <div
                         className="shrink-0 relative overflow-hidden transition-all duration-300"
                         style={{ width: hoveredNews === 1 ? 0 : 140, opacity: hoveredNews === 1 ? 0 : 1 }}
                       >
                         <img src={NEWS_DATA[1].imageUrl} alt={NEWS_DATA[1].title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       </div>
-                      
+
                       {/* Text Content */}
                       <div className={`flex-1 p-5 flex flex-col overflow-hidden transition-all duration-300 ${hoveredNews === 1 ? 'justify-start' : 'justify-center'}`}>
                         {/* Tag + Date row */}
@@ -557,7 +557,7 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
                       <span className="text-white font-medium">24/60</span>
                     </div>
                     <div className="mt-auto pt-2">
-                      <button 
+                      <button
                         onClick={() => setShowMapVote(true)}
                         className="w-full py-2 rounded-lg bg-brand-blue/20 hover:bg-brand-blue text-brand-blue hover:text-white text-[10px] font-bold transition-colors flex items-center justify-center gap-1"
                       >
@@ -624,7 +624,7 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
                   {VOTE_MAPS.map((map) => {
                     const isSelected = selectedMap === map.id;
                     return (
-                      <div 
+                      <div
                         key={map.id}
                         onClick={() => !hasVoted && setSelectedMap(map.id)}
                         className={`flex items-center gap-4 p-3 rounded-2xl transition-all ${hasVoted ? 'cursor-default opacity-70' : 'cursor-pointer'} ${isSelected ? 'bg-brand-blue' : 'bg-[#2C2C2E]'} ${!hasVoted && !isSelected ? 'hover:bg-[#3C3C3E]' : ''}`}
@@ -648,8 +648,8 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
                               onMouseMove={(e) => setHoveredVoter({ name: voter.name, x: e.clientX, y: e.clientY })}
                               onMouseLeave={() => setHoveredVoter(null)}
                             >
-                              <img 
-                                src={voter.avatar} 
+                              <img
+                                src={voter.avatar}
                                 alt={voter.name}
                                 className={`w-8 h-8 rounded-full border-2 hover:scale-110 hover:z-10 transition-transform ${isSelected ? 'border-brand-blue' : 'border-[#2C2C2E]'}`}
                                 onError={(e) => { e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(voter.name)}&background=2C2C2E&color=fff&size=64`; }}
@@ -672,7 +672,7 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
                   <div className="text-gray-500 text-sm">
                     {hasVoted ? '' : (selectedMap ? 'Карта выбрана' : 'Выберите карту')}
                   </div>
-                  <button 
+                  <button
                     onClick={() => {
                       if (hasVoted) {
                         setShowMapVote(false);
@@ -681,13 +681,12 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
                       }
                     }}
                     disabled={!selectedMap && !hasVoted}
-                    className={`h-11 px-6 rounded-xl font-semibold transition-colors ${
-                      hasVoted 
-                        ? 'bg-gray-600 text-gray-300 cursor-default' 
-                        : selectedMap 
-                          ? 'bg-brand-blue hover:bg-blue-600 text-white' 
+                    className={`h-11 px-6 rounded-xl font-semibold transition-colors ${hasVoted
+                        ? 'bg-gray-600 text-gray-300 cursor-default'
+                        : selectedMap
+                          ? 'bg-brand-blue hover:bg-blue-600 text-white'
                           : 'bg-gray-700 text-gray-500 cursor-not-allowed'
-                    }`}
+                      }`}
                   >
                     {hasVoted ? 'Голос отдан' : 'Голосовать'}
                   </button>
@@ -696,7 +695,7 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
 
               {/* Floating Tooltip for Voter Name */}
               {hoveredVoter && (
-                <div 
+                <div
                   className="fixed z-[100] bg-black/90 text-white text-sm px-3 py-1.5 rounded-lg pointer-events-none whitespace-nowrap"
                   style={{ left: hoveredVoter.x + 15, top: hoveredVoter.y - 10 }}
                 >
@@ -846,7 +845,7 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
 
           {/* Rewards Track - Horizontal Scroll with Mouse Wheel */}
           <div className="flex-1 px-6 pb-6 overflow-hidden">
-            <div 
+            <div
               className="h-full overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-thumb-[#2C2C2E] scrollbar-track-transparent"
               onWheel={(e) => {
                 e.currentTarget.scrollLeft += e.deltaY;
@@ -856,7 +855,7 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
                 {BATTLEPASS_LEVELS.map((lvl, idx) => {
                   const isUnlocked = battlePassLevel >= lvl.level;
                   const isCurrent = battlePassLevel === lvl.level;
-                  
+
                   return (
                     <div key={lvl.level} className="flex flex-col items-center gap-2 relative">
                       {/* Level Number */}
@@ -865,10 +864,9 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
                       </div>
 
                       {/* FREE Reward (Top) */}
-                      <div className={`w-24 h-28 rounded-xl p-3 flex flex-col items-center justify-center transition-all ${
-                        isCurrent ? 'bg-brand-blue ring-2 ring-brand-blue ring-offset-2 ring-offset-black' :
-                        isUnlocked ? 'bg-[#1C1C1E]' : 'bg-[#1C1C1E]/50'
-                      }`}>
+                      <div className={`w-24 h-28 rounded-xl p-3 flex flex-col items-center justify-center transition-all ${isCurrent ? 'bg-brand-blue ring-2 ring-brand-blue ring-offset-2 ring-offset-black' :
+                          isUnlocked ? 'bg-[#1C1C1E]' : 'bg-[#1C1C1E]/50'
+                        }`}>
                         <div className="text-[10px] text-gray-400 font-medium mb-1 uppercase">Free</div>
                         <div className={`text-2xl mb-1 ${!isUnlocked && 'grayscale opacity-50'}`}>{lvl.free.icon}</div>
                         <div className={`text-[10px] text-center leading-tight ${isUnlocked ? 'text-white' : 'text-gray-500'}`}>{lvl.free.name}</div>
@@ -885,11 +883,10 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
                       </div>
 
                       {/* PREMIUM Reward (Bottom) */}
-                      <div className={`w-24 h-28 rounded-xl p-3 flex flex-col items-center justify-center transition-all relative ${
-                        isCurrent && hasPremium ? 'bg-yellow-500/30 ring-2 ring-yellow-500 ring-offset-2 ring-offset-black' :
-                        isUnlocked && hasPremium ? 'bg-yellow-500/20' :
-                        'bg-[#1C1C1E]/50'
-                      }`}>
+                      <div className={`w-24 h-28 rounded-xl p-3 flex flex-col items-center justify-center transition-all relative ${isCurrent && hasPremium ? 'bg-yellow-500/30 ring-2 ring-yellow-500 ring-offset-2 ring-offset-black' :
+                          isUnlocked && hasPremium ? 'bg-yellow-500/20' :
+                            'bg-[#1C1C1E]/50'
+                        }`}>
                         <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-yellow-500 flex items-center justify-center">
                           <Trophy size={10} className="text-black" />
                         </div>
@@ -915,10 +912,10 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
 
       {/* === LOADING === */}
       {mode === 'loading' && <LoadingScreen onComplete={onLoadingComplete} />}
-      
+
       {/* === CONNECTING (после загрузки, перед click_to_start) === */}
       {mode === 'connecting' && <ConnectingScreen onComplete={onConnectingComplete} />}
-      
+
       {/* === QUEUE === */}
       {mode === 'queue' && <QueueScreen onComplete={() => setMode('loading')} />}
 
@@ -961,12 +958,11 @@ const MenuButton: React.FC<{ icon: React.ReactNode; label: string; subLabel: str
   <button
     onClick={disabled ? undefined : onClick}
     disabled={disabled}
-    className={`w-full p-4 rounded-2xl flex items-center gap-4 transition-all text-left ${
-      disabled ? 'bg-[#1C1C1E]/50 text-gray-600 cursor-not-allowed' :
-      active ? 'bg-brand-blue text-white shadow-lg shadow-brand-blue/20' :
-      danger ? 'bg-[#1C1C1E] text-red-500 hover:bg-red-500 hover:text-white' :
-      'bg-[#1C1C1E] text-gray-400 hover:bg-[#2C2C2E] hover:text-white'
-    }`}
+    className={`w-full p-4 rounded-2xl flex items-center gap-4 transition-all text-left ${disabled ? 'bg-[#1C1C1E]/50 text-gray-600 cursor-not-allowed' :
+        active ? 'bg-brand-blue text-white shadow-lg shadow-brand-blue/20' :
+          danger ? 'bg-[#1C1C1E] text-red-500 hover:bg-red-500 hover:text-white' :
+            'bg-[#1C1C1E] text-gray-400 hover:bg-[#2C2C2E] hover:text-white'
+      }`}
   >
     <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${disabled ? 'bg-white/5' : active ? 'bg-white/20' : danger ? 'bg-red-500/20' : 'bg-white/5'}`}>{icon}</div>
     <div className="flex-1">
@@ -1011,7 +1007,7 @@ const LoadingScreen: React.FC<{ onComplete: () => void }> = ({ onComplete }) => 
           <img src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Logo" className="w-20 h-20 rounded-2xl mb-4" />
           <h1 className="text-2xl font-bold text-white mb-1">Project SY</h1>
           <p className="text-brand-blue text-sm font-medium uppercase tracking-widest mb-8">Metrostroi NoRank</p>
-          
+
           <div className="w-80">
             <div className="flex justify-between mb-2">
               <span className="text-white font-medium">{progress < 20 ? "Подключение..." : "Загрузка..."}</span>
@@ -1057,7 +1053,7 @@ const ConnectingScreen: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
   };
 
   return (
-    <div 
+    <div
       className="absolute inset-0 z-50 bg-black flex items-center justify-center cursor-pointer"
       onClick={handleClick}
     >
@@ -1117,7 +1113,7 @@ const QueueScreen: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
           <img src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Logo" className="w-20 h-20 rounded-2xl mb-4" />
           <h1 className="text-2xl font-bold text-white mb-1">Project SY</h1>
           <p className="text-brand-blue text-sm font-medium uppercase tracking-widest mb-8">Metrostroi NoRank</p>
-          
+
           <div className="w-80">
             <div className="flex justify-between mb-2">
               <span className="text-white font-medium">Сервер переполнен</span>
@@ -1173,7 +1169,7 @@ const NewsModal: React.FC<{ news: typeof NEWS_DATA[0]; onClose: () => void }> = 
 
 const Scoreboard: React.FC<{ visible: boolean; players: Player[]; onOpenContextMenu?: (e: React.MouseEvent, p: Player) => void }> = ({ visible, players, onOpenContextMenu }) => {
   if (!visible) return null;
-  
+
   return (
     <div className="absolute inset-0 flex items-center justify-center z-40 p-8 pointer-events-none">
       <div className="w-full max-w-5xl bg-[#1C1C1E]/95 backdrop-blur-xl border border-white/5 rounded-2xl overflow-hidden flex flex-col max-h-[85vh] pointer-events-auto animate-ios-slide-up">

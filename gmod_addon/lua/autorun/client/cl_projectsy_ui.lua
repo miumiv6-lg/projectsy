@@ -1,69 +1,50 @@
 --[[
-    Project SY - HTML UI через DHTML
-    Показывает твой дизайн после загрузки
+    Project SY - Ingame UI
 ]]
 
 local htmlPanel = nil
-local BASE_URL = "https://miumiv6-lg.github.io/projectsy/gmod_ingame/"
 
--- Создание HTML панели
-local function ShowProjectSYUI()
+local function ShowUI()
     if IsValid(htmlPanel) then return end
     
     htmlPanel = vgui.Create("DHTML")
     htmlPanel:SetSize(ScrW(), ScrH())
     htmlPanel:SetPos(0, 0)
-    htmlPanel:SetHTML("")
-    htmlPanel:OpenURL(BASE_URL)
+    -- ВСТАВЬ СЮДА ССЫЛКУ НА СВОЙ GITHUB PAGES
+    -- Например: https://yourname.github.io/repo/gmod.html
+    htmlPanel:OpenURL("https://neruk.github.io/project-sy-metro-portal/gmod.html")
     htmlPanel:MakePopup()
     htmlPanel:SetKeyboardInputEnabled(true)
     htmlPanel:SetMouseInputEnabled(true)
     
-    -- JavaScript функция для закрытия из HTML
-    htmlPanel:AddFunction("gmod", "closeUI", function()
+    -- Function to allow JS to spawn
+    htmlPanel:AddFunction("gmod", "spawn", function(name)
         if IsValid(htmlPanel) then
             htmlPanel:Remove()
             htmlPanel = nil
         end
-    end)
-    
-    -- JavaScript функция для спавна
-    htmlPanel:AddFunction("gmod", "spawn", function(spawnName)
-        if IsValid(htmlPanel) then
-            htmlPanel:Remove()
-            htmlPanel = nil
-        end
-        
         net.Start("ProjectSY_SelectSpawn")
-        net.WriteString(spawnName)
+        net.WriteString(name)
         net.SendToServer()
-        
-        notification.AddLegacy("Спавн: " .. spawnName, NOTIFY_GENERIC, 3)
     end)
 end
 
--- Закрыть UI
-local function CloseProjectSYUI()
+local function CloseUI()
     if IsValid(htmlPanel) then
         htmlPanel:Remove()
         htmlPanel = nil
     end
 end
 
--- Показать при первом спавне
-hook.Add("InitPostEntity", "ProjectSY_ShowUI", function()
-    timer.Simple(1, function()
-        ShowProjectSYUI()
-    end)
+hook.Add("InitPostEntity", "ProjectSY_Init", function()
+    timer.Simple(2, ShowUI)
 end)
 
--- Консольные команды для теста
-concommand.Add("projectsy_ui", ShowProjectSYUI)
-concommand.Add("projectsy_close", CloseProjectSYUI)
+concommand.Add("projectsy_ui", ShowUI)
+concommand.Add("projectsy_close", CloseUI)
 
--- ESC закрывает
-hook.Add("Think", "ProjectSY_EscapeClose", function()
+hook.Add("Think", "ProjectSY_Esc", function()
     if IsValid(htmlPanel) and input.IsKeyDown(KEY_ESCAPE) then
-        CloseProjectSYUI()
+        CloseUI()
     end
 end)
