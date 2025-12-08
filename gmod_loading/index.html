@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project SY - Загрузка</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: #000;
+      color: #fff;
+      font-family: 'Inter', -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+    }
+
+    .container {
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Background Video */
+    .bg-video {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0.4;
+      filter: blur(8px);
+      transform: scale(1.1);
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+    }
+
+    .content {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      animation: fadeIn 1s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+      width: 100px; height: 100px;
+      border-radius: 24px;
+      object-fit: cover;
+      margin-bottom: 24px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .title span { color: #007AFF; }
+
+    .subtitle {
+      font-size: 14px;
+      color: #007AFF;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-bottom: 48px;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      width: 320px;
+      margin-bottom: 16px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #007AFF;
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 8px;
+    }
+
+    .status {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      margin-top: 24px;
+      max-width: 400px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Spinner for connecting */
+    .spinner {
+      width: 48px; height: 48px;
+      border: 3px solid rgba(255,255,255,0.1);
+      border-top-color: #007AFF;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 24px;
+      display: none;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .connecting .spinner { display: block; }
+    .connecting .logo { display: none; }
+    .connecting .progress-container { display: none; }
+
+    /* Server Info */
+    .server-info {
+      position: absolute;
+      bottom: 32px;
+      left: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .server-logo {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+
+    .server-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .server-mode {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Tips */
+    .tips {
+      position: absolute;
+      bottom: 32px;
+      right: 32px;
+      text-align: right;
+      max-width: 300px;
+    }
+
+    .tip-label {
+      font-size: 10px;
+      color: rgba(255,255,255,0.3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .tip-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="container">
+    <video class="bg-video" autoplay muted loop playsinline>
+      <source src="https://cdn.pixabay.com/video/2019/04/23/23011-332483109_large.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+
+    <div class="content">
+      <div class="spinner"></div>
+      <img class="logo" src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Logo">
+      <h1 class="title">Project <span>SY</span></h1>
+      <p class="subtitle">Metrostroi NoRank</p>
+
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text">
+          <span id="statusText">Подключение...</span>
+          <span id="progressPercent">0%</span>
+        </div>
+      </div>
+
+      <p class="status" id="fileStatus">Ожидание сервера...</p>
+    </div>
+
+    <div class="server-info">
+      <img class="server-logo" src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Server">
+      <div>
+        <div class="server-name">Project SY</div>
+        <div class="server-mode">Metrostroi • NoRank</div>
+      </div>
+    </div>
+
+    <div class="tips">
+      <div class="tip-label">Совет</div>
+      <p class="tip-text" id="tipText">Нажмите TAB во время игры, чтобы открыть таблицу игроков</p>
+    </div>
+  </div>
+
+  <script>
+    // Tips rotation
+    const tips = [
+      'Нажмите TAB во время игры, чтобы открыть таблицу игроков',
+      'Используйте F1 для открытия меню помощи',
+      'Присоединяйтесь к нашему Discord серверу!',
+      'Уважайте других игроков на сервере',
+      'Следуйте правилам сервера для комфортной игры',
+      'Нажмите ESC чтобы открыть игровое меню'
+    ];
+    let tipIndex = 0;
+
+    function rotateTips() {
+      tipIndex = (tipIndex + 1) % tips.length;
+      document.getElementById('tipText').textContent = tips[tipIndex];
+    }
+    setInterval(rotateTips, 5000);
+
+    // GMod Loading Screen API
+    function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
+      // Server info available
+    }
+
+    function SetFilesTotal(total) {
+      window.totalFiles = total;
+    }
+
+    function SetFilesNeeded(needed) {
+      window.filesNeeded = needed;
+      updateProgress();
+    }
+
+    function DownloadingFile(fileName) {
+      document.getElementById('fileStatus').textContent = 'Загрузка: ' + fileName;
+    }
+
+    function SetStatusChanged(status) {
+      const statusText = document.getElementById('statusText');
+      const container = document.getElementById('container');
+      
+      if (status === 'Загрузка карты...') {
+        statusText.textContent = 'Загрузка карты';
+      } else if (status === 'Отправка клиентской информации...') {
+        statusText.textContent = 'Подключение';
+        container.classList.add('connecting');
+      } else {
+        statusText.textContent = status;
+      }
+    }
+
+    function updateProgress() {
+      const total = window.totalFiles || 1;
+      const needed = window.filesNeeded || 0;
+      const downloaded = total - needed;
+      const percent = Math.round((downloaded / total) * 100);
+      
+      document.getElementById('progressFill').style.width = percent + '%';
+      document.getElementById('progressPercent').textContent = percent + '%';
+    }
+
+    // Fallback progress for demo/testing
+    let demoProgress = 0;
+    function demoUpdate() {
+      if (typeof window.totalFiles === 'undefined') {
+        demoProgress += Math.random() * 3;
+        if (demoProgress > 100) demoProgress = 100;
+        document.getElementById('progressFill').style.width = demoProgress + '%';
+        document.getElementById('progressPercent').textContent = Math.round(demoProgress) + '%';
+        
+        if (demoProgress < 100) {
+          setTimeout(demoUpdate, 200);
+        }
+      }
+    }
+    setTimeout(demoUpdate, 1000);
+  </script>
+</body>
+</html>
