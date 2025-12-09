@@ -30,9 +30,7 @@ html, body {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
     background: url('https://i.ibb.co/sdFN8VZh/generated-image.jpg') center/cover no-repeat;
-    opacity: 0.5;
-    filter: blur(20px) saturate(1.2);
-    transform: scale(1.1);
+    opacity: 0.6;
     transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 1;
 }
@@ -40,6 +38,7 @@ html, body {
 body.spawn-mode #bg {
     opacity: 0.3;
     filter: blur(40px) saturate(1.2);
+    transform: scale(1.1);
 }
 
 #overlay {
