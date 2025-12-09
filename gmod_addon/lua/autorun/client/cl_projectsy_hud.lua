@@ -130,6 +130,34 @@ body {
 .ammo-val { font-size: 32px; font-weight: 800; line-height: 1; letter-spacing: -1px; }
 .ammo-clip { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.4); margin-top: 4px; }
 
+/* Top Right - Logo & Time */
+#top-right {
+    position: absolute;
+    top: 40px; right: 40px;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 16px;
+    pointer-events: none;
+}
+
+.top-logo {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 20px;
+    border-radius: 20px;
+}
+
+.top-logo img {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.top-logo .text { text-align: right; }
+.top-logo .name { font-size: 16px; font-weight: 800; }
+.top-logo .mode { font-size: 10px; font-weight: 600; color: #007AFF; text-transform: uppercase; letter-spacing: 1px; }
+
+.time-widget { text-align: right; }
+.time-date { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+.time-clock { font-size: 36px; font-weight: 200; letter-spacing: -1px; }
+
 /* Chat */
 #chat-container {
     position: absolute;
@@ -307,6 +335,21 @@ body {
 </head>
 <body>
 
+<!-- Top Right - Logo & Time -->
+<div id="top-right">
+    <div class="top-logo liquid-glass">
+        <div class="text">
+            <div class="name">Project SY</div>
+            <div class="mode">Metrostroi NoRank</div>
+        </div>
+        <img src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg">
+    </div>
+    <div class="time-widget">
+        <div class="time-date" id="hud-date"></div>
+        <div class="time-clock" id="hud-time"></div>
+    </div>
+</div>
+
 <!-- Chat -->
 <div id="chat-container"></div>
 
@@ -403,6 +446,16 @@ body {
 </div>
 
 <script>
+// Time update
+var months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+function updateTime() {
+    var d = new Date();
+    document.getElementById('hud-date').innerText = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+    document.getElementById('hud-time').innerText = ('0'+d.getHours()).slice(-2) + ':' + ('0'+d.getMinutes()).slice(-2);
+}
+updateTime();
+setInterval(updateTime, 1000);
+
 function updateHUD(hp, armor, ammo, clip, hasWep) {
     document.getElementById('hp-val').innerText = hp;
     
