@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project SY HUD</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: rgba(0,0,0,0);
+    color: #fff;
+    font-family: 'Inter', -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+}
+
+:root {
+    --glass: rgba(255,255,255,0.05);
+    --glass-strong: rgba(255,255,255,0.08);
+    --stroke: rgba(255,255,255,0.12);
+    --muted: rgba(255,255,255,0.55);
+    --primary: #007AFF;
+    --danger: #EF4444;
+    --success: #34C759;
+}
+
+.hud {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+}
+
+.card {
+    background: var(--glass);
+    border: 1px solid var(--stroke);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+    border-radius: 18px;
+}
+
+.chip {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 108px;
+}
+
+.label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+.value { font-size: 24px; font-weight: 800; line-height: 1; }
+.value-sm { font-size: 14px; font-weight: 700; }
+
+.bar {
+    width: 100%; height: 10px; border-radius: 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    overflow: hidden;
+}
+.bar > .fill {
+    height: 100%;
+    border-radius: 6px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.4), rgba(255,255,255,0.9));
+    box-shadow: 0 0 20px rgba(255,255,255,0.35);
+    width: 0%;
+    transition: width 0.12s ease;
+}
+
+/* Layout */
+#chips {
+    position: fixed;
+    top: 28px; left: 28px;
+    display: flex;
+    gap: 10px;
+}
+
+#chips .chip.primary { border-color: rgba(0,122,255,0.35); color: #fff; }
+#chips .chip.success { border-color: rgba(52,199,89,0.35); color: #fff; }
+
+#brand {
+    position: fixed;
+    top: 24px; right: 24px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 16px;
+    min-width: 240px;
+}
+#brand img {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.15);
+    object-fit: cover;
+}
+#brand .title { font-size: 17px; font-weight: 800; }
+#brand .subtitle { color: var(--primary); font-weight: 700; font-size: 12px; }
+#brand .time { margin-left: auto; text-align: right; }
+#brand .date { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+#brand .clock { font-size: 36px; font-weight: 300; line-height: 1; }
+
+#vitals {
+    position: fixed;
+    left: 28px; bottom: 26px;
+    display: flex; gap: 12px;
+}
+.vital {
+    width: 230px; padding: 14px 16px;
+    display: grid; gap: 8px;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+        "icon header"
+        "bar  bar";
+    align-items: center;
+}
+.vital .icon {
+    grid-area: icon;
+    width: 44px; height: 44px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    background: rgba(255,255,255,0.06);
+}
+.vital .header { grid-area: header; }
+.vital .bar { grid-area: bar; }
+
+#ammo {
+    position: fixed;
+    right: 28px; bottom: 26px;
+    width: 240px;
+    padding: 14px 16px;
+    display: grid; gap: 6px;
+}
+#ammo .top { display: flex; align-items: center; justify-content: space-between; }
+#ammo .weapon { font-size: 13px; color: var(--muted); font-weight: 700; }
+#ammo .count { font-size: 30px; font-weight: 800; }
+#ammo .reserve { color: var(--muted); font-weight: 700; }
+
+#stamina {
+    position: fixed;
+    left: 50%; transform: translateX(-50%);
+    bottom: 16px;
+    width: 240px;
+}
+
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="hud">
+    <div id="chips">
+        <div class="chip primary" id="chip-player"><span class="label">Игрок</span><span class="value-sm" id="player-name">—</span></div>
+        <div class="chip success" id="chip-ping"><span class="label">Пинг</span><span class="value-sm" id="ping-val">0 ms</span></div>
+        <div class="chip primary" id="chip-fps"><span class="label">FPS</span><span class="value-sm" id="fps-val">0</span></div>
+    </div>
+
+    <div class="card" id="brand">
+        <img id="brand-logo" src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="logo">
+        <div>
+            <div class="title" id="brand-name">Project SY</div>
+            <div class="subtitle" id="brand-mode">Metrostroi</div>
+        </div>
+        <div class="time">
+            <div class="date" id="hud-date">-- --- ----</div>
+            <div class="clock" id="hud-time">00:00</div>
+        </div>
+    </div>
+
+    <div id="vitals">
+        <div class="card vital" id="vital-hp">
+            <div class="icon" style="color:var(--danger)">❤</div>
+            <div class="header">
+                <div class="label">Здоровье</div>
+                <div class="value" id="hp-val">0</div>
+            </div>
+            <div class="bar"><div class="fill" id="hp-bar"></div></div>
+        </div>
+
+        <div class="card vital" id="vital-armor">
+            <div class="icon" style="color:var(--primary)">🛡</div>
+            <div class="header">
+                <div class="label">Броня</div>
+                <div class="value" id="armor-val">0</div>
+            </div>
+            <div class="bar"><div class="fill" id="armor-bar"></div></div>
+        </div>
+    </div>
+
+    <div class="card" id="ammo">
+        <div class="top">
+            <div class="weapon" id="ammo-weapon">—</div>
+            <div class="reserve" id="ammo-reserve">/ 0</div>
+        </div>
+        <div class="count" id="ammo-count">0</div>
+    </div>
+
+    <div id="stamina">
+        <div class="bar"><div class="fill" id="stamina-bar"></div></div>
+    </div>
+</div>
+
+<script>
+function clamp01(v){ return Math.max(0, Math.min(1, v)); }
+
+function updatePlayer(name){
+    document.getElementById('player-name').textContent = name || '—';
+}
+
+function updateVitals(hp, armor, maxHp, maxArmor){
+    maxHp = maxHp || 100; maxArmor = maxArmor || 100;
+    const hpVal = Math.max(0, hp|0);
+    const arVal = Math.max(0, armor|0);
+    document.getElementById('hp-val').textContent = hpVal;
+    document.getElementById('hp-bar').style.width = clamp01(hpVal / (maxHp||100)) * 100 + '%';
+
+    const armorCard = document.getElementById('vital-armor');
+    if (arVal > 0){
+        armorCard.classList.remove('hidden');
+        document.getElementById('armor-val').textContent = arVal;
+        document.getElementById('armor-bar').style.width = clamp01(arVal / (maxArmor||100)) * 100 + '%';
+    } else {
+        armorCard.classList.add('hidden');
+    }
+}
+
+function updateAmmo(clip, reserve, weapon){
+    const ammoBox = document.getElementById('ammo');
+    if (clip === undefined || clip < 0){
+        ammoBox.classList.add('hidden');
+        return;
+    }
+    ammoBox.classList.remove('hidden');
+    document.getElementById('ammo-count').textContent = clip;
+    document.getElementById('ammo-reserve').textContent = '/ ' + (reserve|0);
+    document.getElementById('ammo-weapon').textContent = weapon || 'Боезапас';
+}
+
+function updatePerf(ping, fps){
+    document.getElementById('ping-val').textContent = (ping|0) + ' ms';
+    document.getElementById('fps-val').textContent = (fps|0);
+}
+
+function updateStamina(frac){
+    document.getElementById('stamina-bar').style.width = clamp01(frac) * 100 + '%';
+}
+
+function updateClock(dateStr, timeStr){
+    if (dateStr) document.getElementById('hud-date').textContent = dateStr;
+    if (timeStr) document.getElementById('hud-time').textContent = timeStr;
+}
+</script>
+</body>
+</html>
+
