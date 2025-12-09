@@ -1,577 +1,296 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project SY - Загрузка</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    html, body {
-      width: 100%; height: 100%;
-      overflow: hidden;
-      background: #000;
-      color: #fff;
-      font-family: 'Inter', -apple-system, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      user-select: none;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project SY - Загрузка</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-    .container {
-      width: 100%; height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
+html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: #000;
+    color: #fff;
+    font-family: 'Inter', -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+}
 
-    .bg-video {
-      position: absolute;
-      inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      opacity: 0.4;
-      filter: blur(8px);
-      transform: scale(1.1);
-    }
+/* iOS 26 Liquid Glass */
+.liquid-glass {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
 
-    .overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-    }
+.liquid-glass-strong {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(60px);
+    -webkit-backdrop-filter: blur(60px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
 
-    .content {
-      position: relative;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      animation: fadeIn 1s ease-out;
-    }
+/* Background */
+.bg-image {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0.4;
+    filter: blur(20px) saturate(1.2);
+    transform: scale(1.1);
+}
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+.overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%);
+}
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
+/* Container */
+.container {
+    position: relative;
+    z-index: 10;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
+/* Logo Card */
+.logo-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 64px;
+    border-radius: 32px;
+    margin-bottom: 48px;
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
 
-    .logo {
-      width: 100px; height: 100px;
-      border-radius: 24px;
-      object-fit: cover;
-      margin-bottom: 24px;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
+.logo-img {
+    width: 96px; height: 96px;
+    border-radius: 24px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
 
-    .title {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
+.logo-title {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+}
 
-    .title span { color: #007AFF; }
+.logo-title span { color: #007AFF; }
 
-    .subtitle {
-      font-size: 14px;
-      color: #007AFF;
-      text-transform: uppercase;
-      letter-spacing: 4px;
-      margin-bottom: 48px;
-    }
+.logo-subtitle {
+    font-size: 12px;
+    font-weight: 600;
+    color: #007AFF;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
 
-    .progress-container {
-      width: 320px;
-      margin-bottom: 16px;
-    }
+/* Progress */
+.progress-container {
+    width: 400px;
+    max-width: 90%;
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+    opacity: 0;
+}
 
-    .progress-bar {
-      width: 100%;
-      height: 6px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 3px;
-      overflow: hidden;
-    }
+.progress-bar {
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
 
-    .progress-fill {
-      height: 100%;
-      background: #007AFF;
-      border-radius: 3px;
-      width: 0%;
-      transition: width 0.3s ease;
-    }
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #007AFF, #00D4FF);
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 20px rgba(0,122,255,0.5);
+}
 
-    .progress-text {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      color: rgba(255,255,255,0.5);
-      margin-top: 8px;
-    }
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+}
 
-    .status {
-      font-size: 14px;
-      color: rgba(255,255,255,0.6);
-      margin-top: 24px;
-      max-width: 400px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+.progress-percent {
+    font-weight: 600;
+    color: #007AFF;
+}
 
-    .server-info {
-      position: absolute;
-      bottom: 32px;
-      left: 32px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+/* Status */
+.status {
+    margin-top: 32px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.4);
+    max-width: 500px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+    opacity: 0;
+}
 
-    .server-logo {
-      width: 48px; height: 48px;
-      border-radius: 12px;
-      object-fit: cover;
-    }
+/* Server Info - Bottom Left */
+.server-info {
+    position: fixed;
+    bottom: 32px;
+    left: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    border-radius: 20px;
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+    opacity: 0;
+}
 
-    .server-name {
-      font-weight: 600;
-      font-size: 14px;
-    }
+.server-info img {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+}
 
-    .server-mode {
-      font-size: 11px;
-      color: rgba(255,255,255,0.4);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
+.server-info .name {
+    font-size: 15px;
+    font-weight: 700;
+}
 
-    /* Tips - выше над GMod загрузкой */
-    .tips {
-      position: absolute;
-      bottom: 120px;
-      right: 32px;
-      text-align: right;
-      max-width: 300px;
-    }
+.server-info .mode {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
 
-    .tip-label {
-      font-size: 10px;
-      color: rgba(255,255,255,0.3);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 4px;
-    }
+/* Tips - Bottom Right */
+.tips {
+    position: fixed;
+    bottom: 100px;
+    right: 32px;
+    text-align: right;
+    max-width: 320px;
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+    opacity: 0;
+}
 
-    .tip-text {
-      font-size: 13px;
-      color: rgba(255,255,255,0.6);
-      line-height: 1.4;
-    }
+.tips-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
 
-    /* === SCREEN STATES === */
-    .screen { display: none; }
-    .screen.active { display: flex; }
+.tips-text {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+}
 
-    /* Click to Start Screen */
-    #clickScreen {
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-
-    .click-icon {
-      width: 80px; height: 80px;
-      margin-bottom: 32px;
-      animation: bounce 2s ease-in-out infinite;
-    }
-
-    .click-text {
-      font-size: 24px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.8);
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    .click-hint {
-      font-size: 14px;
-      color: rgba(255,255,255,0.4);
-      margin-top: 12px;
-    }
-
-    /* Spawn Selection Screen */
-    #spawnScreen {
-      flex-direction: column;
-      align-items: center;
-      padding: 40px;
-    }
-
-    .spawn-title {
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .spawn-subtitle {
-      font-size: 14px;
-      color: rgba(255,255,255,0.5);
-      margin-bottom: 40px;
-    }
-
-    .spawn-filters {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 32px;
-    }
-
-    .filter-btn {
-      padding: 10px 24px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.05);
-      color: rgba(255,255,255,0.6);
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .filter-btn:hover {
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-    }
-
-    .filter-btn.active {
-      background: #007AFF;
-      border-color: #007AFF;
-      color: #fff;
-    }
-
-    .spawn-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
-      max-width: 900px;
-      width: 100%;
-    }
-
-    .spawn-card {
-      background: rgba(28, 28, 30, 0.9);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
-      padding: 24px;
-      cursor: pointer;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .spawn-card:hover {
-      background: rgba(44, 44, 46, 0.9);
-      border-color: rgba(255,255,255,0.15);
-      transform: translateY(-2px);
-    }
-
-    .spawn-card.driver { border-left: 3px solid #007AFF; }
-    .spawn-card.passenger { border-left: 3px solid #34C759; }
-
-    .spawn-icon {
-      width: 48px; height: 48px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-    }
-
-    .spawn-card.driver .spawn-icon { background: rgba(0,122,255,0.2); }
-    .spawn-card.passenger .spawn-icon { background: rgba(52,199,89,0.2); }
-
-    .spawn-info h3 {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .spawn-info p {
-      font-size: 13px;
-      color: rgba(255,255,255,0.5);
-    }
-
-    .spawn-type {
-      margin-left: auto;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      padding: 4px 10px;
-      border-radius: 6px;
-    }
-
-    .spawn-card.driver .spawn-type {
-      background: rgba(0,122,255,0.2);
-      color: #007AFF;
-    }
-
-    .spawn-card.passenger .spawn-type {
-      background: rgba(52,199,89,0.2);
-      color: #34C759;
-    }
-
-    /* Hide elements based on screen */
-    .loading-only { display: block; }
-    .click-only, .spawn-only { display: none; }
-
-    body.click-mode .loading-only { display: none; }
-    body.click-mode .click-only { display: block; }
-
-    body.spawn-mode .loading-only { display: none; }
-    body.spawn-mode .spawn-only { display: block; }
-  </style>
+/* Animations */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
 </head>
 <body>
-  <div class="container">
-    <video class="bg-video" autoplay muted loop playsinline>
-      <source src="https://cdn.pixabay.com/video/2019/04/23/23011-332483109_large.mp4" type="video/mp4">
-    </video>
-    <div class="overlay"></div>
 
-    <!-- LOADING SCREEN -->
-    <div class="content screen active" id="loadingScreen">
-      <img class="logo" src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Logo">
-      <h1 class="title">Project <span>SY</span></h1>
-      <p class="subtitle">Metrostroi NoRank</p>
+<img class="bg-image" src="https://i.ibb.co/sdFN8VZh/generated-image.jpg" alt="">
+<div class="overlay"></div>
 
-      <div class="progress-container">
+<div class="container">
+    <div class="logo-card liquid-glass-strong">
+        <img class="logo-img" src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Logo">
+        <h1 class="logo-title">Project <span>SY</span></h1>
+        <p class="logo-subtitle">Metrostroi NoRank</p>
+    </div>
+
+    <div class="progress-container">
         <div class="progress-bar">
-          <div class="progress-fill" id="progressFill"></div>
+            <div class="progress-fill" id="progressFill"></div>
         </div>
-        <div class="progress-text">
-          <span id="statusText">Подключение...</span>
-          <span id="progressPercent">0%</span>
+        <div class="progress-info">
+            <span id="statusText">Подключение...</span>
+            <span class="progress-percent" id="progressPercent">0%</span>
         </div>
-      </div>
-
-      <p class="status" id="fileStatus">Ожидание сервера...</p>
     </div>
 
-    <!-- CLICK TO START SCREEN -->
-    <div class="content screen" id="clickScreen" onclick="showSpawnScreen()">
-      <img class="logo" src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Logo">
-      <h1 class="title">Project <span>SY</span></h1>
-      <p class="subtitle">Metrostroi NoRank</p>
-      
-      <svg class="click-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <rect x="6" y="3" width="12" height="18" rx="6" stroke="rgba(255,255,255,0.6)"/>
-        <path d="M12 3V9" stroke="rgba(255,255,255,0.6)"/>
-        <path d="M6 9H18" stroke="rgba(255,255,255,0.6)"/>
-        <path d="M6 8C6 5.23858 8.68629 3 12 3V9H6V8Z" fill="#007AFF"/>
-      </svg>
-      
-      <p class="click-text">Нажмите ЛКМ чтобы начать</p>
-      <p class="click-hint">Click to continue</p>
+    <p class="status" id="fileStatus">Ожидание сервера...</p>
+</div>
+
+<div class="server-info liquid-glass">
+    <img src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="">
+    <div>
+        <div class="name">Project SY</div>
+        <div class="mode">Metrostroi • NoRank</div>
     </div>
+</div>
 
-    <!-- SPAWN SELECTION SCREEN -->
-    <div class="content screen" id="spawnScreen">
-      <h1 class="spawn-title">Выбор точки спавна</h1>
-      <p class="spawn-subtitle">Выберите где вы хотите появиться</p>
+<div class="tips">
+    <div class="tips-label">Совет</div>
+    <p class="tips-text" id="tipText">Нажмите TAB во время игры, чтобы открыть таблицу игроков</p>
+</div>
 
-      <div class="spawn-filters">
-        <button class="filter-btn active" onclick="filterSpawns('all')">Все</button>
-        <button class="filter-btn" onclick="filterSpawns('driver')">Машинист</button>
-        <button class="filter-btn" onclick="filterSpawns('passenger')">Пассажир</button>
-      </div>
+<script>
+const tips = [
+    'Нажмите TAB во время игры, чтобы открыть таблицу игроков',
+    'Используйте F1 для открытия меню помощи',
+    'Присоединяйтесь к нашему Discord серверу!',
+    'Уважайте других игроков на сервере',
+    'Следуйте правилам сервера для комфортной игры'
+];
+let tipIndex = 0;
 
-      <div class="spawn-grid" id="spawnGrid">
-        <div class="spawn-card driver" data-type="driver" onclick="selectSpawn(this)">
-          <div class="spawn-icon">🚇</div>
-          <div class="spawn-info">
-            <h3>ТЧ-1 «Лихоборы»</h3>
-            <p>Электродепо. Спавн составов.</p>
-          </div>
-          <span class="spawn-type">Машинист</span>
-        </div>
+setInterval(() => {
+    tipIndex = (tipIndex + 1) % tips.length;
+    document.getElementById('tipText').textContent = tips[tipIndex];
+}, 5000);
 
-        <div class="spawn-card driver" data-type="driver" onclick="selectSpawn(this)">
-          <div class="spawn-icon">🔄</div>
-          <div class="spawn-info">
-            <h3>Тупик ст. Физтех</h3>
-            <p>Оборотный тупик. Смена кабины.</p>
-          </div>
-          <span class="spawn-type">Машинист</span>
-        </div>
+// GMod Loading API
+function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {}
+function SetFilesTotal(total) { window.totalFiles = total; }
+function SetFilesNeeded(needed) { window.filesNeeded = needed; updateProgress(); }
+function DownloadingFile(fileName) { document.getElementById('fileStatus').textContent = 'Загрузка: ' + fileName; }
+function SetStatusChanged(status) { document.getElementById('statusText').textContent = status; }
 
-        <div class="spawn-card passenger" data-type="passenger" onclick="selectSpawn(this)">
-          <div class="spawn-icon">📍</div>
-          <div class="spawn-info">
-            <h3>Ст. Лианозово</h3>
-            <p>Пассажирская платформа</p>
-          </div>
-          <span class="spawn-type">Пассажир</span>
-        </div>
+function updateProgress() {
+    const total = window.totalFiles || 1;
+    const needed = window.filesNeeded || 0;
+    const downloaded = total - needed;
+    const percent = Math.round((downloaded / total) * 100);
+    document.getElementById('progressFill').style.width = percent + '%';
+    document.getElementById('progressPercent').textContent = percent + '%';
+}
 
-        <div class="spawn-card passenger" data-type="passenger" onclick="selectSpawn(this)">
-          <div class="spawn-icon">📍</div>
-          <div class="spawn-info">
-            <h3>Ст. Физтех</h3>
-            <p>Конечная станция</p>
-          </div>
-          <span class="spawn-type">Пассажир</span>
-        </div>
-
-        <div class="spawn-card passenger" data-type="passenger" onclick="selectSpawn(this)">
-          <div class="spawn-icon">📍</div>
-          <div class="spawn-info">
-            <h3>Ст. Яхромская</h3>
-            <p>Пассажирская платформа</p>
-          </div>
-          <span class="spawn-type">Пассажир</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Server Info -->
-    <div class="server-info">
-      <img class="server-logo" src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Server">
-      <div>
-        <div class="server-name">Project SY</div>
-        <div class="server-mode">Metrostroi • NoRank</div>
-      </div>
-    </div>
-
-    <!-- Tips - подняты выше -->
-    <div class="tips loading-only">
-      <div class="tip-label">Совет</div>
-      <p class="tip-text" id="tipText">Нажмите TAB во время игры, чтобы открыть таблицу игроков</p>
-    </div>
-  </div>
-
-  <script>
-    const tips = [
-      'Нажмите TAB во время игры, чтобы открыть таблицу игроков',
-      'Используйте F1 для открытия меню помощи',
-      'Присоединяйтесь к нашему Discord серверу!',
-      'Уважайте других игроков на сервере',
-      'Следуйте правилам сервера для комфортной игры',
-      'Нажмите ESC чтобы открыть игровое меню'
-    ];
-    let tipIndex = 0;
-
-    function rotateTips() {
-      tipIndex = (tipIndex + 1) % tips.length;
-      document.getElementById('tipText').textContent = tips[tipIndex];
+// Demo
+let demo = 0;
+function demoUpdate() {
+    if (typeof window.totalFiles === 'undefined') {
+        demo += Math.random() * 2;
+        if (demo > 100) demo = 100;
+        document.getElementById('progressFill').style.width = demo + '%';
+        document.getElementById('progressPercent').textContent = Math.round(demo) + '%';
+        if (demo < 100) setTimeout(demoUpdate, 150);
     }
-    setInterval(rotateTips, 5000);
-
-    // Screen management
-    function showScreen(screenId) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById(screenId).classList.add('active');
-    }
-
-    function showClickScreen() {
-      showScreen('clickScreen');
-      document.body.classList.add('click-mode');
-      document.body.classList.remove('spawn-mode');
-    }
-
-    function showSpawnScreen() {
-      showScreen('spawnScreen');
-      document.body.classList.remove('click-mode');
-      document.body.classList.add('spawn-mode');
-    }
-
-    function filterSpawns(type) {
-      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-      
-      document.querySelectorAll('.spawn-card').forEach(card => {
-        if (type === 'all' || card.dataset.type === type) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    }
-
-    function selectSpawn(card) {
-      // В реальном GMod здесь будет вызов Lua функции
-      // gmod.RunConsoleCommand("spawn_at", card.querySelector('h3').textContent);
-      alert('Спавн: ' + card.querySelector('h3').textContent);
-    }
-
-    // GMod Loading Screen API
-    function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {}
-
-    function SetFilesTotal(total) {
-      window.totalFiles = total;
-    }
-
-    function SetFilesNeeded(needed) {
-      window.filesNeeded = needed;
-      updateProgress();
-    }
-
-    function DownloadingFile(fileName) {
-      document.getElementById('fileStatus').textContent = 'Загрузка: ' + fileName;
-    }
-
-    function SetStatusChanged(status) {
-      const statusText = document.getElementById('statusText');
-      
-      if (status === 'Загрузка карты...') {
-        statusText.textContent = 'Загрузка карты';
-      } else if (status === 'Отправка клиентской информации...') {
-        statusText.textContent = 'Подключение';
-        // После загрузки показываем Click to Start
-        setTimeout(showClickScreen, 1000);
-      } else {
-        statusText.textContent = status;
-      }
-    }
-
-    function updateProgress() {
-      const total = window.totalFiles || 1;
-      const needed = window.filesNeeded || 0;
-      const downloaded = total - needed;
-      const percent = Math.round((downloaded / total) * 100);
-      
-      document.getElementById('progressFill').style.width = percent + '%';
-      document.getElementById('progressPercent').textContent = percent + '%';
-    }
-
-    // Demo progress
-    let demoProgress = 0;
-    function demoUpdate() {
-      if (typeof window.totalFiles === 'undefined') {
-        demoProgress += Math.random() * 3;
-        if (demoProgress > 100) demoProgress = 100;
-        document.getElementById('progressFill').style.width = demoProgress + '%';
-        document.getElementById('progressPercent').textContent = Math.round(demoProgress) + '%';
-        
-        if (demoProgress < 100) {
-          setTimeout(demoUpdate, 200);
-        } else {
-          // Demo: show click screen after loading
-          setTimeout(showClickScreen, 1000);
-        }
-      }
-    }
-    setTimeout(demoUpdate, 1000);
-  </script>
+}
+setTimeout(demoUpdate, 500);
+</script>
 </body>
 </html>

@@ -1,497 +1,485 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project SY</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    html, body {
-      width: 100%; height: 100%;
-      overflow: hidden;
-      background: #000;
-      color: #fff;
-      font-family: 'Inter', -apple-system, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      user-select: none;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project SY</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-    .container {
-      width: 100%; height: 100%;
-      position: relative;
-    }
+html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: #000;
+    color: #fff;
+    font-family: 'Inter', -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+}
 
-    .bg-video {
-      position: absolute;
-      inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      opacity: 0.6;
-    }
+/* iOS 26 Liquid Glass */
+.liquid-glass {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
 
-    .overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.4);
-    }
+.liquid-glass-strong {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(60px);
+    -webkit-backdrop-filter: blur(60px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 32px 64px rgba(0, 0, 0, 0.4);
+}
 
-    /* Animations */
-    @keyframes ios-slide-up {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+.liquid-glass-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
-    .animate-ios-slide-up {
-      animation: ios-slide-up 0.6s cubic-bezier(0.32, 0.72, 0, 1) forwards;
-    }
+.liquid-glass-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
 
-    /* Screens */
-    .screen {
-      display: none;
-      position: absolute;
-      inset: 0;
-      z-index: 50;
-    }
-    .screen.active { display: flex; }
+/* Background */
+.bg-image {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0.5;
+    filter: blur(20px) saturate(1.2);
+    transform: scale(1.1);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
-    /* ========== CLICK TO START ========== */
-    #clickScreen {
-      cursor: pointer;
-      align-items: center;
-      justify-content: center;
-    }
+body.spawn-mode .bg-image {
+    opacity: 0.3;
+    filter: blur(40px) saturate(1.2);
+}
 
-    .top-logo {
-      position: absolute;
-      top: 32px;
-      right: 32px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      background: #1C1C1E;
-      padding: 12px 20px;
-      border-radius: 16px;
-    }
+.overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%);
+}
 
-    .top-logo-text { text-align: right; }
-    .top-logo-text .name { font-size: 20px; font-weight: 700; }
-    .top-logo-text .mode { font-size: 12px; color: #007AFF; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; }
-    .top-logo img { width: 48px; height: 48px; border-radius: 12px; object-fit: cover; }
+/* Screens */
+.screen {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
 
-    .click-center { text-align: center; }
+.screen.active { display: flex; }
 
-    .click-icon-box {
-      width: 96px; height: 96px;
-      background: #1C1C1E;
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 24px;
-      transition: background 0.2s;
-    }
+/* ===== CLICK TO START ===== */
+#top-logo {
+    position: fixed;
+    top: 40px;
+    right: 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 24px;
+    border-radius: 24px;
+    z-index: 20;
+}
 
-    .click-center:hover .click-icon-box { background: #2C2C2E; }
+body.spawn-mode #top-logo { display: none; }
 
-    .click-title {
-      font-size: 48px;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
+#top-logo .text { text-align: right; }
+#top-logo .name { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+#top-logo .mode { font-size: 11px; font-weight: 600; color: #007AFF; text-transform: uppercase; letter-spacing: 2px; margin-top: 4px; }
+#top-logo img { width: 56px; height: 56px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); }
 
-    .click-subtitle {
-      color: #007AFF;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 4px;
-      font-size: 14px;
-    }
+#click-box {
+    text-align: center;
+    cursor: pointer;
+}
 
-    /* ========== SPAWN SELECTION ========== */
-    #spawnScreen {
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
+#click-box .icon {
+    width: 120px; height: 120px;
+    border-radius: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 32px;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
-    .spawn-top-left {
-      position: absolute;
-      top: 24px;
-      left: 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+#click-box:hover .icon {
+    background: #007AFF;
+    border-color: transparent;
+    transform: scale(1.1);
+    box-shadow: 0 0 60px rgba(0,122,255,0.5);
+}
 
-    .spawn-top-left img { width: 40px; height: 40px; border-radius: 12px; }
-    .spawn-top-left .name { font-weight: 700; }
-    .spawn-top-left .mode { font-size: 12px; color: #6B6B6B; }
+#click-box h1 {
+    font-size: 64px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 16px;
+    text-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
 
-    .spawn-top-right {
-      position: absolute;
-      top: 24px;
-      right: 24px;
-      display: flex;
-      gap: 12px;
-    }
+#click-box .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    border-radius: 20px;
+}
 
-    .stat-box {
-      background: #1C1C1E;
-      border-radius: 12px;
-      padding: 8px 16px;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+#click-box .badge .dot {
+    width: 8px; height: 8px;
+    background: #007AFF;
+    border-radius: 50%;
+    box-shadow: 0 0 12px #007AFF;
+}
 
-    .stat-box .dot { width: 8px; height: 8px; border-radius: 50%; background: #34C759; }
+#click-box .badge span {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.8);
+}
 
-    .spawn-bottom-right {
-      position: absolute;
-      bottom: 24px;
-      right: 24px;
-      text-align: right;
-    }
+/* ===== SPAWN SELECTION ===== */
+#spawn-logo {
+    position: fixed;
+    top: 40px;
+    left: 40px;
+    display: none;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    border-radius: 20px;
+    z-index: 20;
+}
 
-    .spawn-bottom-right .date { font-size: 14px; color: #6B6B6B; }
-    .spawn-bottom-right .time { font-size: 32px; font-weight: 300; }
+body.spawn-mode #spawn-logo { display: flex; }
 
-    /* Spawn Modal */
-    .spawn-modal {
-      width: 100%;
-      max-width: 500px;
-      background: #1C1C1E;
-      border-radius: 16px;
-      padding: 24px;
-      max-height: 80vh;
-      display: flex;
-      flex-direction: column;
-    }
+#spawn-logo img { width: 48px; height: 48px; border-radius: 14px; }
+#spawn-logo .name { font-size: 18px; font-weight: 800; }
+#spawn-logo .mode { font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; }
 
-    .spawn-header { text-align: center; margin-bottom: 20px; }
-    .spawn-header h2 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
-    .spawn-header p { font-size: 14px; color: #6B6B6B; }
+#stats {
+    position: fixed;
+    top: 40px;
+    right: 40px;
+    display: none;
+    gap: 12px;
+    z-index: 20;
+}
 
-    /* Filter Tabs */
-    .filter-tabs {
-      display: flex;
-      gap: 8px;
-      background: #2C2C2E;
-      border-radius: 12px;
-      padding: 4px;
-      margin-bottom: 16px;
-    }
+body.spawn-mode #stats { display: flex; }
 
-    .filter-tab {
-      flex: 1;
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      background: transparent;
-      color: #6B6B6B;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: inherit;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
+.stat {
+    padding: 12px 20px;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
-    .filter-tab:hover { color: #fff; }
-    .filter-tab.active { background: #007AFF; color: #fff; }
-    .filter-tab.active.green { background: #34C759; }
+.stat .dot { width: 8px; height: 8px; border-radius: 50%; background: #34C759; }
+.stat .label { color: #007AFF; font-size: 11px; font-weight: 700; }
 
-    /* Spawn List */
-    .spawn-list {
-      flex: 1;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+#clock {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    text-align: right;
+    display: none;
+    z-index: 20;
+}
 
-    .spawn-item {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 16px;
-      background: #2C2C2E;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-      border: none;
-      width: 100%;
-      text-align: left;
-      font-family: inherit;
-      color: #fff;
-    }
+body.spawn-mode #clock { display: block; }
 
-    .spawn-item:hover { background: #007AFF; }
+#clock .date { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+#clock .time { font-size: 56px; font-weight: 200; letter-spacing: -2px; }
 
-    .spawn-item-icon {
-      width: 40px; height: 40px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
-    }
+/* Spawn Modal */
+#spawn-modal {
+    width: 560px;
+    max-width: 90%;
+    padding: 32px;
+    border-radius: 32px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
 
-    .spawn-item.driver .spawn-item-icon { background: rgba(0,122,255,0.2); color: #007AFF; }
-    .spawn-item.passenger .spawn-item-icon { background: rgba(52,199,89,0.2); color: #34C759; }
-    .spawn-item:hover .spawn-item-icon { background: rgba(255,255,255,0.2); color: #fff; }
+#spawn-modal h2 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
 
-    .spawn-item-info { flex: 1; }
-    .spawn-item-info .title { font-weight: 500; margin-bottom: 2px; }
-    .spawn-item-info .desc { font-size: 13px; color: #6B6B6B; }
-    .spawn-item:hover .spawn-item-info .desc { color: rgba(255,255,255,0.7); }
+#spawn-modal .line {
+    width: 40px;
+    height: 4px;
+    background: #007AFF;
+    border-radius: 2px;
+    margin: 0 auto 32px;
+    box-shadow: 0 0 20px rgba(0,122,255,0.5);
+}
 
-    .spawn-item-arrow { color: #3C3C3E; font-size: 18px; }
-    .spawn-item:hover .spawn-item-arrow { color: #fff; }
-  </style>
+.tabs {
+    display: flex;
+    gap: 8px;
+    padding: 6px;
+    border-radius: 18px;
+    margin-bottom: 24px;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.tab {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.5);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 14px;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.tab:hover { color: #fff; background: rgba(255,255,255,0.05); }
+.tab.active { background: #007AFF; color: #fff; box-shadow: 0 4px 20px rgba(0,122,255,0.4); }
+.tab.active.green { background: #34C759; box-shadow: 0 4px 20px rgba(52,199,89,0.4); }
+
+.spawns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 8px;
+}
+
+.spawns::-webkit-scrollbar { width: 4px; }
+.spawns::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+.sp {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 18px 20px;
+    border-radius: 18px;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    color: #fff;
+    width: 100%;
+}
+
+.sp .icon {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.05);
+    font-size: 22px;
+    flex-shrink: 0;
+    transition: all 0.3s;
+}
+
+.sp:hover .icon { background: #fff; color: #000; }
+
+.sp .info { flex: 1; }
+.sp .info .title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.sp .info .desc { font-size: 13px; color: rgba(255,255,255,0.5); }
+.sp:hover .info .desc { color: rgba(255,255,255,0.8); }
+
+.sp .arrow { color: rgba(255,255,255,0.3); font-size: 20px; }
+.sp:hover .arrow { color: #fff; }
+
+/* Animations */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.anim { animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+</style>
 </head>
 <body>
-  <div class="container">
-    <video class="bg-video" autoplay muted loop playsinline>
-      <source src="https://cdn.pixabay.com/video/2019/04/23/23011-332483109_large.mp4" type="video/mp4">
-    </video>
-    <div class="overlay"></div>
 
-    <!-- AUDIO -->
-    <audio id="bgMusic" preload="auto"></audio>
+<img class="bg-image" src="https://i.ibb.co/sdFN8VZh/generated-image.jpg" alt="">
+<div class="overlay"></div>
 
+<audio id="bgMusic" preload="auto"></audio>
 
-    <!-- ========== CLICK TO START ========== -->
-    <div class="screen active animate-ios-slide-up" id="clickScreen" onclick="showSpawnScreen()">
-      <div class="top-logo">
-        <div class="top-logo-text">
-          <div class="name">Project SY</div>
-          <div class="mode">Metrostroi NoRank</div>
-        </div>
-        <img src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Logo">
-      </div>
-
-      <div class="click-center">
-        <div class="click-icon-box">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-            <rect x="5" y="2" width="14" height="20" rx="7" stroke="white" stroke-width="2"/>
-            <path d="M12 2V10" stroke="white" stroke-width="2"/>
-            <path d="M5 10H19" stroke="white" stroke-width="2"/>
-            <path d="M5 9C5 5.13401 8.13401 2 12 2V10H5V9Z" fill="#007AFF"/>
-          </svg>
-        </div>
-        <h1 class="click-title">Нажмите ЛКМ</h1>
-        <p class="click-subtitle">Чтобы начать игру</p>
-      </div>
+<div id="top-logo" class="liquid-glass">
+    <div class="text">
+        <div class="name">Project SY</div>
+        <div class="mode">Metrostroi NoRank</div>
     </div>
+    <img src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg">
+</div>
 
-    <!-- ========== SPAWN SELECTION ========== -->
-    <div class="screen" id="spawnScreen">
-      <div class="spawn-top-left">
-        <img src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Logo">
-        <div>
-          <div class="name">Project SY</div>
-          <div class="mode">Metrostroi</div>
-        </div>
-      </div>
-
-      <div class="spawn-top-right">
-        <div class="stat-box"><div class="dot"></div><span id="pingValue">24 ms</span></div>
-        <div class="stat-box">FPS <span id="fpsValue">120</span></div>
-      </div>
-
-      <div class="spawn-bottom-right">
-        <div class="date" id="dateValue"></div>
-        <div class="time" id="timeValue"></div>
-      </div>
-
-      <div class="spawn-modal animate-ios-slide-up">
-        <div class="spawn-header">
-          <h2>Выберите спавн</h2>
-          <p>Выберите место для появления на карте</p>
-        </div>
-
-        <div class="filter-tabs">
-          <button class="filter-tab active" onclick="filterSpawns('all', this)">Все</button>
-          <button class="filter-tab" onclick="filterSpawns('driver', this)">🚇 Машинист</button>
-          <button class="filter-tab" onclick="filterSpawns('passenger', this)">👤 Пассажир</button>
-        </div>
-
-        <div class="spawn-list" id="spawnList">
-          <button class="spawn-item driver" data-type="driver" onclick="selectSpawn('ТЧ-1 Лихоборы')">
-            <div class="spawn-item-icon">🚇</div>
-            <div class="spawn-item-info">
-              <div class="title">ТЧ-1 «Лихоборы»</div>
-              <div class="desc">Электродепо. Спавн составов.</div>
-            </div>
-            <div class="spawn-item-arrow">›</div>
-          </button>
-
-          <button class="spawn-item driver" data-type="driver" onclick="selectSpawn('Тупик Физтех')">
-            <div class="spawn-item-icon">🚇</div>
-            <div class="spawn-item-info">
-              <div class="title">Тупик ст. Физтех</div>
-              <div class="desc">Оборотный тупик. Смена кабины.</div>
-            </div>
-            <div class="spawn-item-arrow">›</div>
-          </button>
-
-          <button class="spawn-item passenger" data-type="passenger" onclick="selectSpawn('Ст. Лианозово')">
-            <div class="spawn-item-icon">📍</div>
-            <div class="spawn-item-info">
-              <div class="title">Ст. Лианозово</div>
-              <div class="desc">Пассажирская платформа</div>
-            </div>
-            <div class="spawn-item-arrow">›</div>
-          </button>
-
-          <button class="spawn-item passenger" data-type="passenger" onclick="selectSpawn('Ст. Физтех')">
-            <div class="spawn-item-icon">📍</div>
-            <div class="spawn-item-info">
-              <div class="title">Ст. Физтех</div>
-              <div class="desc">Конечная станция</div>
-            </div>
-            <div class="spawn-item-arrow">›</div>
-          </button>
-
-          <button class="spawn-item passenger" data-type="passenger" onclick="selectSpawn('Ст. Яхромская')">
-            <div class="spawn-item-icon">📍</div>
-            <div class="spawn-item-info">
-              <div class="title">Ст. Яхромская</div>
-              <div class="desc">Пассажирская платформа</div>
-            </div>
-            <div class="spawn-item-arrow">›</div>
-          </button>
-        </div>
-      </div>
+<div id="spawn-logo" class="liquid-glass">
+    <img src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg">
+    <div>
+        <div class="name">Project SY</div>
+        <div class="mode">Metrostroi</div>
     </div>
-  </div>
+</div>
 
+<div id="stats">
+    <div class="stat liquid-glass"><div class="dot"></div><span id="ping">24 ms</span></div>
+    <div class="stat liquid-glass"><span class="label">FPS</span><span id="fps">120</span></div>
+</div>
 
-  <script>
-    // ========== MUSIC ==========
-    // Музыка - используй свои ссылки или локальные файлы в GMod
-    // Для работы в браузере нужен хостинг музыки (Dropbox, Google Drive с прямой ссылкой, или свой сервер)
-    const MUSIC_TRACKS = [
-      // Пример с pixabay (бесплатная музыка)
-      "https://cdn.pixabay.com/audio/2022/10/25/audio_3712e1a8bc.mp3",
-      "https://cdn.pixabay.com/audio/2022/03/15/audio_8cb749d484.mp3",
-      "https://cdn.pixabay.com/audio/2021/11/25/audio_a2f1b9f4e2.mp3",
-    ];
+<div id="clock">
+    <div class="date" id="date"></div>
+    <div class="time" id="time"></div>
+</div>
 
-    let playedTracks = [];
-    const audio = document.getElementById('bgMusic');
-    const TARGET_VOLUME = 0.15;
-    const FADE_DURATION = 3000;
+<!-- CLICK SCREEN -->
+<div class="screen active" id="scr-click">
+    <div id="click-box" class="anim" onclick="goSpawn()">
+        <div class="icon liquid-glass-btn">
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none">
+                <rect x="5" y="2" width="14" height="20" rx="7" stroke="#fff" stroke-width="2"/>
+                <path d="M12 2V10" stroke="#fff" stroke-width="2"/>
+                <path d="M5 10H19" stroke="#fff" stroke-width="2"/>
+                <path d="M5 9C5 5.13 8.13 2 12 2V10H5V9Z" fill="#007AFF"/>
+            </svg>
+        </div>
+        <h1>Нажмите ЛКМ</h1>
+        <div class="badge liquid-glass">
+            <div class="dot"></div>
+            <span>Чтобы начать игру</span>
+        </div>
+    </div>
+</div>
 
-    function getRandomTrack() {
-      if (playedTracks.length >= MUSIC_TRACKS.length) {
-        playedTracks = [];
-      }
-      const available = MUSIC_TRACKS.filter(t => !playedTracks.includes(t));
-      const track = available[Math.floor(Math.random() * available.length)];
-      playedTracks.push(track);
-      return track;
+<!-- SPAWN SCREEN -->
+<div class="screen" id="scr-spawn">
+    <div id="spawn-modal" class="liquid-glass-strong anim">
+        <h2>Где появимся?</h2>
+        <div class="line"></div>
+        
+        <div class="tabs">
+            <button class="tab active" id="t-all" onclick="flt('all')">Все</button>
+            <button class="tab" id="t-dr" onclick="flt('dr')">🚇 Машинист</button>
+            <button class="tab" id="t-ps" onclick="flt('ps')">👤 Пассажир</button>
+        </div>
+        
+        <div class="spawns">
+            <button class="sp liquid-glass-btn" data-t="dr" onclick="sel('depot')">
+                <div class="icon">🚇</div>
+                <div class="info"><div class="title">ТЧ-1 «Лихоборы»</div><div class="desc">Электродепо. Спавн составов.</div></div>
+                <div class="arrow">›</div>
+            </button>
+            <button class="sp liquid-glass-btn" data-t="dr" onclick="sel('tupik')">
+                <div class="icon">🚇</div>
+                <div class="info"><div class="title">Тупик ст. Физтех</div><div class="desc">Оборотный тупик. Смена кабины.</div></div>
+                <div class="arrow">›</div>
+            </button>
+            <button class="sp liquid-glass-btn" data-t="ps" onclick="sel('lianozovo')">
+                <div class="icon">📍</div>
+                <div class="info"><div class="title">Ст. Лианозово</div><div class="desc">Пассажирская платформа</div></div>
+                <div class="arrow">›</div>
+            </button>
+            <button class="sp liquid-glass-btn" data-t="ps" onclick="sel('fiztech')">
+                <div class="icon">📍</div>
+                <div class="info"><div class="title">Ст. Физтех</div><div class="desc">Конечная станция</div></div>
+                <div class="arrow">›</div>
+            </button>
+            <button class="sp liquid-glass-btn" data-t="ps" onclick="sel('yahroma')">
+                <div class="icon">📍</div>
+                <div class="info"><div class="title">Ст. Яхромская</div><div class="desc">Пассажирская платформа</div></div>
+                <div class="arrow">›</div>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Time
+const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+function updateTime() {
+    const d = new Date();
+    document.getElementById('date').textContent = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+    document.getElementById('time').textContent = ('0'+d.getHours()).slice(-2) + ':' + ('0'+d.getMinutes()).slice(-2);
+}
+updateTime();
+setInterval(updateTime, 1000);
+
+// Stats
+function updateStats() {
+    document.getElementById('ping').textContent = Math.floor(Math.random() * 25 + 15) + ' ms';
+    document.getElementById('fps').textContent = Math.floor(Math.random() * 60 + 60);
+}
+setInterval(updateStats, 2000);
+
+// Music
+const audio = document.getElementById('bgMusic');
+const MUSIC_URL = 'https://cdn.pixabay.com/audio/2022/10/25/audio_3712e1a8bc.mp3';
+
+function playMusic() {
+    audio.src = MUSIC_URL;
+    audio.volume = 0.15;
+    audio.play().catch(() => {});
+}
+
+document.addEventListener('click', function startMusic() {
+    playMusic();
+    document.removeEventListener('click', startMusic);
+}, { once: true });
+
+// Screens
+function goSpawn() {
+    document.getElementById('scr-click').classList.remove('active');
+    document.getElementById('scr-spawn').classList.add('active');
+    document.body.classList.add('spawn-mode');
+}
+
+function flt(t) {
+    document.getElementById('t-all').className = (t=='all') ? 'tab active' : 'tab';
+    document.getElementById('t-dr').className = (t=='dr') ? 'tab active' : 'tab';
+    document.getElementById('t-ps').className = (t=='ps') ? 'tab active green' : 'tab';
+    const btns = document.getElementsByClassName('sp');
+    for (let i = 0; i < btns.length; i++) {
+        btns[i].style.display = (t=='all' || btns[i].getAttribute('data-t')==t) ? 'flex' : 'none';
     }
+}
 
-    function fadeIn() {
-      audio.volume = 0;
-      const step = TARGET_VOLUME / (FADE_DURATION / 50);
-      const interval = setInterval(() => {
-        if (audio.volume < TARGET_VOLUME) {
-          audio.volume = Math.min(TARGET_VOLUME, audio.volume + step);
-        } else {
-          clearInterval(interval);
-        }
-      }, 50);
+function sel(id) {
+    if (typeof gmod !== 'undefined' && gmod.spawn) {
+        gmod.spawn(id);
+    } else {
+        console.log('Spawn:', id);
+        document.getElementById('scr-spawn').classList.remove('active');
     }
-
-    function playMusic() {
-      audio.src = getRandomTrack();
-      audio.play().catch(() => {});
-      fadeIn();
-    }
-
-    audio.addEventListener('ended', () => {
-      audio.src = getRandomTrack();
-      audio.play().catch(() => {});
-      fadeIn();
-    });
-
-    // Start music on first click
-    document.addEventListener('click', function startMusic() {
-      playMusic();
-      document.removeEventListener('click', startMusic);
-    }, { once: true });
-
-    // ========== TIME & STATS ==========
-    function updateTime() {
-      const now = new Date();
-      const time = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Moscow' });
-      const date = now.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Moscow' });
-      document.getElementById('timeValue').textContent = time;
-      document.getElementById('dateValue').textContent = date;
-    }
-
-    function updateStats() {
-      document.getElementById('pingValue').textContent = Math.floor(Math.random() * 25 + 15) + ' ms';
-      document.getElementById('fpsValue').textContent = Math.floor(Math.random() * 60 + 60);
-    }
-
-    updateTime();
-    updateStats();
-    setInterval(updateTime, 1000);
-    setInterval(updateStats, 2000);
-
-    // ========== SCREENS ==========
-    function showSpawnScreen() {
-      document.getElementById('clickScreen').classList.remove('active');
-      document.getElementById('spawnScreen').classList.add('active');
-      document.getElementById('spawnScreen').classList.add('animate-ios-slide-up');
-    }
-
-    function filterSpawns(type, btn) {
-      document.querySelectorAll('.filter-tab').forEach(b => {
-        b.classList.remove('active', 'green');
-      });
-      btn.classList.add('active');
-      if (type === 'passenger') btn.classList.add('green');
-
-      document.querySelectorAll('.spawn-item').forEach(item => {
-        if (type === 'all' || item.dataset.type === type) {
-          item.style.display = 'flex';
-        } else {
-          item.style.display = 'none';
-        }
-      });
-    }
-
-    function selectSpawn(name) {
-      // Call GMod Lua
-      if (typeof gmod !== 'undefined' && gmod.spawn) {
-        gmod.spawn(name);
-      } else {
-        console.log('Spawn:', name);
-        // Demo: just hide UI
-        document.getElementById('spawnScreen').classList.remove('active');
-      }
-    }
-
-    // ESC to close
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        if (typeof gmod !== 'undefined' && gmod.closeUI) {
-          gmod.closeUI();
-        }
-      }
-    });
-  </script>
+}
+</script>
 </body>
 </html>
