@@ -20,6 +20,11 @@ end)
 local htmlPanel
 local htmlContent
 
+-- If you want to load HUD from GitHub Pages (or any external host), set URL here.
+-- Example: "https://<your-gh-user>.github.io/projectsy/hud.html"
+-- Leave empty to use bundled local html/projectsy/hud.html
+local HUD_REMOTE_URL = ""
+
 local function js_safe(str)
     str = tostring(str or "")
     str = string.Replace(str, "\\", "\\\\")
@@ -38,16 +43,23 @@ local function ensure_html()
 end
 
 local function create_panel()
-    ensure_html()
     if IsValid(htmlPanel) then htmlPanel:Remove() end
 
     htmlPanel = vgui.Create("DHTML")
     htmlPanel:SetSize(ScrW(), ScrH())
     htmlPanel:SetPos(0, 0)
-    htmlPanel:SetHTML(htmlContent)
     htmlPanel:SetMouseInputEnabled(false)
     htmlPanel:SetKeyboardInputEnabled(false)
     htmlPanel:SetAllowLua(true)
+
+    if HUD_REMOTE_URL ~= nil and HUD_REMOTE_URL ~= "" then
+        htmlPanel:OpenURL(HUD_REMOTE_URL)
+    else
+        ensure_html()
+        htmlPanel:SetHTML(htmlContent)
+    end
+    htmlPanel:SetMouseInputEnabled(false)
+    htmlPanel:SetKeyboardInputEnabled(false)
 end
 
 local function resize_panel()
