@@ -159,6 +159,69 @@ const MouseLeftClick = ({ size = 24, className = "" }: { size?: number, classNam
   </svg>
 );
 
+// --- LIQUID GLASS COMPONENTS ---
+
+const LiquidGlassBackground = () => (
+  <div className="fixed inset-0 z-0 bg-black pointer-events-none overflow-hidden" />
+);
+
+interface LiquidCardProps {
+  children: React.ReactNode;
+  className?: string;
+  onClick?: (e?: any) => void;
+  style?: React.CSSProperties;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+}
+
+const LiquidCard: React.FC<LiquidCardProps> = ({ children, className = "", onClick, style, onMouseEnter, onMouseLeave }) => {
+  return (
+    <div
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      style={style}
+      className={`
+        relative overflow-hidden
+        bg-white/[0.04] backdrop-blur-2xl
+        border border-white/[0.08]
+        transition-all duration-300 ease-out
+        ${onClick ? 'cursor-pointer hover:bg-white/[0.07] hover:border-white/[0.12] active:scale-[0.98]' : ''}
+        ${className}
+      `}
+    >
+      {children}
+    </div>
+  );
+};
+
+const MenuButton = ({ icon, label, subLabel, active, danger, onClick }: { icon: React.ReactNode, label: string, subLabel: string, active?: boolean, danger?: boolean, onClick: () => void }) => (
+  <button
+    onClick={onClick}
+    className={`
+      w-full p-4 rounded-2xl flex items-center gap-4 transition-all duration-300 group
+      border border-transparent
+      ${active
+        ? 'bg-brand-blue text-white shadow-[0_0_20px_rgba(0,122,255,0.3)]'
+        : danger
+          ? 'bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white'
+          : 'bg-white/[0.03] text-gray-400 hover:bg-white/[0.08] hover:text-white hover:border-white/[0.1]'}
+    `}
+  >
+    <div className={`
+      w-10 h-10 rounded-xl flex items-center justify-center transition-colors
+      ${active ? 'bg-white/20' : danger ? 'bg-red-500/20 group-hover:bg-white/20' : 'bg-white/5 group-hover:bg-white/10'}
+    `}>
+      {icon}
+    </div>
+    <div className="text-left">
+      <div className={`font-bold text-sm ${active ? 'text-white' : 'text-gray-200 group-hover:text-white'}`}>{label}</div>
+      <div className={`text-[10px] uppercase tracking-wider font-medium ${active ? 'text-blue-100' : 'text-gray-500 group-hover:text-gray-400'}`}>{subLabel}</div>
+    </div>
+    {active && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_white]" />}
+  </button>
+);
+
 const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
   const [mode, setMode] = useState<InterfaceMode>('menu');
   const [spawnFilter, setSpawnFilter] = useState<SpawnFilter>('all');
@@ -405,32 +468,38 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
         <div className="absolute inset-0 z-10 animate-ios-slide-up overflow-hidden">
           <div className="h-full flex flex-col p-4 lg:p-6 max-w-[1400px] mx-auto w-full">
 
-            {/* Top Bar */}
-            <div className="flex justify-between items-center mb-4 shrink-0">
-              <div className="flex items-center gap-2">
-                <img src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Logo" className="w-9 h-9 rounded-xl object-cover" />
+            {/* Top Bar - Glass Style */}
+            <div className="flex justify-between items-center mb-6 shrink-0 animate-ios-slide-up delay-100">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-[18px] overflow-hidden border border-white/[0.1] shadow-lg">
+                  <img src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Logo" className="w-full h-full object-cover" />
+                </div>
                 <div>
-                  <div className="text-base font-bold text-white">Project SY</div>
-                  <div className="text-[10px] text-gray-500 uppercase tracking-wider">Metrostroi NoRank</div>
+                  <div className="text-xl font-bold text-white tracking-tight">Project <span className="text-brand-blue">SY</span></div>
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 rounded-md bg-white/[0.05] border border-white/[0.05] text-[10px] text-gray-400 font-bold uppercase tracking-wider">Metrostroi</span>
+                    <span className="w-1 h-1 rounded-full bg-gray-600" />
+                    <span className="text-[10px] text-gray-500 uppercase tracking-wider">NoRank</span>
+                  </div>
                 </div>
               </div>
-              <div className="flex gap-2">
-                <div className="bg-[#1C1C1E] rounded-lg px-3 py-1.5 flex items-center gap-1.5 text-sm">
-                  <Wifi size={14} className="text-green-500" />
-                  <span className="text-white">{ping} ms</span>
+              <div className="flex gap-3">
+                <div className="h-10 px-4 rounded-xl bg-white/[0.05] backdrop-blur-md border border-white/[0.08] flex items-center gap-2 text-sm">
+                  <Wifi size={16} className={ping < 50 ? "text-green-500" : "text-yellow-500"} />
+                  <span className="text-white font-medium">{ping} <span className="text-white/40 text-xs">ms</span></span>
                 </div>
-                <div className="bg-[#1C1C1E] rounded-lg px-3 py-1.5 flex items-center gap-1.5 text-sm">
-                  <span className="text-brand-blue text-[10px] font-bold">FPS</span>
-                  <span className="text-white">{fps}</span>
+                <div className="h-10 px-4 rounded-xl bg-white/[0.05] backdrop-blur-md border border-white/[0.08] flex items-center gap-2 text-sm">
+                  <span className="text-brand-blue text-[10px] font-bold uppercase tracking-wider">FPS</span>
+                  <span className="text-white font-medium">{fps}</span>
                 </div>
               </div>
             </div>
 
             {/* Main Content */}
-            <div className="flex-1 flex gap-4 min-h-0">
+            <div className="flex-1 flex gap-6 min-h-0 animate-ios-slide-up delay-200">
 
               {/* Left - Menu Buttons */}
-              <div className="w-72 shrink-0 flex flex-col gap-2">
+              <div className="w-72 shrink-0 flex flex-col gap-3">
                 <MenuButton icon={<Play size={20} fill="currentColor" />} label="Вернуться в игру" subLabel="ESC" active onClick={() => setMode('ingame')} />
                 <MenuButton icon={<Settings size={20} />} label="Загрузка" subLabel="Демо" onClick={() => setMode('loading')} />
                 <MenuButton icon={<Server size={20} />} label="Очередь" subLabel="Демо" onClick={() => setMode('queue')} />
@@ -440,139 +509,163 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
               </div>
 
               {/* Center - News */}
-              <div className="flex-1 flex flex-col gap-3 min-w-0">
+              <div className="flex-1 flex flex-col gap-4 min-w-0">
                 {/* Featured News */}
                 {NEWS_DATA[0] && (
-                  <div
+                  <LiquidCard
                     onMouseEnter={() => setHoveredNews(0)}
                     onMouseLeave={() => setHoveredNews(null)}
                     style={{ flex: hoveredNews === 1 ? '0 0 100px' : '1 1 auto' }}
-                    className="bg-[#1C1C1E] rounded-2xl overflow-hidden cursor-pointer group relative transition-all duration-300 ease-out"
+                    className="rounded-[24px] cursor-pointer group"
+                    onClick={() => setMenuSelectedNews(NEWS_DATA[0])}
                   >
-                    <img src={NEWS_DATA[0].imageUrl} alt={NEWS_DATA[0].title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                    <div className="absolute inset-0 bg-black/70" />
-                    <div className="absolute inset-0 p-5 flex flex-col justify-end overflow-hidden">
+                    <img src={NEWS_DATA[0].imageUrl} alt={NEWS_DATA[0].title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-70" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+
+                    <div className="absolute inset-0 p-8 flex flex-col justify-end overflow-hidden">
                       {/* Tag + Date row */}
-                      <div className="flex items-center gap-3 mb-2 shrink-0">
-                        <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${NEWS_DATA[0].tagColor} text-white`}>{NEWS_DATA[0].tag}</span>
-                        <span className="text-sm text-gray-400">{NEWS_DATA[0].date}</span>
+                      <div className="flex items-center gap-3 mb-3 shrink-0 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                        <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${NEWS_DATA[0].tagColor} text-white shadow-lg backdrop-blur-md`}>{NEWS_DATA[0].tag}</span>
+                        <span className="text-sm text-gray-300 font-medium">{NEWS_DATA[0].date}</span>
                       </div>
                       {/* Title */}
-                      <h3 className="font-bold text-white text-xl mb-3 group-hover:text-brand-blue transition-colors shrink-0 leading-tight">{NEWS_DATA[0].title}</h3>
-                      {/* Blue separator line */}
-                      {hoveredNews === 0 && <div className="w-12 h-1 bg-brand-blue rounded-full mb-3 shrink-0" />}
+                      <h3 className="font-bold text-white text-3xl mb-4 group-hover:text-brand-blue transition-colors shrink-0 leading-none tracking-tight">{NEWS_DATA[0].title}</h3>
                       {/* Article content */}
-                      <article className={`text-base text-gray-300 leading-relaxed whitespace-pre-line transition-all duration-300 overflow-hidden ${hoveredNews === 0 ? 'max-h-32' : 'max-h-10 line-clamp-2'}`}>
-                        {hoveredNews === 0 ? NEWS_DATA[0].content : NEWS_DATA[0].excerpt}
+                      <article className={`text-lg text-gray-300 leading-relaxed font-light transition-all duration-500 overflow-hidden ${hoveredNews === 0 ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
+                        {NEWS_DATA[0].excerpt}
+                        <div className="mt-4 flex items-center text-brand-blue text-sm font-bold uppercase tracking-wider">
+                          Читать далее <ChevronRight size={14} className="ml-1" />
+                        </div>
                       </article>
                     </div>
-                  </div>
+                  </LiquidCard>
                 )}
 
                 {/* Second News */}
                 {NEWS_DATA[1] && (
-                  <div
+                  <LiquidCard
                     onMouseEnter={() => setHoveredNews(1)}
                     onMouseLeave={() => setHoveredNews(null)}
                     style={{ flex: hoveredNews === 1 ? '1 1 auto' : '0 0 100px' }}
-                    className="bg-[#1C1C1E] rounded-2xl overflow-hidden cursor-pointer group relative transition-all duration-300 ease-out"
+                    className="rounded-[24px] cursor-pointer group"
+                    onClick={() => setMenuSelectedNews(NEWS_DATA[1])}
                   >
                     {/* Background Image */}
                     <img
                       src={NEWS_DATA[1].imageUrl}
                       alt={NEWS_DATA[1].title}
                       className="absolute inset-0 w-full h-full object-cover transition-all duration-300"
-                      style={{ opacity: hoveredNews === 1 ? 0.3 : 0 }}
+                      style={{ opacity: hoveredNews === 1 ? 0.6 : 0 }}
                     />
-                    <div className="absolute inset-0 bg-[#1C1C1E]/90 transition-opacity duration-300" style={{ opacity: hoveredNews === 1 ? 1 : 0 }} />
+                    <div className="absolute inset-0 bg-black/60 transition-opacity duration-300" style={{ opacity: hoveredNews === 1 ? 1 : 0 }} />
 
                     {/* Content */}
-                    <div className="relative z-10 h-full flex">
-                      {/* Thumbnail */}
+                    <div className="relative z-10 h-full flex items-center p-3">
+                      {/* Thumbnail for Compact Mode */}
                       <div
-                        className="shrink-0 relative overflow-hidden transition-all duration-300"
-                        style={{ width: hoveredNews === 1 ? 0 : 140, opacity: hoveredNews === 1 ? 0 : 1 }}
+                        className="shrink-0 relative overflow-hidden rounded-2xl transition-all duration-500"
+                        style={{
+                          width: hoveredNews === 1 ? 0 : 120,
+                          height: hoveredNews === 1 ? 0 : 80,
+                          opacity: hoveredNews === 1 ? 0 : 1,
+                          marginRight: hoveredNews === 1 ? 0 : 16
+                        }}
                       >
-                        <img src={NEWS_DATA[1].imageUrl} alt={NEWS_DATA[1].title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <img src={NEWS_DATA[1].imageUrl} alt={NEWS_DATA[1].title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                       </div>
 
                       {/* Text Content */}
-                      <div className={`flex-1 p-5 flex flex-col overflow-hidden transition-all duration-300 ${hoveredNews === 1 ? 'justify-start' : 'justify-center'}`}>
-                        {/* Tag + Date row */}
-                        <div className="flex items-center gap-3 mb-2 shrink-0">
-                          <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${NEWS_DATA[1].tagColor} text-white`}>{NEWS_DATA[1].tag}</span>
-                          <span className={`text-gray-400 ${hoveredNews === 1 ? 'text-sm' : 'text-[10px]'}`}>{NEWS_DATA[1].date}</span>
+                      <div className={`flex-1 flex flex-col transition-all duration-300 ${hoveredNews === 1 ? 'p-8 justify-end h-full' : 'justify-center'}`}>
+                        {/* Wrapper for Expanded Animation */}
+                        <div className={`${hoveredNews === 1 ? 'transform translate-y-0' : ''}`}>
+                          <div className="flex items-center gap-3 mb-2 shrink-0">
+                            <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${NEWS_DATA[1].tagColor} text-white`}>{NEWS_DATA[1].tag}</span>
+                            <span className="text-gray-400 text-xs">{NEWS_DATA[1].date}</span>
+                          </div>
+
+                          <h3 className={`font-bold text-white group-hover:text-brand-blue transition-colors shrink-0 leading-tight ${hoveredNews === 1 ? 'text-3xl mb-4' : 'text-lg line-clamp-1'}`}>
+                            {NEWS_DATA[1].title}
+                          </h3>
+
+                          <article className={`text-gray-300 leading-relaxed font-light transition-all duration-500 overflow-hidden ${hoveredNews === 1 ? 'max-h-32 opacity-100 text-lg' : 'max-h-0 opacity-0 text-xs'}`}>
+                            {NEWS_DATA[1].excerpt}
+                          </article>
                         </div>
-                        {/* Title */}
-                        <h3 className={`font-bold text-white group-hover:text-brand-blue transition-colors shrink-0 leading-tight ${hoveredNews === 1 ? 'text-xl mb-3' : 'text-sm line-clamp-1'}`}>
-                          {NEWS_DATA[1].title}
-                        </h3>
-                        {/* Blue separator line */}
-                        {hoveredNews === 1 && <div className="w-12 h-1 bg-brand-blue rounded-full mb-3 shrink-0" />}
-                        {/* Article content */}
-                        <article className={`text-gray-300 leading-relaxed whitespace-pre-line transition-all duration-300 overflow-hidden ${hoveredNews === 1 ? 'text-base max-h-32' : 'text-xs max-h-4 line-clamp-1 mt-1 text-gray-500'}`}>
-                          {hoveredNews === 1 ? NEWS_DATA[1].content : NEWS_DATA[1].excerpt}
-                        </article>
                       </div>
                     </div>
-                  </div>
+                  </LiquidCard>
                 )}
               </div>
 
               {/* Right - Profile & Map */}
-              <div className="w-56 shrink-0 flex flex-col gap-3">
+              <div className="w-80 shrink-0 flex flex-col gap-4">
                 {/* Profile */}
-                <div className="bg-[#1C1C1E] rounded-2xl p-4">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-xl bg-[#2C2C2E] flex items-center justify-center">
-                      <User size={18} className="text-gray-500" />
+                <LiquidCard className="rounded-[24px] p-5">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 rounded-2xl bg-white/[0.05] border border-white/[0.1] flex items-center justify-center relative overflow-hidden group">
+                      <User size={24} className="text-gray-400 relative z-10 group-hover:text-white transition-colors" />
+                      <div className="absolute inset-0 bg-brand-blue/10 scale-0 group-hover:scale-100 transition-transform rounded-2xl" />
                     </div>
                     <div>
-                      <div className="font-bold text-white text-sm">Гость</div>
-                      <div className="text-[10px] text-brand-blue">Игрок</div>
+                      <div className="font-bold text-white text-lg leading-tight">Гость</div>
+                      <div className="text-xs text-brand-blue font-bold uppercase tracking-wider mt-0.5">Игрок</div>
                     </div>
                   </div>
-                  <div className="space-y-1 text-xs">
-                    <div className="flex justify-between"><span className="text-gray-500">Ранг</span><span className="text-white">Новичок</span></div>
-                    <div className="flex justify-between"><span className="text-gray-500">Баланс</span><span className="text-white">0 ₽</span></div>
-                    <div className="flex justify-between"><span className="text-gray-500">Время</span><span className="text-white">0.0 ч</span></div>
+                  <div className="space-y-2.5">
+                    <div className="flex justify-between items-center bg-white/[0.03] p-2.5 rounded-xl border border-white/[0.02]">
+                      <span className="text-gray-500 text-xs font-medium">Ранг</span>
+                      <span className="text-white text-sm font-semibold">Новичок</span>
+                    </div>
+                    <div className="flex justify-between items-center bg-white/[0.03] p-2.5 rounded-xl border border-white/[0.02]">
+                      <span className="text-gray-500 text-xs font-medium">Баланс</span>
+                      <span className="text-emerald-400 text-sm font-semibold">0 ₽</span>
+                    </div>
+                    <div className="flex justify-between items-center bg-white/[0.03] p-2.5 rounded-xl border border-white/[0.02]">
+                      <span className="text-gray-500 text-xs font-medium">Время</span>
+                      <span className="text-blue-300 text-sm font-semibold">0.0 ч</span>
+                    </div>
                   </div>
-                </div>
+                </LiquidCard>
 
                 {/* Map */}
-                <div className="flex-1 bg-[#1C1C1E] rounded-2xl p-4 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-[url('https://files.facepunch.com/garry/1083f274/2012-07-06_14-41-43.jpg')] bg-cover bg-center opacity-20" />
-                  <div className="relative z-10 h-full flex flex-col">
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="w-8 h-8 rounded-lg bg-brand-blue/20 flex items-center justify-center">
-                        <Map size={14} className="text-brand-blue" />
+                <LiquidCard className="flex-1 rounded-[24px] p-0 relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-[url('https://files.facepunch.com/garry/1083f274/2012-07-06_14-41-43.jpg')] bg-cover bg-center opacity-40 group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+
+                  <div className="relative z-10 h-full flex flex-col p-5">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="w-10 h-10 rounded-xl bg-brand-blue/20 backdrop-blur-md flex items-center justify-center border border-brand-blue/20">
+                        <Map size={18} className="text-brand-blue" />
                       </div>
-                      <span className="px-2 py-0.5 bg-green-500 rounded text-[9px] font-bold text-black">Активно</span>
+                      <span className="px-2.5 py-1 bg-emerald-500/20 backdrop-blur-md border border-emerald-500/20 rounded-lg text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Активно</span>
                     </div>
-                    <div className="font-bold text-white text-sm">gm_metro_mrl_v3</div>
-                    <div className="text-[10px] text-gray-500">Карта Метростроя</div>
-                    <div className="mt-2 pt-2 border-t border-white/5 flex items-center gap-2 text-[10px]">
-                      <Users size={10} className="text-gray-500" />
-                      <span className="text-gray-400">Онлайн:</span>
-                      <span className="text-white font-medium">24/60</span>
-                    </div>
-                    <div className="mt-auto pt-2">
+
+                    <div className="mt-auto">
+                      <div className="font-bold text-white text-xl leading-tight">gm_metro_mrl_v3</div>
+                      <div className="text-xs text-gray-400 mb-4">Карта Метростроя</div>
+
+                      <div className="flex items-center gap-2 text-[10px] bg-black/40 p-2 rounded-lg backdrop-blur-sm w-fit mb-3">
+                        <Users size={12} className="text-gray-400" />
+                        <span className="text-gray-400 uppercase tracking-wider font-semibold">Онлайн:</span>
+                        <span className="text-white font-bold">24 / 60</span>
+                      </div>
+
                       <button
                         onClick={() => setShowMapVote(true)}
-                        className="w-full py-2 rounded-lg bg-brand-blue/20 hover:bg-brand-blue text-brand-blue hover:text-white text-[10px] font-bold transition-colors flex items-center justify-center gap-1"
+                        className="w-full h-10 rounded-xl bg-brand-blue hover:bg-blue-600 text-white text-xs font-bold uppercase tracking-wider transition-all shadow-lg shadow-brand-blue/20 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
                       >
-                        <Clock size={12} />
-                        Голосование за карту
+                        <Clock size={14} />
+                        Голосование
                       </button>
                     </div>
                   </div>
-                </div>
+                </LiquidCard>
 
                 {/* Time */}
-                <div className="bg-[#1C1C1E] rounded-2xl p-4 text-center">
-                  <div className="text-gray-500 text-[10px] uppercase tracking-wider">{date}</div>
-                  <div className="text-2xl font-light text-white">{time}</div>
-                </div>
+                <LiquidCard className="rounded-[24px] p-5 text-center flex flex-col justify-center items-center">
+                  <div className="text-brand-blue text-[10px] font-bold uppercase tracking-[0.2em] mb-1">{date}</div>
+                  <div className="text-4xl font-light text-white tracking-tight">{time}</div>
+                </LiquidCard>
               </div>
             </div>
           </div>
@@ -597,25 +690,28 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
 
           {/* Map Vote Modal */}
           {showMapVote && (
-            <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 animate-fade-in" onClick={() => setShowMapVote(false)}>
-              <div className="w-full max-w-2xl bg-[#1C1C1E] rounded-[28px] overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-3xl flex items-center justify-center p-4 animate-fade-in" onClick={() => setShowMapVote(false)}>
+              <LiquidCard className="w-full max-w-2xl rounded-[32px] overflow-hidden shadow-2xl bg-black/40 border-white/10" onClick={e => e.stopPropagation()}>
                 {/* Header */}
-                <div className="p-6 flex justify-between items-start">
+                <div className="p-8 flex justify-between items-start border-b border-white/[0.06]">
                   <div>
-                    <div className="flex items-center gap-3 mb-1">
-                      <div className="w-10 h-10 rounded-xl bg-brand-blue/20 flex items-center justify-center">
-                        <Map size={20} className="text-brand-blue" />
+                    <div className="flex items-center gap-4 mb-2">
+                      <div className="w-12 h-12 rounded-[18px] bg-brand-blue/20 flex items-center justify-center border border-brand-blue/20 text-brand-blue shadow-[0_0_20px_rgba(0,122,255,0.2)]">
+                        <Map size={24} />
                       </div>
-                      <h2 className="text-2xl font-bold text-white">Голосование</h2>
+                      <h2 className="text-3xl font-bold text-white">Голосование</h2>
                     </div>
-                    <p className="text-gray-500 text-sm ml-[52px]">Выберите следующую карту</p>
+                    <p className="text-white/40 text-sm ml-[62px]">Выберите следующую карту для игры</p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="bg-yellow-500/10 rounded-xl px-4 py-2.5 flex items-center gap-2">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl px-4 py-2 flex items-center gap-2.5">
                       <Clock size={18} className="text-yellow-500" />
-                      <span className="text-yellow-500 font-bold tabular-nums">{Math.floor(mapVoteTime / 60)}:{(mapVoteTime % 60).toString().padStart(2, '0')}</span>
+                      <div className="flex flex-col items-start leading-none">
+                        <span className="text-[9px] text-yellow-500/70 font-bold uppercase tracking-wider">Осталось</span>
+                        <span className="text-yellow-500 font-bold tabular-nums text-base">{Math.floor(mapVoteTime / 60)}:{(mapVoteTime % 60).toString().padStart(2, '0')}</span>
+                      </div>
                     </div>
-                    <button onClick={() => setShowMapVote(false)} className="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors">✕</button>
+                    <button onClick={() => setShowMapVote(false)} className="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors border border-white/5">✕</button>
                   </div>
                 </div>
 
@@ -682,233 +778,267 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
                     }}
                     disabled={!selectedMap && !hasVoted}
                     className={`h-11 px-6 rounded-xl font-semibold transition-colors ${hasVoted
-                        ? 'bg-gray-600 text-gray-300 cursor-default'
-                        : selectedMap
-                          ? 'bg-brand-blue hover:bg-blue-600 text-white'
-                          : 'bg-gray-700 text-gray-500 cursor-not-allowed'
+                      ? 'bg-gray-600 text-gray-300 cursor-default'
+                      : selectedMap
+                        ? 'bg-brand-blue hover:bg-blue-600 text-white'
+                        : 'bg-gray-700 text-gray-500 cursor-not-allowed'
                       }`}
                   >
                     {hasVoted ? 'Голос отдан' : 'Голосовать'}
                   </button>
                 </div>
-              </div>
+            </div>
 
               {/* Floating Tooltip for Voter Name */}
-              {hoveredVoter && (
-                <div
-                  className="fixed z-[100] bg-black/90 text-white text-sm px-3 py-1.5 rounded-lg pointer-events-none whitespace-nowrap"
-                  style={{ left: hoveredVoter.x + 15, top: hoveredVoter.y - 10 }}
-                >
-                  {hoveredVoter.name}
-                </div>
-              )}
+          {hoveredVoter && (
+            <div
+              className="fixed z-[100] bg-black/90 text-white text-sm px-3 py-1.5 rounded-lg pointer-events-none whitespace-nowrap"
+              style={{ left: hoveredVoter.x + 15, top: hoveredVoter.y - 10 }}
+            >
+              {hoveredVoter.name}
             </div>
           )}
         </div>
       )}
 
       {/* === CLICK TO START === */}
-      {mode === 'click_to_start' && (
-        <div onClick={onClickToStart} className="absolute inset-0 z-50 cursor-pointer flex items-center justify-center animate-ios-slide-up">
-          {/* Top Right Logo */}
-          <div className="absolute top-8 right-8 flex items-center gap-4 bg-[#1C1C1E] rounded-2xl px-5 py-3">
-            <div className="text-right">
-              <div className="text-xl font-bold text-white">Project SY</div>
-              <div className="text-xs text-brand-blue font-medium uppercase tracking-wider">Metrostroi NoRank</div>
-            </div>
-            <img src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Logo" className="w-12 h-12 rounded-xl object-cover" />
-          </div>
+      {
+        mode === 'click_to_start' && (
+          <div onClick={onClickToStart} className="absolute inset-0 z-50 cursor-pointer flex items-center justify-center animate-ios-slide-up">
+            <LiquidGlassBackground />
 
-          {/* Center Content */}
-          <div className="text-center group">
-            <div className="w-24 h-24 rounded-2xl bg-[#1C1C1E] flex items-center justify-center mx-auto mb-6 group-hover:bg-[#2C2C2E] transition-colors">
-              <MouseLeftClick size={48} className="text-white" />
+            {/* Top Right Logo - Glass */}
+            <div className="absolute top-10 right-10 flex items-center gap-5 bg-white/[0.03] backdrop-blur-2xl border border-white/[0.08] rounded-[24px] px-6 py-4 shadow-2xl">
+              <div className="text-right">
+                <div className="text-2xl font-bold text-white tracking-tight">Project SY</div>
+                <div className="text-xs text-brand-blue font-bold uppercase tracking-[0.15em]">Metrostroi NoRank</div>
+              </div>
+              <div className="w-14 h-14 rounded-2xl overflow-hidden border border-white/10 shadow-inner">
+                <img src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Logo" className="w-full h-full object-cover" />
+              </div>
             </div>
-            <h1 className="text-5xl font-bold text-white mb-3">Нажмите ЛКМ</h1>
-            <p className="text-brand-blue font-medium uppercase tracking-widest">Чтобы начать игру</p>
+
+            {/* Center Content */}
+            <div className="text-center group relative z-10">
+              <div className="w-32 h-32 rounded-[32px] bg-white/[0.05] backdrop-blur-3xl border border-white/[0.1] flex items-center justify-center mx-auto mb-10 group-hover:bg-brand-blue group-hover:border-brand-blue/50 group-hover:shadow-[0_0_50px_rgba(0,122,255,0.4)] transition-all duration-500 transform group-hover:scale-110">
+                <MouseLeftClick size={64} className="text-white drop-shadow-lg" />
+              </div>
+              <h1 className="text-7xl font-bold text-white mb-6 tracking-tighter drop-shadow-xl">Нажмите ЛКМ</h1>
+              <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur-md">
+                <div className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
+                <p className="text-gray-200 font-medium uppercase tracking-[0.2em] text-sm">Чтобы начать игру</p>
+              </div>
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* === SPAWN SELECTION === */}
-      {mode === 'spawn_selection' && (
-        <div className="absolute inset-0 z-40 animate-ios-slide-up flex items-center justify-center p-6">
-          {/* Top Bar */}
-          <div className="absolute top-6 left-6 flex items-center gap-3">
-            <img src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Logo" className="w-10 h-10 rounded-xl object-cover" />
-            <div>
-              <div className="font-bold text-white">Project SY</div>
-              <div className="text-xs text-gray-500">Metrostroi</div>
+      {
+        mode === 'spawn_selection' && (
+          <div className="absolute inset-0 z-40 animate-ios-slide-up flex items-center justify-center p-6">
+            <LiquidGlassBackground />
+
+            {/* Top Bar - Glass */}
+            <div className="absolute top-8 left-8 flex items-center gap-4 animate-fade-in">
+              <div className="w-12 h-12 rounded-[18px] overflow-hidden border border-white/10 shadow-lg">
+                <img src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" alt="Logo" className="w-full h-full object-cover" />
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-white tracking-tight">Project SY</div>
+                <div className="text-xs text-white/50 font-medium uppercase tracking-[0.15em]">Metrostroi</div>
+              </div>
             </div>
+
+            <div className="absolute top-8 right-8 flex gap-3 animate-fade-in">
+              <div className="h-10 px-4 rounded-xl bg-white/[0.05] backdrop-blur-md border border-white/[0.08] flex items-center gap-2 text-sm text-white font-medium">
+                <Wifi size={16} className="text-green-500" /> {ping} ms
+              </div>
+              <div className="h-10 px-4 rounded-xl bg-white/[0.05] backdrop-blur-md border border-white/[0.08] flex items-center justify-center text-sm text-white font-medium">
+                FPS {fps}
+              </div>
+            </div>
+
+            <div className="absolute bottom-8 right-8 text-right animate-fade-in">
+              <div className="text-white/40 text-sm font-medium tracking-wider mb-1 uppercase">{date}</div>
+              <div className="text-5xl font-light text-white tracking-tighter">{time}</div>
+            </div>
+
+            {/* Spawn Modal - Glass */}
+            <LiquidCard className="w-full max-w-lg rounded-[36px] p-8 max-h-[80vh] flex flex-col bg-black/40 border-white/10 shadow-2xl">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold text-white mb-2">Где появимся?</h2>
+                <div className="h-1 w-12 bg-brand-blue rounded-full mx-auto" />
+              </div>
+
+              {/* Filter Tabs */}
+              <div className="flex p-1.5 mb-6 bg-black/40 rounded-2xl border border-white/5">
+                {[
+                  { key: 'all', label: 'Все', icon: null },
+                  { key: 'driver', label: 'Машинист', icon: <Briefcase size={16} /> },
+                  { key: 'passenger', label: 'Пассажир', icon: <User size={16} /> },
+                ].map(f => (
+                  <button
+                    key={f.key}
+                    onClick={() => setSpawnFilter(f.key as SpawnFilter)}
+                    className={`
+                      flex-1 py-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2
+                      ${spawnFilter === f.key
+                        ? 'bg-brand-blue text-white shadow-lg'
+                        : 'text-gray-500 hover:text-white hover:bg-white/5'}
+                   `}
+                  >
+                    {f.icon}{f.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Spawn List */}
+              <div className="flex-1 overflow-y-auto space-y-3 pr-2 custom-scrollbar">
+                {SPAWN_POINTS.filter(sp => spawnFilter === 'all' || sp.type === spawnFilter).map(sp => (
+                  <button
+                    key={sp.id}
+                    onClick={onSpawnSelected}
+                    className="w-full flex items-center gap-5 p-4 bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.02] hover:border-white/[0.08] rounded-2xl transition-all group text-left active:scale-[0.98]"
+                  >
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 transition-colors ${sp.type === 'driver' ? 'bg-brand-blue/10 text-brand-blue group-hover:bg-brand-blue group-hover:text-white' : 'bg-green-500/10 text-green-500 group-hover:bg-green-500 group-hover:text-white'}`}>
+                      {sp.icon}
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-bold text-white text-lg leading-tight mb-1">{sp.title}</div>
+                      <div className="text-xs text-gray-500 group-hover:text-gray-300 font-medium uppercase tracking-wide">{sp.desc}</div>
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-white/5 group-hover:bg-white/20 flex items-center justify-center transition-colors">
+                      <ChevronRight size={18} className="text-gray-500 group-hover:text-white" />
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </LiquidCard>
           </div>
-
-          <div className="absolute top-6 right-6 flex gap-3">
-            <div className="bg-[#1C1C1E] rounded-xl px-4 py-2 flex items-center gap-2 text-sm">
-              <Wifi size={14} className="text-green-500" /><span className="text-white">{ping} ms</span>
-            </div>
-            <div className="bg-[#1C1C1E] rounded-xl px-4 py-2 text-sm text-white">FPS {fps}</div>
-          </div>
-
-          <div className="absolute bottom-6 right-6 text-right">
-            <div className="text-gray-500 text-sm">{date}</div>
-            <div className="text-3xl font-light text-white">{time}</div>
-          </div>
-
-          {/* Spawn Modal */}
-          <div className="w-full max-w-lg bg-[#1C1C1E] rounded-2xl p-6 max-h-[80vh] flex flex-col">
-            <div className="text-center mb-5">
-              <h2 className="text-2xl font-bold text-white mb-1">Выберите спавн</h2>
-              <p className="text-gray-500 text-sm">Выберите место для появления на карте</p>
-            </div>
-
-            {/* Filter Tabs */}
-            <div className="flex gap-2 mb-4 bg-[#2C2C2E] rounded-xl p-1">
-              {[
-                { key: 'all', label: 'Все', icon: null },
-                { key: 'driver', label: 'Машинист', icon: <Briefcase size={14} /> },
-                { key: 'passenger', label: 'Пассажир', icon: <User size={14} /> },
-              ].map(f => (
-                <button key={f.key} onClick={() => setSpawnFilter(f.key as SpawnFilter)} className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 ${spawnFilter === f.key ? (f.key === 'passenger' ? 'bg-green-500 text-white' : 'bg-brand-blue text-white') : 'text-gray-400 hover:text-white'}`}>
-                  {f.icon}{f.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Spawn List */}
-            <div className="flex-1 overflow-y-auto space-y-2">
-              {SPAWN_POINTS.filter(sp => spawnFilter === 'all' || sp.type === spawnFilter).map(sp => (
-                <button key={sp.id} onClick={onSpawnSelected} className="w-full flex items-center gap-4 p-4 bg-[#2C2C2E] hover:bg-brand-blue rounded-xl transition-all group text-left">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${sp.type === 'driver' ? 'bg-brand-blue/20 text-brand-blue' : 'bg-green-500/20 text-green-500'} group-hover:bg-white/20 group-hover:text-white transition-colors`}>{sp.icon}</div>
-                  <div className="flex-1">
-                    <div className="font-medium text-white">{sp.title}</div>
-                    <div className="text-sm text-gray-500 group-hover:text-white/70">{sp.desc}</div>
-                  </div>
-                  <ChevronRight size={18} className="text-gray-600 group-hover:text-white" />
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+        )
+      }
 
       {/* === BATTLE PASS === */}
-      {mode === 'battlepass' && (
-        <div className="absolute inset-0 z-40 bg-black animate-ios-slide-up flex flex-col">
-          {/* Header */}
-          <div className="flex justify-between items-center p-6 shrink-0">
-            <div className="flex items-center gap-4">
-              <button onClick={() => setMode('menu')} className="w-10 h-10 rounded-xl bg-[#1C1C1E] hover:bg-[#2C2C2E] flex items-center justify-center text-white transition-colors">
-                <ChevronRight size={20} className="rotate-180" />
-              </button>
-              <div>
-                <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-                  <Trophy size={24} className="text-yellow-500" />
-                  Боевой Пропуск
-                </h1>
-                <p className="text-gray-500 text-sm">Сезон 1 • Заканчивается через 28 дней</p>
+      {
+        mode === 'battlepass' && (
+          <div className="absolute inset-0 z-40 bg-black animate-ios-slide-up flex flex-col">
+            {/* Header */}
+            <div className="flex justify-between items-center p-6 shrink-0">
+              <div className="flex items-center gap-4">
+                <button onClick={() => setMode('menu')} className="w-10 h-10 rounded-xl bg-[#1C1C1E] hover:bg-[#2C2C2E] flex items-center justify-center text-white transition-colors">
+                  <ChevronRight size={20} className="rotate-180" />
+                </button>
+                <div>
+                  <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+                    <Trophy size={24} className="text-yellow-500" />
+                    Боевой Пропуск
+                  </h1>
+                  <p className="text-gray-500 text-sm">Сезон 1 • Заканчивается через 28 дней</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                {!hasPremium ? (
+                  <button onClick={() => setHasPremium(true)} className="px-5 py-2.5 rounded-xl bg-yellow-500 text-black font-bold text-sm hover:bg-yellow-400 transition-colors">
+                    Купить Premium — 299 ₽
+                  </button>
+                ) : (
+                  <div className="px-4 py-2 rounded-xl bg-yellow-500/20 text-yellow-500 font-bold text-sm flex items-center gap-2">
+                    <Trophy size={16} /> Premium активен
+                  </div>
+                )}
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              {!hasPremium ? (
-                <button onClick={() => setHasPremium(true)} className="px-5 py-2.5 rounded-xl bg-yellow-500 text-black font-bold text-sm hover:bg-yellow-400 transition-colors">
-                  Купить Premium — 299 ₽
-                </button>
-              ) : (
-                <div className="px-4 py-2 rounded-xl bg-yellow-500/20 text-yellow-500 font-bold text-sm flex items-center gap-2">
-                  <Trophy size={16} /> Premium активен
-                </div>
-              )}
-            </div>
-          </div>
 
-          {/* Level Progress Bar */}
-          <div className="px-6 pb-4 shrink-0">
-            <div className="bg-[#1C1C1E] rounded-2xl p-4">
-              <div className="flex justify-between items-center mb-2">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-brand-blue flex items-center justify-center text-white font-bold">{battlePassLevel}</div>
-                  <div>
-                    <div className="text-white font-bold text-sm">Уровень {battlePassLevel}</div>
-                    <div className="text-gray-500 text-xs">{battlePassXP} / {XP_PER_LEVEL} XP</div>
+            {/* Level Progress Bar */}
+            <div className="px-6 pb-4 shrink-0">
+              <div className="bg-[#1C1C1E] rounded-2xl p-4">
+                <div className="flex justify-between items-center mb-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-brand-blue flex items-center justify-center text-white font-bold">{battlePassLevel}</div>
+                    <div>
+                      <div className="text-white font-bold text-sm">Уровень {battlePassLevel}</div>
+                      <div className="text-gray-500 text-xs">{battlePassXP} / {XP_PER_LEVEL} XP</div>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={() => setBattlePassXP(prev => Math.min(prev + 100, XP_PER_LEVEL))} className="px-3 py-1.5 rounded-lg bg-[#2C2C2E] hover:bg-[#3C3C3E] text-white text-xs transition-colors">+100 XP</button>
+                    <button onClick={() => { setBattlePassLevel(prev => Math.min(prev + 1, 15)); setBattlePassXP(0); }} className="px-3 py-1.5 rounded-lg bg-brand-blue hover:bg-blue-600 text-white text-xs transition-colors">+1 LVL</button>
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  <button onClick={() => setBattlePassXP(prev => Math.min(prev + 100, XP_PER_LEVEL))} className="px-3 py-1.5 rounded-lg bg-[#2C2C2E] hover:bg-[#3C3C3E] text-white text-xs transition-colors">+100 XP</button>
-                  <button onClick={() => { setBattlePassLevel(prev => Math.min(prev + 1, 15)); setBattlePassXP(0); }} className="px-3 py-1.5 rounded-lg bg-brand-blue hover:bg-blue-600 text-white text-xs transition-colors">+1 LVL</button>
+                <div className="h-2 bg-[#2C2C2E] rounded-full overflow-hidden">
+                  <div className="h-full bg-brand-blue rounded-full transition-all" style={{ width: `${(battlePassXP / XP_PER_LEVEL) * 100}%` }} />
                 </div>
               </div>
-              <div className="h-2 bg-[#2C2C2E] rounded-full overflow-hidden">
-                <div className="h-full bg-brand-blue rounded-full transition-all" style={{ width: `${(battlePassXP / XP_PER_LEVEL) * 100}%` }} />
-              </div>
             </div>
-          </div>
 
-          {/* Rewards Track - Horizontal Scroll with Mouse Wheel */}
-          <div className="flex-1 px-6 pb-6 overflow-hidden">
-            <div
-              className="h-full overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-thumb-[#2C2C2E] scrollbar-track-transparent"
-              onWheel={(e) => {
-                e.currentTarget.scrollLeft += e.deltaY;
-              }}
-            >
-              <div className="flex gap-4 h-full py-2" style={{ minWidth: 'max-content' }}>
-                {BATTLEPASS_LEVELS.map((lvl, idx) => {
-                  const isUnlocked = battlePassLevel >= lvl.level;
-                  const isCurrent = battlePassLevel === lvl.level;
+            {/* Rewards Track - Horizontal Scroll with Mouse Wheel */}
+            <div className="flex-1 px-6 pb-6 overflow-hidden">
+              <div
+                className="h-full overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-thumb-[#2C2C2E] scrollbar-track-transparent"
+                onWheel={(e) => {
+                  e.currentTarget.scrollLeft += e.deltaY;
+                }}
+              >
+                <div className="flex gap-4 h-full py-2" style={{ minWidth: 'max-content' }}>
+                  {BATTLEPASS_LEVELS.map((lvl, idx) => {
+                    const isUnlocked = battlePassLevel >= lvl.level;
+                    const isCurrent = battlePassLevel === lvl.level;
 
-                  return (
-                    <div key={lvl.level} className="flex flex-col items-center gap-2 relative">
-                      {/* Level Number */}
-                      <div className={`text-sm font-bold ${isCurrent ? 'text-brand-blue' : isUnlocked ? 'text-white' : 'text-gray-600'}`}>
-                        {lvl.level}
-                      </div>
+                    return (
+                      <div key={lvl.level} className="flex flex-col items-center gap-2 relative">
+                        {/* Level Number */}
+                        <div className={`text-sm font-bold ${isCurrent ? 'text-brand-blue' : isUnlocked ? 'text-white' : 'text-gray-600'}`}>
+                          {lvl.level}
+                        </div>
 
-                      {/* FREE Reward (Top) */}
-                      <div className={`w-24 h-28 rounded-xl p-3 flex flex-col items-center justify-center transition-all ${isCurrent ? 'bg-brand-blue ring-2 ring-brand-blue ring-offset-2 ring-offset-black' :
+                        {/* FREE Reward (Top) */}
+                        <div className={`w-24 h-28 rounded-xl p-3 flex flex-col items-center justify-center transition-all ${isCurrent ? 'bg-brand-blue ring-2 ring-brand-blue ring-offset-2 ring-offset-black' :
                           isUnlocked ? 'bg-[#1C1C1E]' : 'bg-[#1C1C1E]/50'
-                        }`}>
-                        <div className="text-[10px] text-gray-400 font-medium mb-1 uppercase">Free</div>
-                        <div className={`text-2xl mb-1 ${!isUnlocked && 'grayscale opacity-50'}`}>{lvl.free.icon}</div>
-                        <div className={`text-[10px] text-center leading-tight ${isUnlocked ? 'text-white' : 'text-gray-500'}`}>{lvl.free.name}</div>
-                        {isUnlocked && <div className="text-[8px] text-green-500 font-bold mt-1">✓</div>}
-                        {!isUnlocked && <Lock size={10} className="text-gray-600 mt-1" />}
-                      </div>
+                          }`}>
+                          <div className="text-[10px] text-gray-400 font-medium mb-1 uppercase">Free</div>
+                          <div className={`text-2xl mb-1 ${!isUnlocked && 'grayscale opacity-50'}`}>{lvl.free.icon}</div>
+                          <div className={`text-[10px] text-center leading-tight ${isUnlocked ? 'text-white' : 'text-gray-500'}`}>{lvl.free.name}</div>
+                          {isUnlocked && <div className="text-[8px] text-green-500 font-bold mt-1">✓</div>}
+                          {!isUnlocked && <Lock size={10} className="text-gray-600 mt-1" />}
+                        </div>
 
-                      {/* Progress Line */}
-                      <div className="flex items-center">
-                        <div className={`w-3 h-3 rounded-full ${isUnlocked ? 'bg-brand-blue' : 'bg-[#2C2C2E]'}`} />
-                        {idx < BATTLEPASS_LEVELS.length - 1 && (
-                          <div className={`w-[76px] h-1 ${battlePassLevel > lvl.level ? 'bg-brand-blue' : 'bg-[#2C2C2E]'}`} />
-                        )}
-                      </div>
+                        {/* Progress Line */}
+                        <div className="flex items-center">
+                          <div className={`w-3 h-3 rounded-full ${isUnlocked ? 'bg-brand-blue' : 'bg-[#2C2C2E]'}`} />
+                          {idx < BATTLEPASS_LEVELS.length - 1 && (
+                            <div className={`w-[76px] h-1 ${battlePassLevel > lvl.level ? 'bg-brand-blue' : 'bg-[#2C2C2E]'}`} />
+                          )}
+                        </div>
 
-                      {/* PREMIUM Reward (Bottom) */}
-                      <div className={`w-24 h-28 rounded-xl p-3 flex flex-col items-center justify-center transition-all relative ${isCurrent && hasPremium ? 'bg-yellow-500/30 ring-2 ring-yellow-500 ring-offset-2 ring-offset-black' :
+                        {/* PREMIUM Reward (Bottom) */}
+                        <div className={`w-24 h-28 rounded-xl p-3 flex flex-col items-center justify-center transition-all relative ${isCurrent && hasPremium ? 'bg-yellow-500/30 ring-2 ring-yellow-500 ring-offset-2 ring-offset-black' :
                           isUnlocked && hasPremium ? 'bg-yellow-500/20' :
                             'bg-[#1C1C1E]/50'
-                        }`}>
-                        <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-yellow-500 flex items-center justify-center">
-                          <Trophy size={10} className="text-black" />
+                          }`}>
+                          <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-yellow-500 flex items-center justify-center">
+                            <Trophy size={10} className="text-black" />
+                          </div>
+                          <div className="text-[10px] text-yellow-500 font-medium mb-1 uppercase">Premium</div>
+                          <div className={`text-2xl mb-1 ${(!isUnlocked || !hasPremium) && 'grayscale opacity-50'}`}>{lvl.premium.icon}</div>
+                          <div className={`text-[10px] text-center leading-tight ${isUnlocked && hasPremium ? 'text-white' : 'text-gray-500'}`}>{lvl.premium.name}</div>
+                          {isUnlocked && hasPremium && <div className="text-[8px] text-green-500 font-bold mt-1">✓</div>}
+                          {(!isUnlocked || !hasPremium) && <Lock size={10} className="text-gray-600 mt-1" />}
                         </div>
-                        <div className="text-[10px] text-yellow-500 font-medium mb-1 uppercase">Premium</div>
-                        <div className={`text-2xl mb-1 ${(!isUnlocked || !hasPremium) && 'grayscale opacity-50'}`}>{lvl.premium.icon}</div>
-                        <div className={`text-[10px] text-center leading-tight ${isUnlocked && hasPremium ? 'text-white' : 'text-gray-500'}`}>{lvl.premium.name}</div>
-                        {isUnlocked && hasPremium && <div className="text-[8px] text-green-500 font-bold mt-1">✓</div>}
-                        {(!isUnlocked || !hasPremium) && <Lock size={10} className="text-gray-600 mt-1" />}
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Bottom Hint */}
-          <div className="px-6 pb-4 text-center text-gray-600 text-xs shrink-0">
-            Используйте колёсико мыши для прокрутки • Играйте на сервере чтобы получать XP
+            {/* Bottom Hint */}
+            <div className="px-6 pb-4 text-center text-gray-600 text-xs shrink-0">
+              Используйте колёсико мыши для прокрутки • Играйте на сервере чтобы получать XP
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* === LOADING === */}
       {mode === 'loading' && <LoadingScreen onComplete={onLoadingComplete} />}
@@ -920,30 +1050,36 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
       {mode === 'queue' && <QueueScreen onComplete={() => setMode('loading')} />}
 
       {/* === SCOREBOARD === */}
-      {(showScoreboard || mode === 'ingame') && !['loading', 'queue', 'menu', 'click_to_start', 'spawn_selection'].includes(mode) && (
-        <Scoreboard visible={true} players={players} onOpenContextMenu={(e, p) => setContextMenu({ x: e.clientX, y: e.clientY, player: p })} />
-      )}
-      {showScoreboard && ['menu', 'click_to_start', 'spawn_selection'].includes(mode) && (
-        <div className="absolute inset-0 z-50 bg-black/60 backdrop-blur-md animate-fade-in">
+      {
+        (showScoreboard || mode === 'ingame') && !['loading', 'queue', 'menu', 'click_to_start', 'spawn_selection'].includes(mode) && (
           <Scoreboard visible={true} players={players} onOpenContextMenu={(e, p) => setContextMenu({ x: e.clientX, y: e.clientY, player: p })} />
-        </div>
-      )}
+        )
+      }
+      {
+        showScoreboard && ['menu', 'click_to_start', 'spawn_selection'].includes(mode) && (
+          <div className="absolute inset-0 z-50 bg-black/60 backdrop-blur-md animate-fade-in">
+            <Scoreboard visible={true} players={players} onOpenContextMenu={(e, p) => setContextMenu({ x: e.clientX, y: e.clientY, player: p })} />
+          </div>
+        )
+      }
 
       {/* === CONTEXT MENU === */}
-      {contextMenu && (
-        <div className="fixed z-[100] bg-[#1C1C1E] border border-white/10 rounded-xl shadow-2xl p-1 w-56" style={{ top: contextMenu.y, left: contextMenu.x }} onClick={e => e.stopPropagation()}>
-          <div className="px-3 py-2 border-b border-white/5 mb-1">
-            <div className="font-bold text-white">{contextMenu.player.name}</div>
-            <div className="text-xs text-gray-500 font-mono">{contextMenu.player.steamId}</div>
+      {
+        contextMenu && (
+          <div className="fixed z-[100] bg-[#1C1C1E] border border-white/10 rounded-xl shadow-2xl p-1 w-56" style={{ top: contextMenu.y, left: contextMenu.x }} onClick={e => e.stopPropagation()}>
+            <div className="px-3 py-2 border-b border-white/5 mb-1">
+              <div className="font-bold text-white">{contextMenu.player.name}</div>
+              <div className="text-xs text-gray-500 font-mono">{contextMenu.player.steamId}</div>
+            </div>
+            <ContextMenuItem icon={<User size={16} />} label="Профиль Steam" />
+            <ContextMenuItem icon={<Copy size={16} />} label="Копировать SteamID" />
+            <ContextMenuItem icon={<MessageCircle size={16} />} label="Отправить сообщение" />
+            <div className="h-px bg-white/5 my-1" />
+            <ContextMenuItem icon={<MicOff size={16} />} label="Заглушить" danger />
           </div>
-          <ContextMenuItem icon={<User size={16} />} label="Профиль Steam" />
-          <ContextMenuItem icon={<Copy size={16} />} label="Копировать SteamID" />
-          <ContextMenuItem icon={<MessageCircle size={16} />} label="Отправить сообщение" />
-          <div className="h-px bg-white/5 my-1" />
-          <ContextMenuItem icon={<MicOff size={16} />} label="Заглушить" danger />
-        </div>
-      )}
-    </div>
+        )
+      }
+    </div >
   );
 };
 
@@ -953,24 +1089,36 @@ const ContextMenuItem: React.FC<{ icon: React.ReactNode; label: string; danger?:
   </button>
 );
 
-
-const MenuButton: React.FC<{ icon: React.ReactNode; label: string; subLabel: string; active?: boolean; danger?: boolean; disabled?: boolean; onClick: () => void }> = ({ icon, label, subLabel, active, danger, disabled, onClick }) => (
-  <button
-    onClick={disabled ? undefined : onClick}
-    disabled={disabled}
-    className={`w-full p-4 rounded-2xl flex items-center gap-4 transition-all text-left ${disabled ? 'bg-[#1C1C1E]/50 text-gray-600 cursor-not-allowed' :
-        active ? 'bg-brand-blue text-white shadow-lg shadow-brand-blue/20' :
-          danger ? 'bg-[#1C1C1E] text-red-500 hover:bg-red-500 hover:text-white' :
-            'bg-[#1C1C1E] text-gray-400 hover:bg-[#2C2C2E] hover:text-white'
-      }`}
-  >
-    <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${disabled ? 'bg-white/5' : active ? 'bg-white/20' : danger ? 'bg-red-500/20' : 'bg-white/5'}`}>{icon}</div>
-    <div className="flex-1">
-      <div className="font-bold text-lg">{label}</div>
-      <div className={`text-xs ${active ? 'text-blue-200' : 'text-gray-500'}`}>{subLabel}</div>
+const NewsCard: React.FC<{ news: typeof NEWS_DATA[0]; onClick: () => void; className?: string }> = ({ news, onClick, className = "" }) => (
+  <div onClick={onClick} className={`w-72 bg-[#1C1C1E] rounded-2xl overflow-hidden cursor-pointer group hover:scale-[1.02] transition-all flex-col ${className}`}>
+    <div className="h-40 relative overflow-hidden">
+      <img src={news.imageUrl} alt={news.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+      <div className="absolute inset-0 bg-black/50" />
+      <span className={`absolute top-3 left-3 px-2 py-1 rounded-lg text-xs font-bold ${news.tagColor} text-white`}>{news.tag}</span>
     </div>
-    {disabled && <Lock size={18} className="text-gray-600" />}
-  </button>
+    <div className="p-4">
+      <h3 className="font-bold text-white mb-1 group-hover:text-brand-blue transition-colors">{news.title}</h3>
+      <p className="text-gray-500 text-sm line-clamp-2 mb-2">{news.excerpt}</p>
+      <div className="text-gray-600 text-xs">{news.date}</div>
+    </div>
+  </div>
+);
+
+const NewsModal: React.FC<{ news: typeof NEWS_DATA[0]; onClose: () => void }> = ({ news, onClose }) => (
+  <div className="fixed inset-0 z-60 bg-black/80 backdrop-blur-xl flex items-center justify-center p-6 animate-fade-in" onClick={onClose}>
+    <div className="w-full max-w-xl bg-[#1C1C1E] rounded-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+      <div className="h-48 relative">
+        <img src={news.imageUrl} alt={news.title} className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-black/50" />
+        <button onClick={onClose} className="absolute top-4 right-4 w-8 h-8 rounded-xl bg-black/50 flex items-center justify-center text-white hover:bg-white/20">✕</button>
+      </div>
+      <div className="p-6">
+        <div className="text-gray-500 text-sm mb-2">{news.date}</div>
+        <h2 className="text-xl font-bold text-white mb-3">{news.title}</h2>
+        <p className="text-gray-400 leading-relaxed">{news.content}</p>
+      </div>
+    </div>
+  </div>
 );
 
 const LoadingScreen: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
@@ -1134,37 +1282,7 @@ const QueueScreen: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
   );
 };
 
-const NewsCard: React.FC<{ news: typeof NEWS_DATA[0]; onClick: () => void; className?: string }> = ({ news, onClick, className = "" }) => (
-  <div onClick={onClick} className={`w-72 bg-[#1C1C1E] rounded-2xl overflow-hidden cursor-pointer group hover:scale-[1.02] transition-all flex-col ${className}`}>
-    <div className="h-40 relative overflow-hidden">
-      <img src={news.imageUrl} alt={news.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-      <div className="absolute inset-0 bg-black/50" />
-      <span className={`absolute top-3 left-3 px-2 py-1 rounded-lg text-xs font-bold ${news.tagColor} text-white`}>{news.tag}</span>
-    </div>
-    <div className="p-4">
-      <h3 className="font-bold text-white mb-1 group-hover:text-brand-blue transition-colors">{news.title}</h3>
-      <p className="text-gray-500 text-sm line-clamp-2 mb-2">{news.excerpt}</p>
-      <div className="text-gray-600 text-xs">{news.date}</div>
-    </div>
-  </div>
-);
 
-const NewsModal: React.FC<{ news: typeof NEWS_DATA[0]; onClose: () => void }> = ({ news, onClose }) => (
-  <div className="fixed inset-0 z-60 bg-black/80 backdrop-blur-xl flex items-center justify-center p-6 animate-fade-in" onClick={onClose}>
-    <div className="w-full max-w-xl bg-[#1C1C1E] rounded-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
-      <div className="h-48 relative">
-        <img src={news.imageUrl} alt={news.title} className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-black/50" />
-        <button onClick={onClose} className="absolute top-4 right-4 w-8 h-8 rounded-xl bg-black/50 flex items-center justify-center text-white hover:bg-white/20">✕</button>
-      </div>
-      <div className="p-6">
-        <div className="text-gray-500 text-sm mb-2">{news.date}</div>
-        <h2 className="text-xl font-bold text-white mb-3">{news.title}</h2>
-        <p className="text-gray-400 leading-relaxed">{news.content}</p>
-      </div>
-    </div>
-  </div>
-);
 
 
 const Scoreboard: React.FC<{ visible: boolean; players: Player[]; onOpenContextMenu?: (e: React.MouseEvent, p: Player) => void }> = ({ visible, players, onOpenContextMenu }) => {
