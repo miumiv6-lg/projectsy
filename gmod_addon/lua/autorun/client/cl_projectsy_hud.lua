@@ -1,12 +1,11 @@
 --[[
-    Project SY - HUD
-    iOS 26 Liquid Glass Style
-    Uses native Lua drawing (no DHTML)
+    Project SY - HUD (DHTML)
+    Liquid Glass / iOS 26 style rendered via HTML/CSS
 ]]
 
 print("[Project SY] HUD Script Loading...")
 
--- Hide default HUD
+-- Hide base HUD
 local hide = {
     ["CHudHealth"] = true,
     ["CHudBattery"] = true,
@@ -18,162 +17,100 @@ hook.Add("HUDShouldDraw", "ProjectSY_HideHUD", function(name)
     if hide[name] then return false end
 end)
 
--- Colors
-local colBg = Color(255, 255, 255, 10)
-local colBorder = Color(255, 255, 255, 20)
-local colWhite = Color(255, 255, 255, 255)
-local colWhite70 = Color(255, 255, 255, 180)
-local colWhite40 = Color(255, 255, 255, 100)
-local colRed = Color(239, 68, 68, 255)
-local colRedBg = Color(239, 68, 68, 40)
-local colBlue = Color(0, 122, 255, 255)
-local colBlueBg = Color(0, 122, 255, 40)
-local colGreen = Color(52, 199, 89, 255)
+local htmlPanel
+local htmlContent
 
--- Fonts
-surface.CreateFont("ProjectSY_HUD_Big", {
-    font = "Arial",
-    size = 32,
-    weight = 800,
-})
-
-surface.CreateFont("ProjectSY_HUD_Medium", {
-    font = "Arial",
-    size = 18,
-    weight = 700,
-})
-
-surface.CreateFont("ProjectSY_HUD_Small", {
-    font = "Arial",
-    size = 12,
-    weight = 600,
-})
-
-surface.CreateFont("ProjectSY_HUD_Time", {
-    font = "Arial",
-    size = 42,
-    weight = 300,
-})
-
-surface.CreateFont("ProjectSY_HUD_Title", {
-    font = "Arial",
-    size = 18,
-    weight = 800,
-})
-
--- Draw rounded box with border
-local function DrawGlassBox(x, y, w, h, radius)
-    draw.RoundedBox(radius, x, y, w, h, colBg)
-    surface.SetDrawColor(colBorder)
-    surface.DrawOutlinedRect(x, y, w, h, 1)
+local function js_safe(str)
+    str = tostring(str or "")
+    str = string.Replace(str, "\\", "\\\\")
+    str = string.Replace(str, "'", "\\'")
+    str = string.Replace(str, "\n", "\\n")
+    str = string.Replace(str, "\r", "")
+    return str
 end
 
--- Draw icon (simple shapes)
-local function DrawHeartIcon(x, y, size)
-    surface.SetDrawColor(colRed)
-    draw.RoundedBox(size/4, x, y + size/4, size, size * 0.6, colRed)
-    draw.RoundedBox(size/2, x, y, size/2, size/2, colRed)
-    draw.RoundedBox(size/2, x + size/2, y, size/2, size/2, colRed)
+local function ensure_html()
+    if htmlContent then return end
+    htmlContent = file.Read("html/projectsy/hud.html", "GAME")
+    if not htmlContent then
+        htmlContent = [[<html><body style="background:rgba(0,0,0,0);color:#fff;font-family:Inter,sans-serif;">Project SY HUD missing (html/projectsy/hud.html)</body></html>]]
+    end
 end
 
-local function DrawShieldIcon(x, y, size)
-    surface.SetDrawColor(colBlue)
-    draw.RoundedBox(4, x + size*0.1, y, size*0.8, size*0.7, colBlue)
-    draw.NoTexture()
-    surface.DrawPoly({
-        {x = x + size*0.1, y = y + size*0.6},
-        {x = x + size/2, y = y + size},
-        {x = x + size*0.9, y = y + size*0.6},
-    })
+local function create_panel()
+    ensure_html()
+    if IsValid(htmlPanel) then htmlPanel:Remove() end
+
+    htmlPanel = vgui.Create("DHTML")
+    htmlPanel:SetSize(ScrW(), ScrH())
+    htmlPanel:SetPos(0, 0)
+    htmlPanel:SetHTML(htmlContent)
+    htmlPanel:SetMouseInputEnabled(false)
+    htmlPanel:SetKeyboardInputEnabled(false)
+    htmlPanel:SetAllowLua(true)
 end
 
--- Main HUD Paint
-hook.Add("HUDPaint", "ProjectSY_DrawHUD", function()
+local function resize_panel()
+    if not IsValid(htmlPanel) then return end
+    htmlPanel:SetSize(ScrW(), ScrH())
+end
+
+hook.Add("OnScreenSizeChanged", "ProjectSY_HUD_Resize", resize_panel)
+
+-- Periodic data push
+local function push_hud_state()
+    if not IsValid(htmlPanel) then return end
+
     local ply = LocalPlayer()
-    if not IsValid(ply) or not ply:Alive() then return end
-    
-    local scrW, scrH = ScrW(), ScrH()
-    local hp = ply:Health()
-    local armor = ply:Armor()
-    
-    -- === LEFT BOTTOM - Health ===
-    local hpX, hpY = 40, scrH - 100
-    local hpW, hpH = 160, 60
-    
-    DrawGlassBox(hpX, hpY, hpW, hpH, 16)
-    
-    -- Health icon box
-    draw.RoundedBox(10, hpX + 12, hpY + 10, 40, 40, colRedBg)
-    surface.SetDrawColor(colRed)
-    surface.SetMaterial(Material("icon16/heart.png"))
-    surface.DrawTexturedRect(hpX + 22, hpY + 20, 20, 20)
-    
-    -- Health text
-    draw.SimpleText(hp, "ProjectSY_HUD_Big", hpX + 65, hpY + 12, colWhite, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-    draw.SimpleText("ЗДОРОВЬЕ", "ProjectSY_HUD_Small", hpX + 65, hpY + 42, colWhite40, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-    
-    -- === LEFT BOTTOM - Armor (if > 0) ===
-    if armor > 0 then
-        local arX = hpX + hpW + 12
-        local arW = 160
-        
-        DrawGlassBox(arX, hpY, arW, hpH, 16)
-        
-        -- Armor icon box
-        draw.RoundedBox(10, arX + 12, hpY + 10, 40, 40, colBlueBg)
-        surface.SetDrawColor(colBlue)
-        surface.SetMaterial(Material("icon16/shield.png"))
-        surface.DrawTexturedRect(arX + 22, hpY + 20, 20, 20)
-        
-        -- Armor text
-        draw.SimpleText(armor, "ProjectSY_HUD_Big", arX + 65, hpY + 12, colWhite, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-        draw.SimpleText("БРОНЯ", "ProjectSY_HUD_Small", arX + 65, hpY + 42, colWhite40, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-    end
-    
-    -- === RIGHT BOTTOM - Ammo ===
+    if not IsValid(ply) then return end
+
+    local hp = math.max(ply:Health(), 0)
+    local armor = math.max(ply:Armor(), 0)
+    local maxHp = 100
+    local maxArmor = 100
+
     local wep = ply:GetActiveWeapon()
+    local clip, reserve, wname = -1, 0, ""
     if IsValid(wep) then
-        local clip = wep:Clip1()
-        local ammo = ply:GetAmmoCount(wep:GetPrimaryAmmoType())
-        
-        if clip >= 0 then
-            local amX = scrW - 200
-            local amY = scrH - 100
-            local amW = 160
-            local amH = 60
-            
-            DrawGlassBox(amX, amY, amW, amH, 16)
-            
-            -- Ammo text
-            draw.SimpleText(clip, "ProjectSY_HUD_Big", amX + 20, amY + 8, colWhite, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-            draw.SimpleText("/ " .. ammo, "ProjectSY_HUD_Medium", amX + 20, amY + 38, colWhite40, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-            
-            -- Icon
-            draw.RoundedBox(10, amX + amW - 52, amY + 10, 40, 40, Color(255,255,255,20))
-            surface.SetDrawColor(colWhite70)
-            surface.SetMaterial(Material("icon16/bullet_orange.png"))
-            surface.DrawTexturedRect(amX + amW - 42, amY + 20, 20, 20)
-        end
+        clip = wep:Clip1()
+        reserve = ply:GetAmmoCount(wep:GetPrimaryAmmoType())
+        wname = wep:GetPrintName() or wep:GetClass() or ""
     end
-    
-    -- === TOP RIGHT - Logo & Time ===
-    local logoX = scrW - 220
-    local logoY = 40
-    local logoW = 180
-    local logoH = 50
-    
-    DrawGlassBox(logoX, logoY, logoW, logoH, 16)
-    
-    -- Logo text
-    draw.SimpleText("Project SY", "ProjectSY_HUD_Title", logoX + 15, logoY + 10, colWhite, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-    draw.SimpleText("METROSTROI", "ProjectSY_HUD_Small", logoX + 15, logoY + 30, colBlue, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-    
-    -- Time below logo
+
+    local ping = ply:Ping() or 0
+    local fps = math.floor(1 / FrameTime())
+    local stamina = ply:GetNWFloat("SprintStamina", 1)
+
+    local dateStr = os.date("%d %b %Y"):upper()
     local timeStr = os.date("%H:%M")
-    local dateStr = os.date("%d %b %Y")
-    
-    draw.SimpleText(dateStr:upper(), "ProjectSY_HUD_Small", scrW - 40, logoY + logoH + 20, colWhite40, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-    draw.SimpleText(timeStr, "ProjectSY_HUD_Time", scrW - 40, logoY + logoH + 35, colWhite, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+
+    htmlPanel:Call(string.format("updatePlayer('%s');", js_safe(ply:Nick())))
+    htmlPanel:Call(string.format("updateVitals(%d,%d,%d,%d);", hp, armor, maxHp, maxArmor))
+    htmlPanel:Call(string.format("updateAmmo(%d,%d,'%s');", clip or -1, reserve or 0, js_safe(wname)))
+    htmlPanel:Call(string.format("updatePerf(%d,%d);", ping, fps))
+    htmlPanel:Call(string.format("updateStamina(%0.3f);", math.Clamp(stamina or 1, 0, 1)))
+    htmlPanel:Call(string.format("updateClock('%s','%s');", js_safe(dateStr), js_safe(timeStr)))
+end
+
+timer.Create("ProjectSY_HUD_Update", 0.15, 0, function()
+    if not IsValid(htmlPanel) then return end
+    push_hud_state()
+end)
+
+-- Ensure panel exists
+hook.Add("HUDPaint", "ProjectSY_HUD_DHTML_Bootstrap", function()
+    if not IsValid(htmlPanel) then
+        create_panel()
+    end
+end)
+
+-- Console helpers
+concommand.Add("projectsy_hud_reload", function()
+    htmlContent = nil
+    ensure_html()
+    create_panel()
+    push_hud_state()
 end)
 
 print("[Project SY] HUD Script Loaded!")
+
