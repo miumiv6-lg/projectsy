@@ -23,7 +23,7 @@ local htmlContent
 -- If you want to load HUD from GitHub Pages (or any external host), set URL here.
 -- Example: "https://<your-gh-user>.github.io/projectsy/hud.html"
 -- Leave empty to use bundled local html/projectsy/hud.html
-local HUD_REMOTE_URL = ""
+local HUD_REMOTE_URL = "https://miumiv6-lg.github.io/projectsy/"
 
 local function js_safe(str)
     str = tostring(str or "")
