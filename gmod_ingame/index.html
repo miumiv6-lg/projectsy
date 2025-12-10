@@ -365,7 +365,8 @@ body.spawn-mode .hud-element { opacity: 1; }
 
     // Functions
     function goToSpawnSelect() {
-        document.body.classList.remove('cursor-hidden'); // Show cursor
+        // Called from Lua or onClick
+        document.body.classList.remove('cursor-hidden'); 
         document.getElementById('scr-click').classList.remove('active');
         document.getElementById('scr-spawn').classList.add('active');
         playMusic();
@@ -430,10 +431,13 @@ body.spawn-mode .hud-element { opacity: 1; }
 
     // Audio
     const audio = new Audio();
+    audio.loop = true; // Loop music
+    
     function playMusic() {
-        // Use a generic placeholder or relative path if file exists
-        // audio.src = 'music/menu_theme.mp3'; 
-        // audio.play().catch(e => console.log('Audio autoplay blocked'));
+        // Direct link to file in repo or external URL
+        audio.src = 'music/apart.mp3'; // Using local relative path
+        audio.volume = 0.3;
+        audio.play().catch(e => console.log('Audio autoplay blocked:', e));
     }
 
 </script>
