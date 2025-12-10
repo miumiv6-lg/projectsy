@@ -155,7 +155,7 @@ const MouseLeftClick = ({ size = 24, className = "" }: { size?: number, classNam
     <rect x="5" y="2" width="14" height="20" rx="7" stroke="currentColor" strokeWidth="2" />
     <path d="M12 2V10" stroke="currentColor" strokeWidth="2" />
     <path d="M5 10H19" stroke="currentColor" strokeWidth="2" />
-    <path d="M5 9C5 5.13401 8.13401 2 12 2V10H5V9Z" fill="#007AFF" />
+    <path d="M5 9C5 5.13401 8.13401 2 12 2V10H5V9Z" fill="#1092ea" />
   </svg>
 );
 
@@ -202,7 +202,7 @@ const MenuButton = ({ icon, label, subLabel, active, danger, onClick }: { icon: 
       w-full p-4 rounded-2xl flex items-center gap-4 transition-all duration-300 group
       border border-transparent
       ${active
-        ? 'bg-brand-blue text-white shadow-[0_0_20px_rgba(0,122,255,0.3)]'
+        ? 'bg-brand-blue text-white shadow-[0_0_20px_rgba(16,146,234,0.3)]'
         : danger
           ? 'bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white'
           : 'bg-white/[0.03] text-gray-400 hover:bg-white/[0.08] hover:text-white hover:border-white/[0.1]'}
@@ -1220,7 +1220,7 @@ const ConnectingScreen: React.FC<{ onComplete: () => void }> = ({ onComplete }) 
             <rect x="5" y="2" width="14" height="20" rx="7" stroke="white" strokeWidth="2" />
             <path d="M12 2V10" stroke="white" strokeWidth="2" />
             <path d="M5 10H19" stroke="white" strokeWidth="2" />
-            <path d="M5 9C5 5.13401 8.13401 2 12 2V10H5V9Z" fill="#007AFF" />
+            <path d="M5 9C5 5.13401 8.13401 2 12 2V10H5V9Z" fill="#1092ea" />
           </svg>
         </div>
         <h1 className="text-4xl font-bold text-white mb-3">Нажмите ЛКМ</h1>
