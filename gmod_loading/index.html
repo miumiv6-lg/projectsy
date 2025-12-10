@@ -6,26 +6,25 @@
     <title>Project SY - Loading</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* CSS Reset & Variables from index.css */
         :root {
-            --brand-blue: #007AFF;
-            --bg-dark: #000000;
-            --bg-card: #1C1C1E;
-            --text-main: #FFFFFF;
-            --text-muted: #9CA3AF;
+            --color-background: #0e0e10;
+            --color-surface: #18181b;
+            --color-surface-hover: #2f2f35;
+            --color-text-primary: #efeff1;
+            --color-text-secondary: #adadb8;
+            --color-primary: #a8c7fa; /* Twitch-like Blue/Purple */
+            --radius-md: 6px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             width: 100vw;
             height: 100vh;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
+            background-color: var(--color-background);
+            color: var(--color-text-primary);
+            font-family: 'Inter', -apple-system, sans-serif;
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -38,207 +37,211 @@
             position: absolute;
             inset: 0;
             z-index: 0;
+            overflow: hidden;
         }
         .bg-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.4;
-            filter: blur(20px);
-            transform: scale(1.1);
+            opacity: 0.2;
+            filter: blur(8px);
+            transform: scale(1.05);
         }
         .bg-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(20px);
+            background: linear-gradient(to bottom, transparent, var(--color-background));
         }
 
-        /* Main Container */
-        .main-container {
+        /* Layout */
+        .container {
             position: relative;
             z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 40px;
+            display: grid;
+            grid-template-columns: 320px 1fr 320px;
+            gap: 24px;
             width: 100%;
-            max-width: 1400px;
-            padding: 20px;
+            max-width: 1600px;
+            padding: 40px;
+            height: 100vh;
+            align-items: center;
         }
 
-        /* Center Column */
-        .center-col {
+        /* Columns */
+        .col-side {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            justify-content: center;
+        }
+        .col-center {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             text-align: center;
-            flex: 0 0 auto;
-            width: 400px;
         }
 
-        .logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        /* Cards (Matches .m3-card / Twitch style) */
+        .card {
+            background-color: var(--color-surface);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
         }
 
-        .title {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 4px;
-            letter-spacing: -0.5px;
+        /* Center Info */
+        .logo-container {
+            width: 120px;
+            height: 120px;
+            background-color: var(--color-surface);
+            border-radius: 12px;
+            padding: 8px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
         }
 
-        .subtitle {
-            color: var(--brand-blue);
+        .server-title {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+        .server-title span { color: var(--color-primary); }
+
+        .server-subtitle {
+            color: var(--color-primary);
             font-size: 14px;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 40px;
+            letter-spacing: 0.05em;
+            margin-bottom: 60px;
+            background: var(--color-surface-hover);
+            padding: 6px 12px;
+            border-radius: 4px;
         }
 
         /* Progress Bar */
-        .progress-wrapper {
+        .loading-container {
             width: 100%;
+            max-width: 480px;
         }
-
-        .progress-header {
+        
+        .loading-info {
             display: flex;
             justify-content: space-between;
             margin-bottom: 8px;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 13px;
+            font-weight: 600;
         }
-        
-        .status-text {
-            color: var(--text-main);
-        }
-
-        .percent-text {
-            color: var(--text-muted);
-        }
+        .loading-status { color: var(--color-text-secondary); }
+        .loading-percent { color: var(--color-primary); }
 
         .progress-track {
-            height: 8px;
-            background-color: #2C2C2E;
-            border-radius: 4px;
+            height: 6px;
+            background-color: var(--color-surface);
+            border-radius: 3px;
             overflow: hidden;
-            position: relative;
         }
-
         .progress-fill {
             height: 100%;
             width: 0%;
-            background-color: var(--brand-blue);
-            border-radius: 4px;
-            transition: width 0.3s ease-out;
-            box-shadow: 0 0 15px rgba(0, 122, 255, 0.5);
+            background-color: var(--color-primary);
+            border-radius: 3px;
+            transition: width 0.2s ease-out;
         }
 
-        .detail-status {
+        .file-status {
             margin-top: 12px;
-            font-size: 13px;
-            color: var(--text-muted);
+            font-size: 12px;
+            color: #6b6b75; /* Darker grey */
+            font-family: monospace;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             max-width: 100%;
         }
 
-        /* News Cards */
-        .news-card {
-            width: 320px;
-            height: 380px;
-            background-color: var(--bg-card);
-            border-radius: 24px;
+        /* News Item (Sidebars) */
+        .news-item {
+            display: block;
+            background-color: var(--color-surface);
+            border-radius: var(--radius-md);
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            transition: transform 0.3s ease;
-            opacity: 0;
-            animation: fadeIn 0.8s ease forwards;
+            text-decoration: none;
+            color: inherit;
         }
         
-        .news-card:nth-child(1) { animation-delay: 0.1s; }
-        .news-card:nth-child(3) { animation-delay: 0.3s; }
-
-        .news-image-wrapper {
-            height: 180px;
+        .news-thumb {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background-color: #1f1f23;
             position: relative;
-            overflow: hidden;
         }
-
-        .news-image {
+        .news-thumb img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
+            opacity: 0.8;
         }
-
-        .news-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.3);
-        }
-
         .news-tag {
             position: absolute;
-            top: 12px;
-            left: 12px;
-            padding: 4px 8px;
-            border-radius: 6px;
+            top: 8px;
+            left: 8px;
+            background-color: #eb0400; /* Live red */
+            color: white;
             font-size: 11px;
             font-weight: 700;
-            color: white;
-            text-transform: uppercase;
+            padding: 2px 6px;
+            border-radius: 2px;
         }
-
-        .tag-green { background-color: #22c55e; }
-        .tag-red { background-color: #ef4444; }
 
         .news-content {
-            padding: 24px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
+            padding: 12px;
         }
-
         .news-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            line-height: 1.3;
-        }
-
-        .news-excerpt {
             font-size: 14px;
-            color: var(--text-muted);
-            line-height: 1.5;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 4px;
+            color: var(--color-text-primary);
             display: -webkit-box;
-            -webkit-line-clamp: 3;
+            -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            margin-bottom: auto;
         }
-
-        .news-date {
-            margin-top: 16px;
+        .news-meta {
             font-size: 12px;
-            color: #6b7280;
+            color: var(--color-text-secondary);
+        }
+        .news-tags {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .tag {
+            background-color: var(--color-surface-hover);
+            color: var(--color-text-secondary);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 1100px) {
-            .news-card { display: none; }
+        @media (max-width: 1200px) {
+            .container { grid-template-columns: 1fr; padding: 20px; }
+            .col-side { display: none; }
         }
     </style>
 </head>
@@ -249,63 +252,83 @@
         <div class="bg-overlay"></div>
     </div>
 
-    <div class="main-container">
-        
-        <!-- News 1 -->
-        <div class="news-card">
-            <div class="news-image-wrapper">
-                <img src="https://i.ibb.co/Pz5YV78w/wmremove-transformed-3.png" class="news-image" alt="News">
-                <div class="news-overlay"></div>
-                <div class="news-tag tag-green">Разработка</div>
+    <div class="container">
+        <!-- Left Column: Updates -->
+        <div class="col-side">
+            <div class="news-item">
+                <div class="news-thumb">
+                    <img src="https://i.ibb.co/Pz5YV78w/wmremove-transformed-3.png" alt="Update">
+                    <div class="news-tag">UPDATE</div>
+                </div>
+                <div class="news-content">
+                    <div class="news-title">Сервер в активной разработке: готовимся к открытию</div>
+                    <div class="news-meta">Project SY • 4 декабря</div>
+                    <div class="news-tags">
+                        <span class="tag">DevLog</span>
+                        <span class="tag">News</span>
+                    </div>
+                </div>
             </div>
-            <div class="news-content">
-                <h3 class="news-title">Сервер в активной разработке</h3>
-                <p class="news-excerpt">Работа над проектом кипит. Мы готовимся к открытию. На данный момент мы занимаемся настройкой игровой сборки.</p>
-                <div class="news-date">4 декабря 2025</div>
+
+            <div class="news-item">
+                <div class="news-thumb">
+                    <img src="https://steamuserimages-a.akamaihd.net/ugc/2056508932644266184/0B293153545163D520D8F7B596F3D3C126838D64/" alt="Metro">
+                </div>
+                <div class="news-content">
+                    <div class="news-title">Обновление подвижного состава и новые линии</div>
+                    <div class="news-meta">Metrostroi • Скоро</div>
+                    <div class="news-tags">
+                        <span class="tag">Trains</span>
+                        <span class="tag">Map</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Center -->
-        <div class="center-col">
-            <img src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" class="logo" alt="Logo">
-            <h1 class="title">Project SY</h1>
-            <div class="subtitle">Metrostroi NoRank</div>
+        <!-- Center Column: Loading Status -->
+        <div class="col-center">
+            <div class="logo-container">
+                <img src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg" class="logo-img" alt="Logo">
+            </div>
+            
+            <h1 class="server-title">Project <span>SY</span></h1>
+            <div class="server-subtitle">Metrostroi NoRank</div>
 
-            <div class="progress-wrapper">
-                <div class="progress-header">
-                    <span class="status-text" id="statusText">Подключение...</span>
-                    <span class="percent-text" id="progressPercent">0%</span>
+            <div class="loading-container">
+                <div class="loading-info">
+                    <span class="loading-status" id="statusText">Подключение к серверу...</span>
+                    <span class="loading-percent" id="progressPercent">0%</span>
                 </div>
+                
                 <div class="progress-track">
                     <div class="progress-fill" id="progressFill"></div>
                 </div>
-                <div class="detail-status" id="fileStatus">Ожидание сервера...</div>
+                
+                <div class="file-status" id="fileStatus">Ожидание ответа...</div>
             </div>
         </div>
 
-        <!-- News 2 -->
-        <div class="news-card">
-            <div class="news-image-wrapper">
-                <img src="https://i.ibb.co/QvRv01bH/Gemini-Generated-Image-lowwn6lowwn6loww-1.png" class="news-image" alt="News">
-                <div class="news-overlay"></div>
-                <div class="news-tag tag-red">Важное</div>
-            </div>
-            <div class="news-content">
-                <h3 class="news-title">Глобальный переезд в GMod</h3>
-                <p class="news-excerpt">В связи с блокировкой Roblox мы сменили платформу. Наша карта будет перенесена в Garry's Mod.</p>
-                <div class="news-date">3 декабря 2025</div>
+        <!-- Right Column: Community -->
+        <div class="col-side">
+            <div class="news-item">
+                <div class="news-thumb">
+                    <img src="https://i.ibb.co/QvRv01bH/Gemini-Generated-Image-lowwn6lowwn6loww-1.png" alt="Migration">
+                    <div class="news-tag" style="background-color: #a8c7fa; color: black;">INFO</div>
+                </div>
+                <div class="news-content">
+                    <div class="news-title">Глобальный переезд в Garry's Mod завершен</div>
+                    <div class="news-meta">Important • 3 декабря</div>
+                    <div class="news-tags">
+                        <span class="tag">Announcement</span>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 
     <script>
         // GMod Loading API
-        // https://wiki.facepunch.com/gmod/Loading_URL
-
-        function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
-            // Can update UI with map name if needed
-        }
+        function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {}
 
         function SetFilesTotal(total) {
             window.totalFiles = total;
@@ -318,24 +341,17 @@
 
         function DownloadingFile(fileName) {
             const statusEl = document.getElementById('fileStatus');
-            if (statusEl) {
-                statusEl.textContent = 'Загрузка: ' + fileName;
-            }
+            if (statusEl) statusEl.textContent = 'Загрузка: ' + fileName;
             
             const mainStatus = document.getElementById('statusText');
-            if (mainStatus) {
-                mainStatus.textContent = 'Загрузка файлов...';
-            }
+            if (mainStatus) mainStatus.textContent = 'Загрузка файлов...';
         }
 
         function SetStatusChanged(status) {
             const statusEl = document.getElementById('statusText');
             if (statusEl) {
-                // Translate common GMod statuses to Russian
-                if (status.includes("Sending Client Info")) status = "Отправка сведений о клиенте...";
-                else if (status.includes("Getting Client Info")) status = "Получение сведений о клиенте...";
-                else if (status.includes("Workshop")) status = "Загрузка Workshop...";
-                
+                if (status.includes("Sending Client Info")) status = "Отправка сведений...";
+                else if (status.includes("Workshop")) status = "Загрузка аддонов...";
                 statusEl.textContent = status;
             }
         }
@@ -344,14 +360,8 @@
             const total = window.totalFiles || 1;
             const needed = window.filesNeeded || 0;
             const downloaded = total - needed;
+            const percent = Math.round((downloaded / total) * 100);
             
-            // Calculate percentage
-            let percent = 0;
-            if (total > 0) {
-                percent = Math.round((downloaded / total) * 100);
-            }
-            
-            // Update UI
             const fill = document.getElementById('progressFill');
             const text = document.getElementById('progressPercent');
             
@@ -359,26 +369,21 @@
             if (text) text.textContent = percent + '%';
         }
 
-        // Demo Mode (runs if not in GMod)
-        const isGMod = navigator.userAgent.includes("Valve Source Game");
-        
-        if (!isGMod) {
+        // Demo Mode
+        if (!navigator.userAgent.includes("Valve Source Game")) {
             let demo = 0;
             const demoInterval = setInterval(() => {
-                demo += Math.random() * 1.5;
+                demo += Math.random() * 2;
                 if (demo >= 100) {
                     demo = 100;
                     clearInterval(demoInterval);
-                    document.getElementById('statusText').textContent = "Готово";
+                    document.getElementById('statusText').textContent = "Готово к игре";
                 }
-                
                 document.getElementById('progressFill').style.width = demo + '%';
                 document.getElementById('progressPercent').textContent = Math.round(demo) + '%';
                 
-                if (demo < 30) document.getElementById('fileStatus').textContent = "Загрузка: materials/models/props/test.vtf";
-                else if (demo < 60) document.getElementById('fileStatus').textContent = "Загрузка: sound/ambient/metro.mp3";
-                else document.getElementById('fileStatus').textContent = "Отправка сведений о клиенте...";
-                
+                if (demo < 90) document.getElementById('fileStatus').textContent = "Загрузка: models/props_trainstation/trashcan.mdl";
+                else document.getElementById('fileStatus').textContent = "Инициализация...";
             }, 100);
         }
     </script>
