@@ -12,8 +12,7 @@ local UI_URL = "https://miumiv6-lg.github.io/projectsy/gmod_ingame/index.html"
 
 local function PlayMusic()
     if musicChannel then return end
-    -- Музыка теперь управляется внутри веб-страницы, но можно оставить как фоллбек
-    -- sound.PlayURL("...", ...)
+    -- Музыка теперь управляется внутри веб-страницы
 end
 
 local function CloseUI()
@@ -53,17 +52,7 @@ local function ShowUI()
         end
     end)
     
-    -- Обработка спавна от JS (console.log перехватывается или через title)
-    -- DHTML:AddFunction работает только для SetHTML, для OpenURL нужен другой подход или bridge.
-    -- Простейший способ для OpenURL: отслеживать смену title или console message, 
-    -- но DHTML в GMod ограничен.
-    
-    -- ВАЖНО: DHTML:AddFunction НЕ РАБОТАЕТ с OpenURL (из-за безопасности Chromium/CEF).
-    -- Чтобы это работало с внешним сайтом, нужно либо:
-    -- 1. Использовать SetHTML с iframe (но тогда проблемы с CORS/звуком).
-    -- 2. Инжектить JS-мост после загрузки страницы.
-    
-    -- Используем инъекцию моста:
+    -- Обработка спавна от JS
     htmlPanel:AddFunction("gmod", "spawn", function(spawnId)
         if isClosing then return end
         isClosing = true
