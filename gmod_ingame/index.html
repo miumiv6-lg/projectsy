@@ -24,11 +24,17 @@
 html, body {
     width: 100%; height: 100%;
     overflow: hidden;
-    background: transparent; /* Transparent for overlay */
+    background: transparent;
     color: var(--color-text-primary);
     font-family: 'Inter', -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     user-select: none;
+}
+
+/* Hide cursor initially */
+body.cursor-hidden,
+body.cursor-hidden * { 
+    cursor: none !important; 
 }
 
 /* Background */
@@ -276,7 +282,7 @@ body.spawn-mode .hud-element { opacity: 1; }
 
 </style>
 </head>
-<body class="menu-active"> <!-- Start with menu active -->
+<body class="menu-active cursor-hidden"> <!-- Start with menu active and cursor HIDDEN -->
 
     <!-- Background Image -->
     <div class="bg-layer">
@@ -354,6 +360,7 @@ body.spawn-mode .hud-element { opacity: 1; }
 
     // Functions
     function goToSpawnSelect() {
+        document.body.classList.remove('cursor-hidden'); // Show cursor
         document.getElementById('scr-click').classList.remove('active');
         document.getElementById('scr-spawn').classList.add('active');
         playMusic();
