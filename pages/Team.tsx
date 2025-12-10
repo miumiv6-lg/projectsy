@@ -1,5 +1,5 @@
 import React from 'react';
-import { Crown, Code, Train, Users } from 'lucide-react';
+import { Crown, Code, Train, Users, ArrowUpRight } from 'lucide-react';
 
 interface TeamMember {
   name: string;
@@ -7,7 +7,6 @@ interface TeamMember {
   description: string;
   initials: string;
   color: string;
-  roleColor: string;
   icon?: any;
 }
 
@@ -18,8 +17,7 @@ const Team: React.FC = () => {
       role: 'Основатель', 
       description: 'Создатель и руководитель проекта', 
       initials: 'S',
-      color: 'bg-red-500/80',
-      roleColor: 'text-red-400',
+      color: 'text-red-400',
       icon: Crown,
     },
     { 
@@ -27,16 +25,14 @@ const Team: React.FC = () => {
       role: 'Зам. главы', 
       description: 'Заместитель руководителя', 
       initials: 'U',
-      color: 'bg-purple-500/80',
-      roleColor: 'text-purple-400',
+      color: 'text-purple-400',
     },
     { 
       name: 'scxowo', 
       role: 'Зам. главы', 
       description: 'Заместитель руководителя', 
       initials: 'S',
-      color: 'bg-orange-500/80',
-      roleColor: 'text-orange-400',
+      color: 'text-orange-400',
     },
   ];
 
@@ -46,8 +42,7 @@ const Team: React.FC = () => {
       role: 'Разработчик', 
       description: 'Сайт, серверная часть', 
       initials: 'SI',
-      color: 'bg-brand-blue',
-      roleColor: 'text-brand-blue',
+      color: 'text-blue-400',
       icon: Code,
     },
     { 
@@ -55,8 +50,7 @@ const Team: React.FC = () => {
       role: 'Метростроевец', 
       description: 'Строительство и карты', 
       initials: 'ЮС',
-      color: 'bg-cyan-500/80',
-      roleColor: 'text-cyan-400',
+      color: 'text-green-400',
       icon: Train,
     },
     { 
@@ -64,8 +58,7 @@ const Team: React.FC = () => {
       role: 'Главарь РЭКС', 
       description: 'Направление РЭКС', 
       initials: 'Т',
-      color: 'bg-amber-500/80',
-      roleColor: 'text-amber-400',
+      color: 'text-yellow-400',
     },
   ];
 
@@ -73,17 +66,17 @@ const Team: React.FC = () => {
     const Icon = member.icon;
     return (
       <div 
-        className="bg-white/[0.04] backdrop-blur-2xl border border-white/[0.08] rounded-[24px] p-5 hover:bg-white/[0.06] transition-colors animate-ios-slide-up opacity-0 fill-mode-forwards"
-        style={{ animationDelay: `${(index + 1) * 80}ms` }}
+        className="bg-[#18181b] border border-[#2f2f35] rounded-md p-5 hover:border-primary/50 transition-colors group animate-fade-in"
+        style={{ animationDelay: `${index * 50}ms` }}
       >
         <div className="flex items-center gap-4">
-          <div className={`w-12 h-12 rounded-xl ${member.color} flex items-center justify-center text-white font-bold text-base flex-shrink-0`}>
-            {Icon ? <Icon size={22} /> : member.initials}
+          <div className="w-14 h-14 rounded bg-[#2f2f35] flex items-center justify-center font-bold text-lg shrink-0 group-hover:scale-110 transition-transform duration-300">
+            {Icon ? <Icon size={24} className={member.color} /> : <span className={member.color}>{member.initials}</span>}
           </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-white truncate">{member.name}</h3>
-            <p className={`text-sm font-medium ${member.roleColor}`}>{member.role}</p>
-            <p className="text-xs text-white/40 mt-0.5">{member.description}</p>
+          <div className="min-w-0">
+            <h3 className="font-bold text-white text-base truncate">{member.name}</h3>
+            <p className={`text-xs font-bold uppercase tracking-wider mb-1 ${member.color}`}>{member.role}</p>
+            <p className="text-sm text-[#adadb8] truncate">{member.description}</p>
           </div>
         </div>
       </div>
@@ -91,44 +84,49 @@ const Team: React.FC = () => {
   };
 
   return (
-    <div className="w-full px-4 max-w-4xl mx-auto pb-20 pt-24">
+    <div className="w-full px-6 max-w-[1000px] mx-auto pb-20 pt-8 animate-fade-in">
+      
       {/* Header */}
-      <div className="text-center py-10 animate-ios-slide-up">
-        <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
-          <Users size={28} className="text-purple-400" />
+      <div className="mb-10 flex items-center gap-4">
+        <div className="w-12 h-12 rounded bg-[#2f2f35] flex items-center justify-center">
+          <Users size={24} className="text-primary" />
         </div>
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">Команда</h1>
-        <p className="text-white/40 text-lg">Люди, создающие Project SY</p>
+        <div>
+          <h1 className="text-3xl font-bold text-[#efeff1]">Команда</h1>
+          <p className="text-[#adadb8]">Люди, создающие Project SY</p>
+        </div>
       </div>
 
       {/* Leadership */}
-      <div className="mb-8">
-        <h2 className="text-xs font-semibold text-white/30 uppercase tracking-wider mb-4 px-1">Руководство</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="mb-12">
+        <h2 className="text-sm font-bold text-[#adadb8] uppercase tracking-wider mb-4 px-1">Руководство</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {leadership.map((member, idx) => (
-            <div key={member.name}>
-              <MemberCard member={member} index={idx} />
-            </div>
+            <MemberCard key={member.name} member={member} index={idx} />
           ))}
         </div>
       </div>
 
       {/* Team */}
-      <div className="mb-8">
-        <h2 className="text-xs font-semibold text-white/30 uppercase tracking-wider mb-4 px-1">Команда</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="mb-12">
+        <h2 className="text-sm font-bold text-[#adadb8] uppercase tracking-wider mb-4 px-1">Команда</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {team.map((member, idx) => (
-            <div key={member.name}>
-              <MemberCard member={member} index={idx + leadership.length} />
-            </div>
+            <MemberCard key={member.name} member={member} index={idx + leadership.length} />
           ))}
         </div>
       </div>
 
-      {/* Join - Liquid Glass */}
-      <div className="bg-white/[0.04] backdrop-blur-2xl border border-white/[0.08] rounded-[24px] p-6 text-center animate-ios-slide-up delay-500 opacity-0 fill-mode-forwards">
+      {/* Join CTA */}
+      <div className="bg-[#18181b] border border-[#2f2f35] rounded-md p-8 text-center animate-fade-in">
         <h3 className="text-lg font-bold text-white mb-2">Хочешь в команду?</h3>
-        <p className="text-white/40 text-sm">Мы всегда ищем талантливых людей. Напиши нам в Telegram!</p>
+        <p className="text-sm text-[#adadb8] mb-6 max-w-md mx-auto">
+          Мы всегда ищем талантливых людей. Напиши нам в Telegram!
+        </p>
+        <button className="h-10 px-6 bg-[#2f2f35] hover:bg-[#3f3f46] text-white font-bold rounded text-sm inline-flex items-center gap-2 transition-colors">
+          Написать
+          <ArrowUpRight size={16} />
+        </button>
       </div>
     </div>
   );

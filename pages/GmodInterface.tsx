@@ -787,7 +787,7 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
                     {hasVoted ? 'Голос отдан' : 'Голосовать'}
                   </button>
                 </div>
-            </div>
+            </LiquidCard>
 
               {/* Floating Tooltip for Voter Name */}
           {hoveredVoter && (

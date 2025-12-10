@@ -1,156 +1,134 @@
 import React from 'react';
-import { ExternalLink, AlertTriangle, Package, CheckCircle2 } from 'lucide-react';
+import { Page } from '../types';
+import { Package, ExternalLink, Download, Check, AlertCircle } from 'lucide-react';
 
-const LiquidBackground = () => (
-  <div className="fixed inset-0 z-0 bg-black pointer-events-none" />
-);
-
-interface GlassCardProps {
-  children: React.ReactNode;
-  className?: string;
-  onClick?: () => void;
+interface WorkshopProps {
+  setPage: (page: Page) => void;
 }
 
-const GlassCard: React.FC<GlassCardProps> = ({ children, className = "", onClick }) => (
-  <div
-    onClick={onClick}
-    className={`
-      relative overflow-hidden
-      bg-white/5 backdrop-blur-3xl 
-      border border-white/10 
-      shadow-[0_8px_32px_0_rgba(0,0,0,0.36)]
-      hover:bg-white/10 hover:border-white/20 hover:shadow-[0_16px_48px_0_rgba(0,0,0,0.5)]
-      transition-all duration-300 ease-out
-      ${onClick ? 'cursor-pointer active:scale-[0.98]' : ''}
-      ${className}
-    `}
-  >
-    {children}
-  </div>
-);
+const Workshop: React.FC<WorkshopProps> = ({ setPage }) => {
+  const collections = [
+    {
+      title: 'Metrostroi Core',
+      description: 'Основной аддон Metrostroi с моделями поездов и системами',
+      link: 'https://steamcommunity.com/sharedfiles/filedetails/?id=1547330606',
+      required: true,
+    },
+    {
+      title: 'Project SY Content Pack',
+      description: 'Дополнительный контент для сервера (текстуры, звуки)',
+      link: '#',
+      required: true,
+      comingSoon: true,
+    },
+    {
+      title: 'Metrostroi Maps',
+      description: 'Коллекция карт метро для Metrostroi',
+      link: 'https://steamcommunity.com/workshop/browse/?appid=4000&searchtext=metrostroi+map',
+      required: false,
+    },
+  ];
 
-const Workshop: React.FC = () => {
   return (
-    <div className="relative w-full min-h-screen">
-      <LiquidBackground />
+    <div className="w-full px-6 max-w-[1000px] mx-auto pb-20 pt-8 animate-fade-in">
+      
+      {/* Header */}
+      <div className="mb-10 flex items-center gap-4">
+        <div className="w-12 h-12 rounded bg-[#2f2f35] flex items-center justify-center">
+          <Package size={24} className="text-primary" />
+        </div>
+        <div>
+          <h1 className="text-3xl font-bold text-[#efeff1]">Мастерская</h1>
+          <p className="text-[#adadb8]">Скачайте необходимый контент для игры</p>
+        </div>
+      </div>
 
-      <div className="relative z-10 w-full px-4 max-w-5xl mx-auto pb-20 pt-6">
-
-        {/* Header */}
-        <div className="text-center py-12 animate-ios-slide-up">
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white mb-6">
-            Мастерская
-          </h1>
-          <p className="text-xl text-white/50 font-light tracking-wide max-w-2xl mx-auto">
-            Контент для комфортной и правильной игры на сервере Project SY
+      {/* Info Card */}
+      <div className="bg-[#1b1b1f] border-l-4 border-primary p-6 mb-8 flex items-start gap-4 rounded-r-md">
+        <div className="text-primary shrink-0 mt-1">
+          <AlertCircle size={20} />
+        </div>
+        <div>
+          <h3 className="font-bold text-[#efeff1] mb-1">Важно</h3>
+          <p className="text-sm text-[#adadb8] leading-relaxed">
+            После обновления Garry's Mod (Июль 2025), CSS и HL2 контент монтируется автоматически. 
+            Вам нужно только подписаться на Metrostroi.
           </p>
         </div>
-
-        {/* Warning Banner */}
-        <div className="mb-10 animate-ios-slide-up delay-100 opacity-0 fill-mode-forwards">
-          <div className="
-              relative overflow-hidden
-              bg-yellow-500/10 backdrop-blur-xl 
-              border border-yellow-500/20 
-              rounded-[32px] p-6 md:p-8
-              flex flex-col md:flex-row items-start gap-6
-          ">
-            <div className="w-14 h-14 rounded-2xl bg-yellow-500/20 flex items-center justify-center flex-shrink-0 border border-yellow-500/10">
-              <AlertTriangle className="text-yellow-400" size={28} />
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-yellow-500 mb-2">Проблемы с текстурами?</h3>
-              <p className="text-white/70 text-base leading-relaxed">
-                Если вы видите <span className="text-red-400 font-bold">ERROR</span> или фиолетово-чёрную сетку, подпишитесь на нашу коллекцию.
-                Все необходимые ассеты и аддоны скачаются автоматически.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Metrostroi */}
-        <GlassCard className="rounded-[40px] p-8 mb-8 animate-ios-slide-up delay-200 opacity-0 fill-mode-forwards group">
-          <div className="flex flex-col md:flex-row md:items-center gap-8">
-            <div className="w-24 h-24 rounded-[32px] bg-blue-500/20 flex items-center justify-center flex-shrink-0 border border-white/5 group-hover:scale-105 transition-transform duration-500">
-              <Package className="text-blue-400" size={48} />
-            </div>
-
-            <div className="flex-1">
-              <div className="flex items-center gap-4 mb-3">
-                <h3 className="text-3xl font-bold text-white">Metrostroi</h3>
-                <span className="px-4 py-1.5 bg-red-500/20 border border-red-500/20 text-red-300 text-xs font-bold uppercase tracking-wider rounded-full">
-                  Обязательно
-                </span>
-              </div>
-              <p className="text-white/60 text-lg mb-2 font-light">
-                Базовый аддон симулятора метро. Без него сервер не будет работать корректно.
-              </p>
-              <div className="flex items-center gap-4 text-sm text-white/30 font-medium">
-                <span>Размер: ~2 GB</span>
-                <span>•</span>
-                <span>Версия: Latest</span>
-              </div>
-            </div>
-
-            <a
-              href="https://steamcommunity.com/sharedfiles/filedetails/?id=1098503782"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="h-14 px-8 bg-white text-black hover:bg-white/90 font-bold rounded-2xl transition-all shadow-lg shadow-white/10 flex items-center justify-center gap-3 active:scale-95"
-            >
-              <span>Открыть</span>
-              <ExternalLink size={18} />
-            </a>
-          </div>
-        </GlassCard>
-
-        {/* Collection Link */}
-        <GlassCard className="rounded-[40px] p-10 text-center animate-ios-slide-up delay-300 opacity-0 fill-mode-forwards relative z-0">
-
-
-          <div className="relative z-10 flex flex-col items-center">
-            <div className="w-20 h-20 bg-white/5 rounded-3xl flex items-center justify-center mb-6 border border-white/5">
-              <img
-                src="https://img.icons8.com/?size=100&id=pOa8st0SGd5C&format=png&color=FFFFFF"
-                alt="Steam"
-                className="w-10 h-10 opacity-80"
-              />
-            </div>
-
-            <h3 className="text-3xl font-bold text-white mb-3">Коллекция сервера</h3>
-            <p className="text-white/50 text-lg mb-8 max-w-lg mx-auto">
-              Мы готовим полный список аддонов. Коллекция появится здесь в ближайшее время.
-            </p>
-
-            <div className="inline-flex items-center gap-3 px-8 py-4 bg-white/5 border border-white/5 text-white/30 font-bold rounded-2xl cursor-not-allowed">
-              <ExternalLink size={20} />
-              Скоро будет доступно
-            </div>
-          </div>
-        </GlassCard>
-
-        {/* Instructions */}
-        <div className="mt-12 animate-ios-slide-up delay-400 opacity-0 fill-mode-forwards">
-          <h3 className="text-2xl font-bold text-white mb-8 pl-4">Инструкция по установке</h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {[
-              "Войдите в свой аккаунт Steam",
-              "Перейдите на страницу коллекции или аддона",
-              "Нажмите кнопку «Подписаться на все»",
-              "Запустите Garry's Mod для загрузки"
-            ].map((step, idx) => (
-              <GlassCard key={idx} className="p-6 rounded-[28px] flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-blue-500/10 text-blue-400 font-bold text-lg flex items-center justify-center border border-blue-500/10">
-                  {idx + 1}
-                </div>
-                <span className="text-white/80 font-medium">{step}</span>
-              </GlassCard>
-            ))}
-          </div>
-        </div>
-
       </div>
+
+      {/* Collections */}
+      <div className="space-y-4 mb-12">
+        {collections.map((item, idx) => (
+          <div 
+            key={idx} 
+            className="bg-[#18181b] border border-[#2f2f35] rounded-md p-5 animate-fade-in hover:border-primary/50 transition-colors"
+            style={{ animationDelay: `${idx * 50}ms` }}
+          >
+            <div className="flex flex-col md:flex-row md:items-center gap-4">
+              <div className="flex-grow">
+                <div className="flex items-center gap-3 mb-1">
+                  <h3 className="font-bold text-[#efeff1] text-lg">{item.title}</h3>
+                  {item.required && (
+                    <span className="px-2 py-0.5 rounded bg-red-500/10 text-red-400 text-xs font-bold uppercase tracking-wider">
+                      Required
+                    </span>
+                  )}
+                </div>
+                <p className="text-sm text-[#adadb8]">{item.description}</p>
+              </div>
+              
+              {item.comingSoon ? (
+                <button 
+                  disabled 
+                  className="h-9 px-4 rounded bg-[#2f2f35] text-[#adadb8] text-sm font-semibold cursor-not-allowed shrink-0"
+                >
+                  Скоро
+                </button>
+              ) : (
+                <a
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="h-9 px-4 rounded bg-[#2f2f35] hover:bg-[#3f3f46] text-white text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors shrink-0"
+                >
+                  <Download size={16} />
+                  Скачать
+                </a>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Checklist */}
+      <div className="bg-[#18181b] border border-[#2f2f35] rounded-md p-6">
+        <h3 className="font-bold text-[#efeff1] mb-6 border-b border-[#2f2f35] pb-4">Чек-лист готовности</h3>
+        <div className="space-y-3">
+          {[
+            'Установлен Garry\'s Mod (лицензия)',
+            'Подписка на Metrostroi Core',
+            'Подписка на карты (опционально)',
+            'Знание IP сервера',
+          ].map((item, idx) => (
+            <div key={idx} className="flex items-center gap-3">
+              <div className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center text-green-500 shrink-0">
+                <Check size={12} strokeWidth={3} />
+              </div>
+              <span className="text-[#adadb8] text-sm">{item}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Play CTA */}
+      <button
+        onClick={() => setPage(Page.PLAY)}
+        className="w-full h-12 mt-8 bg-primary text-black font-bold rounded flex items-center justify-center gap-2 hover:bg-primary/90 transition-all active:scale-[0.99]"
+      >
+        Перейти к игре
+        <ExternalLink size={18} />
+      </button>
     </div>
   );
 };

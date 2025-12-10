@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Clock, Trophy, Star, Shield, ExternalLink, Copy, Check, Settings, MessageSquare, ChevronRight } from 'lucide-react';
+import { LogOut, Clock, Trophy, Star, Shield, ExternalLink, Copy, Check, Settings, MessageSquare, ChevronRight, Activity, User } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Page, UserRole } from '../types';
 
@@ -14,19 +14,21 @@ const Profile: React.FC<ProfileProps> = ({ setPage }) => {
 
   if (!isAuthenticated || !user) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 pt-24">
-        <div className="w-20 h-20 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-6">
-          <Shield size={36} className="text-white/30" />
+      <div className="flex flex-col items-center justify-center min-h-[70vh] px-6 pt-8">
+        <div className="w-24 h-24 rounded-3xl bg-surface-container-high flex items-center justify-center mb-8 animate-scale-in">
+          <User size={48} className="text-on-surface-variant" />
         </div>
-        <h1 className="text-2xl font-bold text-white mb-3">Войдите в аккаунт</h1>
-        <p className="text-white/40 text-center mb-8 max-w-md text-sm">
-          Авторизуйтесь через Steam, чтобы просматривать профиль и статистику
+        <h1 className="headline-large text-on-surface mb-3">Войдите в аккаунт</h1>
+        <p className="body-large text-on-surface-variant text-center mb-10 max-w-md">
+          Авторизуйтесь через Steam, чтобы получить доступ к профилю, статистике и настройкам.
         </p>
         <button
           onClick={openLoginModal}
-          className="h-12 px-6 rounded-xl bg-[#1b2838] hover:bg-[#2a475e] text-white font-semibold flex items-center gap-3 transition-colors"
+          className="h-14 px-8 rounded-full bg-[#1b2838] hover:bg-[#2a475e] text-white title-medium flex items-center gap-3 transition-all shadow-lg hover:-translate-y-0.5 active:scale-[0.98]"
         >
-          <img src="https://img.icons8.com/?size=100&id=pOa8st0SGd5C&format=png&color=FFFFFF" alt="Steam" className="w-5 h-5" />
+          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 3.12.597 6.035 1.636 8.636l2.97-4.16c-.053-.28-.088-.567-.088-.86 0-2.486 2.014-4.5 4.5-4.5.293 0 .58.035.86.088l4.16-2.97C13.565 2.87 12.805 0 12 0zm6.916 6.773c-.05.27-.083.546-.083.826 0 2.485-2.015 4.5-4.5 4.5-.28 0-.556-.032-.826-.083l-2.97 4.16c1.17 1.632 2.83 2.91 4.79 3.654L18.916 6.773zM12 24c6.627 0 12-5.373 12-12 0-3.12-.597-6.035-1.636-8.636l-2.97 4.16c.053.28.088.567.088.86 0 2.486-2.014 4.5-4.5 4.5-.293 0-.58-.035-.86-.088l-4.16 2.97c2.503 5.277 8.16 8.834 14.684 8.834z"/>
+          </svg>
           Войти через Steam
         </button>
       </div>
@@ -47,14 +49,14 @@ const Profile: React.FC<ProfileProps> = ({ setPage }) => {
   const getRoleBadge = () => {
     if (!user.role) return null;
     const styles: Record<UserRole, { bg: string; text: string; label: string }> = {
-      [UserRole.USER]: { bg: 'bg-white/[0.06]', text: 'text-white/50', label: 'Игрок' },
-      [UserRole.MODERATOR]: { bg: 'bg-blue-500/10', text: 'text-blue-400', label: 'Модератор' },
-      [UserRole.ADMIN]: { bg: 'bg-purple-500/10', text: 'text-purple-400', label: 'Администратор' },
-      [UserRole.OWNER]: { bg: 'bg-red-500/10', text: 'text-red-400', label: 'Владелец' },
+      [UserRole.USER]: { bg: 'bg-surface-container-highest', text: 'text-on-surface', label: 'Игрок' },
+      [UserRole.MODERATOR]: { bg: 'bg-tertiary-container', text: 'text-on-tertiary-container', label: 'Модератор' },
+      [UserRole.ADMIN]: { bg: 'bg-secondary-container', text: 'text-on-secondary-container', label: 'Администратор' },
+      [UserRole.OWNER]: { bg: 'bg-error-container', text: 'text-on-error-container', label: 'Владелец' },
     };
     const style = styles[user.role];
     return (
-      <span className={`px-3 py-1 rounded-full ${style.bg} ${style.text} font-medium text-xs`}>
+      <span className={`px-3 py-1 rounded-full ${style.bg} ${style.text} label-medium`}>
         {style.label}
       </span>
     );
@@ -69,70 +71,82 @@ const Profile: React.FC<ProfileProps> = ({ setPage }) => {
       : 'Неизвестно',
   };
 
-  const recentActivity: { type: string; text: string; date: string }[] = [];
-
   return (
-    <div className="w-full px-4 max-w-4xl mx-auto pb-20 pt-24 animate-ios-slide-up">
-      {/* Header Card - Liquid Glass */}
-      <div className="bg-white/[0.04] backdrop-blur-2xl border border-white/[0.08] rounded-[28px] p-6 md:p-8 mb-6 relative overflow-hidden">
-        <div className="relative flex flex-col md:flex-row items-center gap-6">
-          {/* Avatar */}
+    <div className="w-full px-6 max-w-5xl mx-auto pb-20 pt-8">
+      
+      {/* Profile Header */}
+      <div className="relative mb-20 animate-fade-in">
+        
+        {/* Banner */}
+        <div className="h-48 md:h-56 rounded-3xl bg-gradient-to-br from-primary-container via-surface-container to-tertiary-container/50 w-full" />
+        
+        {/* Avatar & Info */}
+        <div className="absolute -bottom-16 left-6 md:left-10 flex items-end gap-6">
           <div className="relative">
-            <img
-              src={user.avatarfull}
-              alt={user.personaname}
-              className="w-24 h-24 md:w-28 md:h-28 rounded-2xl object-cover border border-white/[0.1]"
-            />
-            <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-4 border-black" />
-          </div>
-
-          {/* Info */}
-          <div className="flex-1 text-center md:text-left">
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-3">{user.personaname}</h1>
-            
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-4">
-              {getRoleBadge()}
-              {user.loccountrycode && (
-                <span className="px-3 py-1 rounded-full bg-white/[0.04] text-white/40 text-xs">
-                  🌍 {user.loccountrycode}
-                </span>
-              )}
+            <div className="p-1 bg-background rounded-3xl">
+              <img 
+                src={user.avatarfull} 
+                alt={user.personaname} 
+                className="w-28 h-28 md:w-36 md:h-36 rounded-2xl object-cover"
+              />
             </div>
-
-            {/* Steam ID */}
-            <button
-              onClick={handleCopySteamId}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] transition-colors text-xs text-white/40"
-            >
-              <span className="font-mono">{user.steamId}</span>
-              {copied ? <Check size={12} className="text-green-400" /> : <Copy size={12} />}
-            </button>
+            <div className="absolute bottom-2 right-2 w-5 h-5 bg-success rounded-full border-4 border-background" />
           </div>
-
-          {/* Actions */}
-          <div className="flex gap-2">
-            <a
-              href={user.profileurl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] flex items-center justify-center text-white/40 hover:text-white transition-colors"
-            >
-              <ExternalLink size={18} />
-            </a>
-            {hasPermission(UserRole.MODERATOR) && (
+          
+          <div className="mb-4 hidden md:block">
+            <div className="flex items-center gap-3 mb-2">
+              <h1 className="headline-large text-on-surface">{user.personaname}</h1>
+              {getRoleBadge()}
+            </div>
+            <div className="flex items-center gap-3">
               <button
-                onClick={() => setPage(Page.ADMIN)}
-                className="w-10 h-10 rounded-xl bg-brand-blue/10 hover:bg-brand-blue/20 flex items-center justify-center text-brand-blue transition-colors"
+                onClick={handleCopySteamId}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors body-medium text-on-surface-variant"
               >
-                <Shield size={18} />
+                <span className="font-mono">{user.steamId}</span>
+                {copied ? <Check size={14} className="text-success" /> : <Copy size={14} />}
               </button>
-            )}
+              <a
+                href={user.profileurl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"
+              >
+                <ExternalLink size={16} />
+              </a>
+            </div>
           </div>
         </div>
+
+        {/* Admin Button */}
+        {hasPermission(UserRole.MODERATOR) && (
+          <button
+            onClick={() => setPage(Page.ADMIN)}
+            className="absolute top-6 right-6 px-5 py-2.5 bg-error-container text-on-error-container rounded-full label-large hover:shadow-lg transition-all flex items-center gap-2"
+          >
+            <Shield size={18} />
+            <span>Админ-панель</span>
+          </button>
+        )}
       </div>
 
-      {/* Tabs - Liquid Glass */}
-      <div className="flex gap-2 mb-6">
+      {/* Mobile Info */}
+      <div className="md:hidden mb-8 px-2">
+        <div className="flex items-center gap-3 mb-3">
+          <h1 className="headline-medium text-on-surface">{user.personaname}</h1>
+          {getRoleBadge()}
+        </div>
+        <button
+          onClick={handleCopySteamId}
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container body-small text-on-surface-variant"
+        >
+          <span className="font-mono">{user.steamId}</span>
+          {copied ? <Check size={14} className="text-success" /> : <Copy size={14} />}
+        </button>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex gap-2 overflow-x-auto pb-2 mb-8">
         {[
           { id: 'overview', label: 'Обзор' },
           { id: 'activity', label: 'Активность' },
@@ -141,10 +155,10 @@ const Profile: React.FC<ProfileProps> = ({ setPage }) => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as typeof activeTab)}
-            className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all ${
+            className={`px-6 py-3 rounded-full label-large whitespace-nowrap transition-all ${
               activeTab === tab.id 
-                ? 'bg-brand-blue text-white' 
-                : 'bg-white/[0.04] text-white/50 hover:bg-white/[0.08] hover:text-white/70'
+                ? 'bg-secondary-container text-on-secondary-container' 
+                : 'bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface'
             }`}
           >
             {tab.label}
@@ -153,108 +167,104 @@ const Profile: React.FC<ProfileProps> = ({ setPage }) => {
       </div>
 
       {/* Tab Content */}
-      {activeTab === 'overview' && (
-        <div className="space-y-4">
-          {/* Stats Grid - Liquid Glass */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {[
-              { icon: Clock, color: 'text-purple-400', value: stats.hoursPlayed, label: 'Часов в игре' },
-              { icon: MessageSquare, color: 'text-blue-400', value: stats.forumPosts, label: 'Сообщений' },
-              { icon: Trophy, color: 'text-yellow-400', value: stats.achievements.current, label: 'Достижений' },
-              { icon: Star, color: 'text-brand-blue', value: '—', label: 'Ранг' },
-            ].map((stat, idx) => (
-              <div key={idx} className="bg-white/[0.04] backdrop-blur-2xl border border-white/[0.08] rounded-[20px] p-5 text-center">
-                <stat.icon size={20} className={`${stat.color} mx-auto mb-3`} />
-                <div className="text-xl font-bold text-white">{stat.value}</div>
-                <div className="text-[10px] text-white/30 uppercase tracking-wider">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Account Info - Liquid Glass */}
-          <div className="bg-white/[0.04] backdrop-blur-2xl border border-white/[0.08] rounded-[20px] overflow-hidden">
-            <div className="px-5 py-4 border-b border-white/[0.05]">
-              <h3 className="font-semibold text-white text-sm">Информация</h3>
-            </div>
-            <div className="divide-y divide-white/[0.05]">
-              <div className="px-5 py-3.5 flex justify-between">
-                <span className="text-white/40 text-sm">Steam создан</span>
-                <span className="text-white text-sm">{stats.joinDate}</span>
-              </div>
-              <div className="px-5 py-3.5 flex justify-between">
-                <span className="text-white/40 text-sm">Статус</span>
-                <span className="text-green-400 flex items-center gap-2 text-sm">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
-                  Онлайн
-                </span>
-              </div>
-              <div className="px-5 py-3.5 flex justify-between">
-                <span className="text-white/40 text-sm">Баны</span>
-                <span className="text-white/40 text-sm">Нет</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'activity' && (
-        <div className="bg-white/[0.04] backdrop-blur-2xl border border-white/[0.08] rounded-[20px] overflow-hidden">
-          <div className="px-5 py-4 border-b border-white/[0.05]">
-            <h3 className="font-semibold text-white text-sm">Последняя активность</h3>
-          </div>
-          {recentActivity.length > 0 ? (
-            <div className="divide-y divide-white/[0.05]">
-              {recentActivity.map((item, idx) => (
-                <div key={idx} className="px-5 py-4 flex items-center gap-4">
-                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-                    item.type === 'forum' ? 'bg-blue-500/10' : item.type === 'achievement' ? 'bg-yellow-500/10' : 'bg-green-500/10'
-                  }`}>
-                    {item.type === 'forum' && <MessageSquare size={16} className="text-blue-400" />}
-                    {item.type === 'achievement' && <Trophy size={16} className="text-yellow-400" />}
-                    {item.type === 'game' && <Star size={16} className="text-green-400" />}
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-white text-sm">{item.text}</div>
-                    <div className="text-white/30 text-xs">{item.date}</div>
-                  </div>
+      <div className="animate-slide-up">
+        
+        {activeTab === 'overview' && (
+          <div className="space-y-5">
+            
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { icon: Clock, color: 'text-primary', value: stats.hoursPlayed, label: 'Часов в игре' },
+                { icon: MessageSquare, color: 'text-tertiary', value: stats.forumPosts, label: 'Постов' },
+                { icon: Trophy, color: 'text-secondary', value: stats.achievements.current, label: 'Достижений' },
+                { icon: Star, color: 'text-error', value: '—', label: 'Ранг' },
+              ].map((stat, idx) => (
+                <div key={idx} className="m3-card p-6 hover:bg-surface-container-high transition-colors">
+                  <stat.icon className={`w-7 h-7 ${stat.color} mb-4`} />
+                  <div className="headline-medium text-on-surface mb-1">{stat.value}</div>
+                  <div className="body-medium text-on-surface-variant">{stat.label}</div>
                 </div>
               ))}
             </div>
-          ) : (
-            <div className="p-10 text-center text-white/30 text-sm">Нет активности</div>
-          )}
-        </div>
-      )}
 
-      {activeTab === 'settings' && (
-        <div className="space-y-4">
-          <div className="bg-white/[0.04] backdrop-blur-2xl border border-white/[0.08] rounded-[20px] overflow-hidden">
-            <button className="w-full px-5 py-4 flex items-center justify-between hover:bg-white/[0.04] transition-colors">
-              <div className="flex items-center gap-3">
-                <Settings size={18} className="text-white/40" />
-                <span className="text-white text-sm">Уведомления</span>
+            {/* Details Card */}
+            <div className="m3-card overflow-hidden">
+              <div className="p-6 border-b border-outline-variant/20">
+                <h3 className="title-large text-on-surface">Подробности</h3>
               </div>
-              <ChevronRight size={18} className="text-white/20" />
-            </button>
-            <div className="h-px bg-white/[0.05]" />
-            <button className="w-full px-5 py-4 flex items-center justify-between hover:bg-white/[0.04] transition-colors">
-              <div className="flex items-center gap-3">
-                <Shield size={18} className="text-white/40" />
-                <span className="text-white text-sm">Приватность</span>
+              <div>
+                <div className="px-6 py-4 flex justify-between items-center hover:bg-surface-container-high transition-colors">
+                  <span className="body-large text-on-surface-variant">Дата регистрации</span>
+                  <span className="title-medium text-on-surface">{stats.joinDate}</span>
+                </div>
+                <div className="h-px bg-outline-variant/10 mx-6" />
+                <div className="px-6 py-4 flex justify-between items-center hover:bg-surface-container-high transition-colors">
+                  <span className="body-large text-on-surface-variant">Статус аккаунта</span>
+                  <span className="px-3 py-1 rounded-full bg-success/10 text-success label-medium">Активен</span>
+                </div>
+                <div className="h-px bg-outline-variant/10 mx-6" />
+                <div className="px-6 py-4 flex justify-between items-center hover:bg-surface-container-high transition-colors">
+                  <span className="body-large text-on-surface-variant">Блокировки</span>
+                  <span className="body-large text-on-surface-variant">Отсутствуют</span>
+                </div>
               </div>
-              <ChevronRight size={18} className="text-white/20" />
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'activity' && (
+          <div className="m3-card overflow-hidden min-h-[300px]">
+            <div className="p-6 border-b border-outline-variant/20">
+              <h3 className="title-large text-on-surface">История действий</h3>
+            </div>
+            <div className="flex flex-col items-center justify-center py-20 text-on-surface-variant">
+              <Activity size={48} className="mb-4 opacity-30" />
+              <p className="body-large">Активности пока нет</p>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'settings' && (
+          <div className="max-w-2xl space-y-4">
+            <div className="m3-card overflow-hidden">
+              <button className="w-full px-6 py-5 flex items-center justify-between hover:bg-surface-container-high transition-colors group">
+                <div className="flex items-center gap-4">
+                  <div className="w-11 h-11 rounded-xl bg-surface-container-high flex items-center justify-center group-hover:bg-primary-container group-hover:text-on-primary-container transition-colors">
+                    <Settings size={20} />
+                  </div>
+                  <div className="text-left">
+                    <div className="title-medium text-on-surface">Уведомления</div>
+                    <div className="body-medium text-on-surface-variant">Настройка оповещений</div>
+                  </div>
+                </div>
+                <ChevronRight size={20} className="text-on-surface-variant" />
+              </button>
+              <div className="h-px bg-outline-variant/10 mx-6" />
+              <button className="w-full px-6 py-5 flex items-center justify-between hover:bg-surface-container-high transition-colors group">
+                <div className="flex items-center gap-4">
+                  <div className="w-11 h-11 rounded-xl bg-surface-container-high flex items-center justify-center group-hover:bg-primary-container group-hover:text-on-primary-container transition-colors">
+                    <Shield size={20} />
+                  </div>
+                  <div className="text-left">
+                    <div className="title-medium text-on-surface">Безопасность</div>
+                    <div className="body-medium text-on-surface-variant">Приватность профиля</div>
+                  </div>
+                </div>
+                <ChevronRight size={20} className="text-on-surface-variant" />
+              </button>
+            </div>
+
+            <button
+              onClick={handleLogout}
+              className="w-full h-14 rounded-2xl bg-error-container hover:bg-error/20 text-on-error-container title-medium flex items-center justify-center gap-3 transition-colors"
+            >
+              <LogOut size={20} />
+              Выйти из аккаунта
             </button>
           </div>
-
-          <button
-            onClick={handleLogout}
-            className="w-full h-12 rounded-xl bg-red-500/10 hover:bg-red-500/15 text-red-400 font-medium flex items-center justify-center gap-2 transition-colors text-sm"
-          >
-            <LogOut size={18} />
-            Выйти из аккаунта
-          </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

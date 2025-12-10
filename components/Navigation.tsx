@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Home, Gamepad2, Users, BookOpen, HelpCircle, Newspaper, Mail, MessageSquare, Shield } from 'lucide-react';
-import { Page, UserRole } from '../types';
+import { Menu, X, Search, Bell, Inbox, HelpCircle } from 'lucide-react';
+import { Page } from '../types';
 import ProfileButton from './ProfileButton';
-import { useAuth } from '../context/AuthContext';
 
 interface NavigationProps {
   currentPage: Page;
@@ -10,225 +9,170 @@ interface NavigationProps {
 }
 
 const Navigation: React.FC<NavigationProps> = ({ currentPage, setPage }) => {
-  const { hasPermission } = useAuth();
-  const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const isModerator = hasPermission(UserRole.MODERATOR);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Close menu when pressing Escape
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
-    };
-  }, [isOpen]);
-
-  const menuItems = [
-    { label: 'Главная', value: Page.HOME, icon: Home },
-    { label: 'Играть', value: Page.PLAY, icon: Gamepad2 },
-    { label: 'Новости', value: Page.NEWS, icon: Newspaper },
-    { label: 'О Проекте', value: Page.ABOUT, icon: BookOpen },
-    { label: 'Команда', value: Page.TEAM, icon: Users },
-    { label: 'FAQ', value: Page.FAQ, icon: HelpCircle },
-    { label: 'Правила', value: Page.RULES, icon: Shield },
-    { label: 'Форум', value: Page.FORUM, icon: MessageSquare },
-    { label: 'Контакты', value: Page.CONTACTS, icon: Mail },
-    ...(isModerator ? [{ label: 'Админка', value: Page.ADMIN, icon: Shield }] : []),
+  const allNavLinks = [
+    { label: 'Главная', page: Page.HOME, section: 'main' },
+    { label: 'Играть', page: Page.PLAY, section: 'main' },
+    { label: 'О нас', page: Page.ABOUT, section: 'main' },
+    { label: 'Новости', page: Page.NEWS, section: 'main' },
+    { label: 'Форум', page: Page.FORUM, section: 'community' },
+    { label: 'Мастерская', page: Page.WORKSHOP, section: 'community' },
+    { label: 'Команда', page: Page.TEAM, section: 'info' },
+    { label: 'FAQ', page: Page.FAQ, section: 'info' },
+    { label: 'Правила', page: Page.RULES, section: 'info' },
+    { label: 'Контакты', page: Page.CONTACTS, section: 'info' },
   ];
-
-  const handleNavClick = (page: Page) => {
-    setPage(page);
-    setIsOpen(false);
-  };
 
   return (
     <>
-      <nav
-        className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${
-          scrolled || isOpen
-            ? 'w-[95%] max-w-[900px]'
-            : 'w-[90%] max-w-[800px]'
-        }`}
+      {/* Navigation Bar (Twitch Style) */}
+      <nav 
+        className="fixed top-0 left-0 right-0 z-50 h-[3.5rem] bg-[#18181b] border-b border-[#000] shadow-sm flex items-center px-4 justify-between"
       >
-        {/* Liquid Glass Container */}
-        <div className={`
-          relative rounded-[24px] transition-all duration-300
-          bg-white/[0.06] backdrop-blur-2xl
-          border border-white/[0.1]
-          ${scrolled ? 'bg-white/[0.08]' : ''}
-        `}>
-
-          <div className="relative px-4 sm:px-6">
-            <div className="flex items-center justify-between h-14">
-              {/* Logo */}
-              <button
-                className="flex items-center gap-2.5 group"
-                onClick={() => handleNavClick(Page.HOME)}
-              >
-                <img
-                  src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg"
-                  alt="Project SY"
-                    className="w-8 h-8 rounded-xl object-cover border border-white/10"
-                />
-                <span className="text-sm font-semibold text-white/90">Project SY</span>
-              </button>
-
-              {/* Desktop Menu */}
-              <div className="hidden md:flex items-center gap-0.5">
-                {menuItems.slice(0, 5).map((item) => (
-                  <button
-                    key={item.value}
-                    onClick={() => handleNavClick(item.value)}
-                    className={`
-                      relative px-4 py-2 rounded-2xl text-sm font-medium transition-all duration-300
-                      ${currentPage === item.value
-                        ? 'text-white'
-                        : 'text-white/60 hover:text-white/90'
-                      }
-                    `}
-                  >
-                    {currentPage === item.value && (
-                      <div className="absolute inset-0 rounded-xl bg-white/[0.1] border border-white/[0.08]" />
-                    )}
-                    <span className="relative z-10">{item.label}</span>
-                  </button>
-                ))}
-
-                <button
-                  onClick={() => setIsOpen(true)}
-                  className="ml-1 w-9 h-9 rounded-xl text-white/60 hover:text-white hover:bg-white/10 flex items-center justify-center transition-all"
-                >
-                  <Menu size={18} />
-                </button>
-
-                <div className="ml-2">
-                  <ProfileButton setPage={setPage} variant="desktop" />
-                </div>
-              </div>
-
-              {/* Mobile */}
-              <div className="md:hidden flex items-center gap-2">
-                <ProfileButton setPage={setPage} variant="desktop" />
-                <button
-                  onClick={() => setIsOpen(!isOpen)}
-                  className="w-9 h-9 rounded-xl bg-white/10 text-white/80 hover:text-white flex items-center justify-center transition-colors"
-                >
-                  {isOpen ? <X size={20} /> : <Menu size={20} />}
-                </button>
-              </div>
+        {/* Left: Logo & Links */}
+        <div className="flex items-center gap-6">
+          <button 
+            onClick={() => setPage(Page.HOME)}
+            className="flex items-center gap-2 group"
+          >
+            <div className="w-8 h-8 rounded bg-primary flex items-center justify-center text-black group-hover:opacity-90 transition-opacity">
+               <span className="font-bold text-sm">SY</span>
             </div>
+            <span className="font-semibold text-lg text-[#efeff1] tracking-tight hidden sm:block group-hover:text-primary transition-colors">
+              Project SY
+            </span>
+          </button>
+          
+          <div className="hidden md:flex items-center gap-6">
+            <button 
+              onClick={() => setPage(Page.HOME)}
+              className={`text-sm font-semibold hover:text-primary transition-colors ${currentPage === Page.HOME ? 'text-primary' : 'text-[#efeff1]'}`}
+            >
+              Обзор
+            </button>
+            <button 
+               onClick={() => window.open('https://store.steampowered.com', '_blank')}
+               className="text-sm font-semibold text-[#efeff1] hover:text-primary transition-colors"
+            >
+              Контент
+            </button>
+             <button 
+               onClick={() => setPage(Page.FAQ)}
+               className="text-sm font-semibold text-[#efeff1] hover:text-primary transition-colors"
+            >
+              Помощь
+            </button>
           </div>
+        </div>
+
+        {/* Center: Search (Visual - adapted for Wiki/Players search) */}
+        <div className="hidden md:flex flex-1 max-w-[400px] mx-4">
+          <div className="relative w-full group">
+            <input 
+              type="text" 
+              placeholder="Поиск по вики или игрокам..." 
+              className="w-full h-[36px] bg-[#0e0e10] border border-[#2f2f35] rounded-l-md pl-9 pr-4 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-primary focus:bg-black transition-all"
+            />
+            <Search size={18} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-white" />
+            <button className="absolute right-[-32px] top-0 h-[36px] w-[32px] bg-[#2f2f35] flex items-center justify-center rounded-r-md hover:bg-[#3f3f46]">
+               <Search size={18} className="text-[#efeff1]" />
+            </button>
+          </div>
+        </div>
+
+        {/* Right Actions */}
+        <div className="flex items-center gap-2 sm:gap-4">
+          <div className="hidden sm:flex items-center gap-2">
+            <button className="p-1.5 text-[#efeff1] hover:bg-[#2f2f35] rounded-md transition-colors relative" title="Уведомления сервера">
+               <Inbox size={20} />
+            </button>
+          </div>
+
+          <ProfileButton 
+            setPage={setPage} 
+            variant="desktop" 
+            onOpenNavigation={() => setMobileMenuOpen(true)}
+          />
+
+          {/* Mobile Menu Toggle */}
+          <button 
+            className="md:hidden w-8 h-8 flex items-center justify-center text-white hover:bg-[#2f2f35] rounded-md transition-colors"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
       </nav>
 
-      {/* Full Screen Menu - Liquid Glass Style */}
-      {isOpen && (
-        <div className="fixed inset-0 z-40 animate-fade-in" data-lenis-prevent>
-          {/* Backdrop with blur */}
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-3xl" onClick={() => setIsOpen(false)} />
+      {/* Mobile Navigation Menu */}
+      <div 
+        className={`fixed inset-0 z-40 transition-opacity duration-200 ${
+          mobileMenuOpen 
+            ? 'opacity-100 pointer-events-auto' 
+            : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        {/* Backdrop */}
+        <div 
+          className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+        
+        {/* Menu Panel */}
+        <div className={`absolute top-0 right-0 h-full w-[280px] bg-[#18181b] shadow-xl transform transition-transform duration-200 ${
+          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}>
           
-          {/* Menu Panel */}
-          <div className="absolute inset-4 sm:inset-8 flex flex-col rounded-[32px] overflow-hidden
-            bg-white/[0.08] backdrop-blur-2xl border border-white/[0.12]
-            shadow-[0_32px_64px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)]
-            animate-ios-slide-up
-          ">
+          {/* Header */}
+          <div className="h-[3.5rem] flex items-center justify-between px-4 border-b border-[#2f2f35]">
+            <span className="font-semibold text-lg text-white">Меню</span>
+            <button 
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-2 hover:bg-[#2f2f35] rounded-md text-white transition-colors"
+            >
+              <X size={20} />
+            </button>
+          </div>
 
-
-            {/* Header */}
-            <div className="relative flex items-center justify-between px-6 py-5 border-b border-white/[0.08]">
-              <div className="flex items-center gap-3">
-                <img
-                  src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg"
-                  alt="Logo"
-                  className="w-10 h-10 rounded-2xl ring-2 ring-white/20"
-                />
-                <div>
-                  <span className="text-lg font-bold text-white">Project SY</span>
-                  <p className="text-xs text-white/40">Metrostroi Server</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="w-10 h-10 rounded-2xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 hover:text-white transition-all"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            {/* Menu Content */}
-            <div className="relative flex-1 overflow-y-auto px-6 py-6">
-              <div className="max-w-md mx-auto grid grid-cols-2 gap-3">
-                {menuItems.map((item, idx) => {
-                  const Icon = item.icon;
-                  const isActive = currentPage === item.value;
-                  return (
-                    <button
-                      key={item.value}
-                      onClick={() => handleNavClick(item.value)}
-                      className={`
-                        relative flex flex-col items-center gap-3 p-5 rounded-3xl transition-all duration-300
-                        ${isActive
-                          ? 'bg-brand-blue/30 border-brand-blue/50'
-                          : 'bg-white/[0.06] hover:bg-white/[0.12] border-white/[0.08]'
-                        }
-                        border backdrop-blur-sm
-                        shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]
-                        hover:scale-[1.02] hover:shadow-lg
-                      `}
-                      style={{ animationDelay: `${idx * 40}ms` }}
-                    >
-                      <div className={`
-                        w-12 h-12 rounded-2xl flex items-center justify-center
-                        ${isActive 
-                          ? 'bg-brand-blue text-white shadow-[0_4px_20px_rgba(0,122,255,0.4)]' 
-                          : 'bg-white/10 text-white/70'
-                        }
-                        transition-all
-                      `}>
-                        <Icon size={24} />
-                      </div>
-                      <span className={`font-medium text-sm ${isActive ? 'text-white' : 'text-white/70'}`}>
-                        {item.label}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Profile */}
-              <div className="max-w-md mx-auto mt-6">
-                <ProfileButton
-                  setPage={(page) => {
-                    setPage(page);
-                    setIsOpen(false);
+          {/* Links */}
+          <div className="flex-1 overflow-y-auto p-2">
+            <div className="space-y-1">
+              {allNavLinks.map((link) => (
+                <button
+                  key={link.label}
+                  onClick={() => {
+                    setPage(link.page);
+                    setMobileMenuOpen(false);
                   }}
-                  variant="mobile"
-                />
-              </div>
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    currentPage === link.page
+                      ? 'bg-[#26262c] text-primary'
+                      : 'text-[#adadb8] hover:bg-[#26262c] hover:text-white'
+                  }`}
+                >
+                  <span>{link.label}</span>
+                  {currentPage === link.page && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
+                </button>
+              ))}
             </div>
-
-            {/* Footer */}
-            <div className="relative px-6 py-4 border-t border-white/[0.08] text-center">
-              <p className="text-white/30 text-sm">© 2022-2025 Project SY</p>
+            
+            <div className="mt-4 pt-4 border-t border-[#2f2f35] px-3">
+               <p className="text-xs text-[#adadb8] uppercase font-bold tracking-wider mb-2">Аккаунт</p>
+               {/* Additional account links could go here */}
             </div>
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 };

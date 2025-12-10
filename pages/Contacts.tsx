@@ -1,73 +1,103 @@
 import React from 'react';
-import { Gamepad2, Mail } from 'lucide-react';
+import { Page } from '../types';
+import { Mail, Send, MessageCircle, ExternalLink } from 'lucide-react';
 
-const Contacts: React.FC = () => {
+interface ContactsProps {
+  setPage: (page: Page) => void;
+}
+
+const Contacts: React.FC<ContactsProps> = ({ setPage }) => {
+  const contacts = [
+    {
+      title: 'Telegram',
+      description: 'Основной канал связи и новости',
+      link: 'https://t.me/projectsy',
+      icon: Send,
+      color: 'text-blue-400',
+      buttonText: 'Открыть Telegram',
+    },
+    {
+      title: 'Discord',
+      description: 'Голосовой чат и обсуждения',
+      link: '#',
+      icon: MessageCircle,
+      color: 'text-indigo-400',
+      buttonText: 'Присоединиться',
+      disabled: true,
+    },
+    {
+      title: 'Email',
+      description: 'Для деловых предложений',
+      link: 'mailto:contact@projectsy.ru',
+      icon: Mail,
+      color: 'text-orange-400',
+      buttonText: 'Написать письмо',
+    },
+  ];
+
   return (
-    <div className="w-full px-4 max-w-xl mx-auto py-10">
+    <div className="w-full px-6 max-w-[1000px] mx-auto pb-20 pt-8 animate-fade-in">
       
-      <div className="text-center mb-10 animate-ios-slide-up">
-        <h1 className="text-4xl font-bold text-white mb-2">Контакты</h1>
-        <p className="text-gray-400">Связь с администрацией</p>
+      {/* Header */}
+      <div className="mb-10 flex items-center gap-4">
+        <div className="w-12 h-12 rounded bg-[#2f2f35] flex items-center justify-center">
+          <Mail size={24} className="text-primary" />
+        </div>
+        <div>
+          <h1 className="text-3xl font-bold text-[#efeff1]">Контакты</h1>
+          <p className="text-[#adadb8]">Связь с администрацией</p>
+        </div>
       </div>
 
-      <div className="space-y-4">
-         {/* Telegram */}
-         <a href="#" className="flex items-center p-5 bg-[#1C1C1E] rounded-[24px] hover:bg-[#2C2C2E] transition-colors active-scale animate-ios-slide-up delay-100 opacity-0 fill-mode-forwards">
-            <div className="w-12 h-12 rounded-full bg-[#229ED9] flex items-center justify-center text-white mr-5 shadow-lg shadow-blue-400/20">
-              <img 
-                src="https://img.icons8.com/?size=100&id=lUktdBVdL4Kb&format=png&color=FFFFFF" 
-                alt="Telegram" 
-                className="w-6 h-6" 
-              />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {contacts.map((contact, idx) => {
+          const Icon = contact.icon;
+          return (
+            <div 
+              key={idx} 
+              className="bg-[#18181b] rounded-md border border-[#2f2f35] p-6 hover:border-primary/50 transition-colors flex flex-col group h-full"
+            >
+              <div className="w-10 h-10 rounded bg-[#2f2f35] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
+                <Icon size={20} className={contact.color} />
+              </div>
+              
+              <h3 className="font-bold text-white text-lg mb-1">{contact.title}</h3>
+              <p className="text-sm text-[#adadb8] mb-6 flex-grow leading-relaxed">{contact.description}</p>
+              
+              {contact.disabled ? (
+                <button 
+                  disabled 
+                  className="w-full h-10 rounded bg-[#2f2f35] text-[#adadb8] text-sm font-semibold cursor-not-allowed opacity-50"
+                >
+                  Скоро
+                </button>
+              ) : (
+                <a
+                  href={contact.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full h-10 rounded bg-[#2f2f35] hover:bg-[#3f3f46] text-white text-sm font-semibold flex items-center justify-center gap-2 transition-colors"
+                >
+                  {contact.buttonText}
+                  <ExternalLink size={14} />
+                </a>
+              )}
             </div>
-            <div>
-              <h3 className="font-bold text-xl text-white">Telegram</h3>
-              <p className="text-gray-400 font-medium">Канал новостей</p>
-            </div>
-         </a>
-        
-         {/* Steam */}
-         <a href="#" className="flex items-center p-5 bg-[#1C1C1E] rounded-[24px] hover:bg-[#2C2C2E] transition-colors active-scale animate-ios-slide-up delay-200 opacity-0 fill-mode-forwards">
-            <div className="w-12 h-12 rounded-full bg-[#171a21] flex items-center justify-center text-white mr-5 shadow-lg shadow-black/30">
-              <img 
-                src="https://img.icons8.com/?size=100&id=pOa8st0SGd5C&format=png&color=FFFFFF" 
-                alt="Steam" 
-                className="w-6 h-6" 
-              />
-            </div>
-            <div>
-              <h3 className="font-bold text-xl text-white">Steam Workshop</h3>
-              <p className="text-gray-400 font-medium">Коллекция аддонов</p>
-            </div>
-         </a>
-
-         {/* Roblox */}
-         <a href="#" className="flex items-center p-5 bg-[#1C1C1E] rounded-[24px] hover:bg-[#2C2C2E] transition-colors active-scale animate-ios-slide-up delay-300 opacity-0 fill-mode-forwards">
-            <div className="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center text-white mr-5 shadow-lg shadow-red-500/20">
-              <Gamepad2 size={24} />
-            </div>
-            <div>
-              <h3 className="font-bold text-xl text-white">Roblox</h3>
-              <p className="text-gray-400 font-medium">Архив группы</p>
-            </div>
-         </a>
-
-         {/* Email */}
-         <div className="flex items-center p-5 bg-[#1C1C1E] rounded-[24px] animate-ios-slide-up delay-400 opacity-0 fill-mode-forwards">
-            <div className="w-12 h-12 rounded-full bg-zinc-700 flex items-center justify-center text-white mr-5">
-              <Mail size={24} />
-            </div>
-            <div>
-              <h3 className="font-bold text-xl text-white">Email</h3>
-              <p className="text-gray-500 font-medium select-all">support@projectsy.com</p>
-            </div>
-         </div>
+          );
+        })}
       </div>
 
-      <div className="mt-12 text-center animate-ios-slide-up delay-500 opacity-0 fill-mode-forwards">
-        <p className="text-gray-500 mb-6 font-medium">Есть вопрос по серверу?</p>
-        <button className="bg-brand-blue hover:bg-blue-600 text-white font-bold py-4 px-12 rounded-full text-lg shadow-lg shadow-blue-900/50 active-scale transition-all">
-           Написать Админу
+      {/* FAQ Banner */}
+      <div className="mt-8 bg-[#18181b] rounded-md border border-[#2f2f35] p-8 text-center">
+        <h3 className="text-lg font-bold text-white mb-2">Часто задаваемые вопросы</h3>
+        <p className="text-[#adadb8] text-sm mb-6 max-w-md mx-auto">
+          Прежде чем писать в поддержку, рекомендуем ознакомиться с нашим FAQ. Возможно, ответ на ваш вопрос уже там.
+        </p>
+        <button
+          onClick={() => setPage(Page.FAQ)}
+          className="px-6 py-2 bg-primary text-black font-bold text-sm rounded hover:bg-primary/90 transition-colors"
+        >
+          Открыть FAQ
         </button>
       </div>
 

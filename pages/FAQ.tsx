@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Page, FaqCategory } from '../types';
-import { ChevronDown, Search, HelpCircle, Shield, Wrench, Gamepad2, ChevronRight, MessageCircle } from 'lucide-react';
+import { Search, HelpCircle, Wrench, Gamepad2, ChevronRight, MessageCircle, ChevronDown } from 'lucide-react';
 
 interface FaqProps {
   setPage: (page: Page) => void;
@@ -14,7 +14,7 @@ const FAQ: React.FC<FaqProps> = ({ setPage }) => {
     {
       title: 'О Проекте',
       icon: HelpCircle,
-      color: 'text-brand-blue',
+      color: 'bg-primary-container text-on-primary-container',
       items: [
         { question: 'Что такое Project SY?', answer: 'Проект по метро-симуляторам. Начали в Roblox, теперь делаем качественный сервер в GMod.' },
         { question: 'Почему перешли в GMod?', answer: 'В первую очередь — из-за блокировки Roblox в России (РКН). Мы были вынуждены искать новую платформу, и Garry\'s Mod стал идеальным выбором.' },
@@ -23,7 +23,7 @@ const FAQ: React.FC<FaqProps> = ({ setPage }) => {
     {
       title: 'Технические вопросы',
       icon: Wrench,
-      color: 'text-yellow-400',
+      color: 'bg-tertiary-container text-on-tertiary-container',
       items: [
         { question: 'Как зайти на сервер?', answer: 'Раздел "Играть" в меню содержит IP и кнопку автоматического входа.' },
         { question: 'Нужен ли CSS контент?', answer: 'Больше нет. Обновление Garry\'s Mod (Июль 2025) сделало ручное скачивание ненужным. Игра теперь сама монтирует контент CSS и HL2.' },
@@ -34,7 +34,7 @@ const FAQ: React.FC<FaqProps> = ({ setPage }) => {
     {
       title: 'Игровой процесс',
       icon: Gamepad2,
-      color: 'text-green-400',
+      color: 'bg-secondary-container text-on-secondary-container',
       items: [
         { question: 'Как управлять поездом?', answer: 'Используйте клавиши W/S для контроллера, пробел для тормоза. Подробные гайды будут на сервере.' },
         { question: 'Где взять состав?', answer: 'На станциях есть депо, где можно заспавнить поезд через меню Q.' },
@@ -63,119 +63,106 @@ const FAQ: React.FC<FaqProps> = ({ setPage }) => {
     ),
   })).filter((cat) => cat.items.length > 0);
 
-  const totalQuestions = categories.reduce((acc, cat) => acc + cat.items.length, 0);
-
   return (
-    <div className="relative w-full min-h-screen">
-      <div className="relative z-10 w-full px-4 max-w-4xl mx-auto pb-20 pt-24">
+    <div className="w-full px-6 max-w-[1000px] mx-auto pb-20 pt-8 animate-fade-in">
 
-        {/* Header */}
-        <div className="text-center py-10 animate-ios-slide-up">
-          <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center">
-            <HelpCircle size={28} className="text-yellow-400" />
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded bg-[#2f2f35] flex items-center justify-center">
+            <HelpCircle size={24} className="text-primary" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">FAQ</h1>
-          <p className="text-white/40 text-lg">{totalQuestions} ответов на популярные вопросы</p>
-        </div>
-
-        {/* Search - Liquid Glass */}
-        <div className="relative mb-10 animate-ios-slide-up delay-100 opacity-0 fill-mode-forwards">
-          <div className="bg-white/[0.04] backdrop-blur-2xl border border-white/[0.08] rounded-2xl flex items-center p-1.5 focus-within:border-white/[0.15] transition-colors">
-            <div className="w-10 h-10 flex items-center justify-center">
-              <Search size={18} className="text-white/30" />
-            </div>
-            <input
-              type="text"
-              placeholder="Поиск по вопросам..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-transparent text-white px-3 py-2.5 focus:outline-none placeholder-white/30 text-sm"
-            />
+          <div>
+            <h1 className="text-3xl font-bold text-[#efeff1]">FAQ</h1>
+            <p className="text-[#adadb8]">Часто задаваемые вопросы</p>
           </div>
         </div>
 
-        {/* Categories */}
-        <div className="space-y-8">
-          {filteredCategories.length === 0 ? (
-            <div className="text-center py-16 animate-ios-slide-up">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center">
-                <Search size={24} className="text-white/20" />
-              </div>
-              <h3 className="text-lg font-bold text-white mb-2">Ничего не найдено</h3>
-              <p className="text-white/40 text-sm">Попробуйте изменить запрос</p>
-            </div>
-          ) : (
-            filteredCategories.map((cat, catIdx) => {
-              const Icon = cat.icon;
-              return (
-                <div
-                  key={catIdx}
-                  className="animate-ios-slide-up opacity-0 fill-mode-forwards"
-                  style={{ animationDelay: `${(catIdx + 2) * 80}ms` }}
-                >
-                  {/* Category Header */}
-                  <div className="flex items-center gap-3 mb-4 px-1">
-                    <div className={`w-8 h-8 rounded-lg bg-white/[0.04] flex items-center justify-center ${cat.color}`}>
-                      <Icon size={16} />
-                    </div>
-                    <h2 className="text-lg font-bold text-white">{cat.title}</h2>
-                  </div>
+        {/* Search */}
+        <div className="relative w-full md:w-80">
+          <input
+            type="text"
+            placeholder="Поиск вопроса..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full h-10 bg-[#18181b] border border-[#2f2f35] rounded pl-10 pr-4 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-primary transition-colors"
+          />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+        </div>
+      </div>
 
-                  {/* Questions */}
-                  <div className="space-y-3">
-                    {cat.items.map((item, itemIdx) => {
-                      const itemId = `${catIdx}-${itemIdx}`;
-                      const isOpen = openItems.has(itemId);
+      {/* Categories */}
+      <div className="space-y-8">
+        {filteredCategories.length === 0 ? (
+          <div className="p-16 text-center border border-dashed border-[#2f2f35] rounded-lg">
+            <p className="text-[#adadb8]">Ничего не найдено</p>
+          </div>
+        ) : (
+          filteredCategories.map((cat, catIdx) => {
+            const Icon = cat.icon;
+            return (
+              <div key={catIdx} className="space-y-3">
+                {/* Category Header */}
+                <h2 className="text-lg font-bold text-white flex items-center gap-2 mb-4">
+                  <Icon size={20} className="text-primary" />
+                  {cat.title}
+                </h2>
 
-                      return (
-                        <div
-                          key={itemIdx}
-                          className={`bg-white/[0.04] backdrop-blur-2xl border border-white/[0.08] rounded-[20px] overflow-hidden transition-colors ${isOpen ? 'bg-white/[0.06]' : 'hover:bg-white/[0.05]'}`}
+                {/* Questions */}
+                <div className="space-y-2">
+                  {cat.items.map((item, itemIdx) => {
+                    const itemId = `${catIdx}-${itemIdx}`;
+                    const isOpen = openItems.has(itemId);
+
+                    return (
+                      <div
+                        key={itemIdx}
+                        className={`bg-[#18181b] border border-[#2f2f35] rounded-md overflow-hidden transition-all duration-200 ${isOpen ? 'border-primary/50' : 'hover:border-[#3f3f46]'}`}
+                      >
+                        <button
+                          onClick={() => toggleItem(itemId)}
+                          className="w-full px-5 py-4 text-left flex items-center justify-between gap-4"
                         >
-                          <button
-                            onClick={() => toggleItem(itemId)}
-                            className="w-full px-5 py-4 text-left flex items-center justify-between gap-4"
-                          >
-                            <span className="text-sm font-medium text-white/80">{item.question}</span>
-                            <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-300 ${isOpen ? 'bg-white/10 rotate-90' : 'bg-white/[0.04]'}`}>
-                              <ChevronRight size={14} className="text-white/50" />
-                            </div>
-                          </button>
+                          <span className="font-semibold text-[#efeff1] text-sm md:text-base">{item.question}</span>
+                          <ChevronDown size={18} className={`text-[#adadb8] transition-transform duration-200 ${isOpen ? 'rotate-180 text-primary' : ''}`} />
+                        </button>
 
-                          <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-[300px] opacity-100' : 'max-h-0 opacity-0'}`}>
-                            <div className="px-5 pb-5 pt-0 text-white/50 text-sm leading-relaxed">
-                              <div className="h-px w-full bg-white/[0.05] mb-4" />
+                        <div className={`transition-all duration-300 overflow-hidden ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                          <div className="px-5 pb-5 pt-0">
+                            <p className="text-[#adadb8] text-sm leading-relaxed border-t border-[#2f2f35] pt-3">
                               {item.answer}
-                            </div>
+                            </p>
                           </div>
                         </div>
-                      );
-                    })}
-                  </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              );
-            })
-          )}
-        </div>
-
-        {/* Contact Support - Liquid Glass */}
-        <div className="mt-12 bg-white/[0.04] backdrop-blur-2xl border border-white/[0.08] rounded-[28px] p-8 text-center animate-ios-slide-up delay-500 opacity-0 fill-mode-forwards">
-          <div className="w-14 h-14 mx-auto mb-5 rounded-2xl bg-brand-blue/10 border border-brand-blue/20 flex items-center justify-center">
-            <MessageCircle size={24} className="text-brand-blue" />
-          </div>
-          <h3 className="text-xl font-bold text-white mb-2">Остались вопросы?</h3>
-          <p className="text-white/40 text-sm mb-6 max-w-sm mx-auto">
-            Наша команда поддержки всегда готова помочь
-          </p>
-          <button
-            onClick={() => setPage(Page.CONTACTS)}
-            className="px-6 py-3 bg-brand-blue hover:bg-blue-600 text-white font-semibold text-sm rounded-xl transition-colors"
-          >
-            Связаться с нами
-          </button>
-        </div>
-
+              </div>
+            );
+          })
+        )}
       </div>
+
+      {/* Support Box */}
+      <div className="mt-12 bg-[#18181b] border border-[#2f2f35] rounded-md p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 rounded bg-[#2f2f35] flex items-center justify-center shrink-0">
+            <MessageCircle size={20} className="text-white" />
+          </div>
+          <div>
+            <h3 className="font-bold text-white text-sm">Не нашли ответ?</h3>
+            <p className="text-xs text-[#adadb8]">Свяжитесь с нашей поддержкой</p>
+          </div>
+        </div>
+        <button
+          onClick={() => setPage(Page.CONTACTS)}
+          className="px-6 py-2 bg-[#2f2f35] hover:bg-[#3f3f46] text-white text-sm font-semibold rounded transition-colors whitespace-nowrap"
+        >
+          Написать нам
+        </button>
+      </div>
+
     </div>
   );
 };

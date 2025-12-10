@@ -3,6 +3,7 @@ import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import Lenis from 'lenis';
 import { Page } from './types';
 import Navigation from './components/Navigation';
+import Sidebar from './components/Sidebar';
 import Footer from './components/Footer';
 import PageTransition from './components/PageTransition';
 import { AuthProvider } from './context/AuthContext';
@@ -25,6 +26,7 @@ import Rules from './pages/Rules';
 
 const AppContent: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>(Page.HOME);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const lenisRef = useRef<any>(null);
 
   // SYNCHRONOUS scroll reset - runs before browser paints
@@ -47,13 +49,9 @@ const AppContent: React.FC = () => {
     });
   }, [currentPage]);
 
-  // Initialize Smooth Scrolling (Lenis) - after scroll reset
+  // Initialize Smooth Scrolling (Lenis) - DISABLED per user request
+  /* 
   useEffect(() => {
-    // GMod UI отключен
-    // if (currentPage === Page.GMOD_UI) {
-    //   return;
-    // }
-
     // Create Lenis after a small delay
     const timer = setTimeout(() => {
       const lenis = new Lenis({
@@ -81,7 +79,8 @@ const AppContent: React.FC = () => {
         lenisRef.current = null;
       }
     };
-  }, [currentPage]);
+  }, [currentPage]); 
+  */
 
   const renderPage = () => {
     switch (currentPage) {
@@ -104,19 +103,35 @@ const AppContent: React.FC = () => {
 
   return (
     <div
-      className="bg-black min-h-screen text-white font-sans selection:bg-brand-blue selection:text-white flex flex-col antialiased"
+      className="bg-background min-h-screen text-white font-sans selection:bg-brand selection:text-white flex flex-col antialiased"
       onContextMenu={(e) => e.preventDefault()}
     >
       <Navigation currentPage={currentPage} setPage={setCurrentPage} />
+      
+      <Sidebar 
+        currentPage={currentPage} 
+        setPage={setCurrentPage} 
+        isCollapsed={isSidebarCollapsed} 
+        toggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)} 
+      />
 
-      <main className="flex-grow flex flex-col pt-24 pb-10">
+      <main 
+        className={`flex-grow flex flex-col pt-16 pb-10 transition-all duration-300 ease-in-out ${
+          isSidebarCollapsed ? 'ml-[50px]' : 'ml-[240px]'
+        }`}
+      >
         {/* We use a Key here so React remounts the transition wrapper every time the page changes */}
         <PageTransition key={currentPage}>
           {renderPage()}
         </PageTransition>
       </main>
 
-      <Footer setPage={setCurrentPage} />
+      {/* Footer should probably be inside Main or pushed by Sidebar too */}
+      <div className={`transition-all duration-300 ease-in-out ${
+          isSidebarCollapsed ? 'ml-[50px]' : 'ml-[240px]'
+        }`}>
+        <Footer setPage={setCurrentPage} />
+      </div>
 
       {/* Global Steam Login Modal */}
       <SteamLoginModal />

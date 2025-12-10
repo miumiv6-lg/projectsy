@@ -1,226 +1,203 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Page } from '../types';
-import { ChevronRight, Play, Newspaper, Users, Train, Gamepad2, Calendar, ArrowRight, Activity, Globe } from 'lucide-react';
+import { Play, ArrowRight, Train, Users, Shield, Zap, Info, ChevronRight } from 'lucide-react';
 
 interface HomeProps {
   setPage: (page: Page) => void;
 }
 
-// iOS 26 Liquid Glass Background - Clean minimal style
-const LiquidGlassBackground = () => (
-  <div className="fixed inset-0 z-0 bg-black pointer-events-none overflow-hidden" />
-);
-
-// Liquid Glass Card Component - Clean iOS style without glow
-interface LiquidCardProps {
-  children: React.ReactNode;
-  className?: string;
-  onClick?: () => void;
-}
-
-const LiquidCard: React.FC<LiquidCardProps> = ({ children, className = "", onClick }) => {
-  return (
-    <div
-      onClick={onClick}
-      className={`
-        relative overflow-hidden
-        bg-white/[0.04] backdrop-blur-2xl
-        border border-white/[0.08]
-        hover:bg-white/[0.07] hover:border-white/[0.12]
-        transition-all duration-300 ease-out
-        ${onClick ? 'cursor-pointer active:scale-[0.98]' : ''}
-        ${className}
-      `}
-    >
-      {children}
-    </div>
-  );
-};
-
 const Home: React.FC<HomeProps> = ({ setPage }) => {
-  const [isHeroHovered, setIsHeroHovered] = useState(false);
-
   return (
-    <div className="relative w-full min-h-screen">
-      <LiquidGlassBackground />
-
-      <div className="relative z-10 w-full px-4 max-w-[1400px] mx-auto pb-20 pt-24">
-
-        {/* HERO SECTION - Liquid Glass Style */}
-        <section
-          className="relative w-full min-h-[70vh] rounded-[48px] overflow-hidden flex flex-col items-center justify-center text-center p-8 mb-8 animate-ios-slide-up group"
-          onMouseEnter={() => setIsHeroHovered(true)}
-          onMouseLeave={() => setIsHeroHovered(false)}
-        >
-          {/* Liquid Glass Background */}
-          <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-white/[0.02] backdrop-blur-3xl" />
-            <img
-              src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg"
-              className={`w-full h-full object-cover opacity-10 transition-all duration-[2s] ease-out ${isHeroHovered ? 'scale-110 opacity-15' : 'scale-105'}`}
-              alt="Background"
-            />
-            <div className="absolute inset-0 bg-black/70" />
-          </div>
-
-          {/* Glass border effect */}
-          <div className="absolute inset-0 rounded-[48px] border border-white/[0.08] pointer-events-none" />
-          <div className="absolute inset-[1px] rounded-[47px] border border-white/[0.03] pointer-events-none" />
-
-          <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
-            {/* Logo with glass effect */}
-            <div className="relative mb-10 animate-ios-slide-up delay-100 opacity-0 fill-mode-forwards">
-              <div className="w-28 h-28 rounded-[32px] overflow-hidden border border-white/[0.1]">
-                <img
-                  src="https://i.ibb.co/Xf2nNn4H/photo-2025-12-03-19-30-54.jpg"
-                  alt="Project SY"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 mb-6 animate-ios-slide-up delay-150 opacity-0 fill-mode-forwards">
-              <span className="text-sm font-medium text-white/50 uppercase tracking-[0.3em]">Metrostroi Server</span>
-            </div>
-
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-white mb-6 animate-ios-slide-up delay-200 opacity-0 fill-mode-forwards">
-              Project <span className="text-brand-blue">SY</span>
-            </h1>
-
-            <p className="text-lg md:text-xl text-white/40 font-light mb-12 max-w-xl leading-relaxed animate-ios-slide-up delay-250 opacity-0 fill-mode-forwards">
-              Погрузитесь в мир метрополитена. <br className="hidden md:block" />
-              <span className="text-white/70">Свобода. Реализм. Атмосфера.</span>
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto animate-ios-slide-up delay-300 opacity-0 fill-mode-forwards">
-              <button
-                onClick={() => setPage(Page.PLAY)}
-                className="group/btn relative h-14 px-8 rounded-2xl font-semibold text-base overflow-hidden transition-all duration-300 hover:scale-105"
-              >
-                {/* Button glass background */}
-                <div className="absolute inset-0 bg-blue-500 opacity-90" />
-                <div className="absolute inset-0 bg-blue-400 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
+    <div className="w-full min-h-screen px-4 py-6 md:px-8">
+      
+      {/* ===== HERO SECTION (Twitch "Featured" Carousel Style) ===== */}
+      <div className="w-full max-w-[1600px] mx-auto mb-12">
+        <div className="relative w-full h-[400px] md:h-[450px] bg-[#18181b] rounded-lg overflow-hidden shadow-lg flex flex-col md:flex-row group transition-all hover:shadow-xl hover:shadow-primary/10">
+          
+          {/* Main Content Area */}
+          <div className="relative flex-1 h-full overflow-hidden bg-[#000]">
+             {/* Background Image / Video Placeholder */}
+             <div className="absolute inset-0 bg-gradient-to-r from-[#000] via-transparent to-transparent z-10" />
+             <div className="absolute inset-0 bg-[url('https://steamuserimages-a.akamaihd.net/ugc/2056508932644266184/0B293153545163D520D8F7B596F3D3C126838D64/')] bg-cover bg-center opacity-60 group-hover:opacity-80 transition-opacity duration-500 scale-105 group-hover:scale-100" />
+             
+             <div className="relative z-20 h-full flex flex-col justify-end p-8 md:p-12 max-w-2xl">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="px-2 py-0.5 rounded bg-primary text-black font-bold text-xs uppercase tracking-wider">
+                    Обновление 2.0
+                  </span>
+                  <span className="text-[#adadb8] text-sm font-semibold">
+                    Уже доступно
+                  </span>
+                </div>
                 
-                <span className="relative z-10 flex items-center justify-center gap-2 text-white">
-                  <Play size={18} fill="currentColor" />
-                  Начать Играть
-                </span>
-              </button>
-              
-              <button
-                onClick={() => setPage(Page.ABOUT)}
-                className="h-14 px-8 rounded-2xl bg-white/[0.05] backdrop-blur-xl border border-white/[0.1] hover:bg-white/[0.1] hover:border-white/[0.2] text-white/80 hover:text-white font-semibold text-base transition-all duration-300 hover:scale-105 flex items-center justify-center"
-              >
-                О Проекте
-              </button>
+                <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
+                  Project <span className="text-primary">SY</span>
+                </h1>
+                
+                <p className="text-[#efeff1] text-lg mb-8 font-medium line-clamp-3">
+                  Реалистичный симулятор метрополитена в Garry's Mod. 
+                  Управляйте поездами, общайтесь с игроками и стройте карьеру машиниста прямо сейчас.
+                </p>
+                
+                <div className="flex gap-3">
+                  <button 
+                    onClick={() => setPage(Page.PLAY)}
+                    className="btn-primary h-12 px-6 text-base rounded-md flex items-center gap-2 hover:bg-primary/90"
+                  >
+                    <Play size={20} fill="currentColor" />
+                    Начать игру
+                  </button>
+                  <button 
+                    onClick={() => setPage(Page.ABOUT)}
+                    className="btn-secondary h-12 px-6 text-base rounded-md flex items-center gap-2 bg-[#2f2f35] hover:bg-[#3f3f46]"
+                  >
+                    <Info size={20} />
+                    Подробнее
+                  </button>
+                </div>
+             </div>
+          </div>
+
+          {/* Sidebar Info (Twitch "Stream Info" Style) */}
+          <div className="hidden lg:flex w-[320px] bg-[#18181b] flex-col border-l border-[#000]/20 p-6">
+            <h3 className="text-[#efeff1] font-bold text-lg mb-4">Статистика сервера</h3>
+            
+            <div className="space-y-4">
+               <div className="flex items-center gap-3">
+                 <div className="w-10 h-10 rounded bg-[#2f2f35] flex items-center justify-center text-primary">
+                    <Users size={20} />
+                 </div>
+                 <div>
+                   <p className="text-sm text-[#adadb8] font-medium">Посещений</p>
+                   <p className="text-white font-bold">400K+</p>
+                 </div>
+               </div>
+               
+               <div className="flex items-center gap-3">
+                 <div className="w-10 h-10 rounded bg-[#2f2f35] flex items-center justify-center text-primary">
+                    <Zap size={20} />
+                 </div>
+                 <div>
+                   <p className="text-sm text-[#adadb8] font-medium">Uptime</p>
+                   <p className="text-white font-bold">24/7</p>
+                 </div>
+               </div>
+
+               <div className="flex items-center gap-3">
+                 <div className="w-10 h-10 rounded bg-[#2f2f35] flex items-center justify-center text-primary">
+                    <Shield size={20} />
+                 </div>
+                 <div>
+                   <p className="text-sm text-[#adadb8] font-medium">Ранги</p>
+                   <p className="text-white font-bold">Отсутствуют</p>
+                 </div>
+               </div>
+            </div>
+
+            <div className="mt-auto pt-6 border-t border-[#2f2f35]">
+               <p className="text-xs text-[#adadb8] leading-relaxed">
+                 Сервер работает стабильно. Последняя перезагрузка была 2 часа назад.
+               </p>
             </div>
           </div>
-        </section>
 
-        {/* FEATURES GRID - Liquid Glass */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 animate-ios-slide-up delay-400 opacity-0 fill-mode-forwards">
-          {[
-            { icon: Train, label: 'Симулятор', value: 'Metrostroi', color: 'blue' },
-            { icon: Gamepad2, label: 'Режим', value: 'NoRank', color: 'purple' },
-            { icon: Users, label: 'Слоты', value: '32', color: 'green' },
-            { icon: Calendar, label: 'Основан', value: '2022', color: 'orange' },
-          ].map((item, idx) => (
-            <LiquidCard key={idx} className="rounded-[28px] p-6 text-center group">
-              <div className={`
-                mb-4 inline-flex p-3.5 rounded-2xl transition-all duration-500 group-hover:scale-110
-                ${item.color === 'blue' ? 'bg-blue-500/10 text-blue-400' : ''}
-                ${item.color === 'purple' ? 'bg-purple-500/10 text-purple-400' : ''}
-                ${item.color === 'green' ? 'bg-green-500/10 text-green-400' : ''}
-                ${item.color === 'orange' ? 'bg-orange-500/10 text-orange-400' : ''}
-              `}>
-                <item.icon size={26} />
-              </div>
-              <div className="text-2xl font-bold text-white mb-1">{item.value}</div>
-              <div className="text-[11px] text-white/30 uppercase tracking-[0.2em] font-semibold">{item.label}</div>
-            </LiquidCard>
-          ))}
         </div>
-
-        {/* MAIN CONTENT - Liquid Glass */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-8">
-
-          {/* About Card */}
-          <LiquidCard className="lg:col-span-3 rounded-[36px] p-10 animate-ios-slide-up delay-500 opacity-0 fill-mode-forwards flex flex-col justify-between min-h-[380px] group">
-            <div>
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.05] border border-white/[0.08] text-white/60 text-xs font-semibold tracking-[0.15em] uppercase mb-8">
-                История
-              </span>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight">
-                От Roblox к вершинам <br /> 
-                <span className="text-blue-400">Garry's Mod</span>
-              </h2>
-              <p className="text-white/40 text-lg leading-relaxed font-light max-w-xl">
-                Project SY зародился в 2022 году. Мы прошли путь от простых карт в Roblox до создания одного из самых атмосферных серверов Metrostroi.
-              </p>
-            </div>
-
-            <button
-              onClick={() => setPage(Page.ABOUT)}
-              className="mt-8 self-start flex items-center gap-3 text-white/70 font-medium group/btn hover:text-white transition-colors"
-            >
-              <span>Читать историю</span>
-              <div className="w-9 h-9 rounded-xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center group-hover/btn:bg-blue-500/20 group-hover/btn:border-blue-500/30 group-hover/btn:scale-110 transition-all">
-                <ArrowRight size={16} />
-              </div>
-            </button>
-          </LiquidCard>
-
-          {/* Quick Links */}
-          <div className="lg:col-span-2 flex flex-col gap-4 animate-ios-slide-up delay-600 opacity-0 fill-mode-forwards">
-            {[
-              { page: Page.NEWS, icon: Newspaper, title: 'Новости', desc: 'Последние обновления', iconBg: 'bg-red-500/10', iconColor: 'text-red-400' },
-              { page: Page.TEAM, icon: Users, title: 'Команда', desc: 'Создатели проекта', iconBg: 'bg-purple-500/10', iconColor: 'text-purple-400' },
-              { page: Page.FAQ, icon: () => <span className="text-2xl font-bold">?</span>, title: 'FAQ', desc: 'Помощь и ответы', iconBg: 'bg-yellow-500/10', iconColor: 'text-yellow-400' },
-            ].map((item, idx) => (
-              <LiquidCard
-                key={idx}
-                onClick={() => setPage(item.page)}
-                className="flex-1 rounded-[28px] p-5 flex items-center gap-5 group"
-              >
-                <div className={`w-14 h-14 rounded-2xl ${item.iconBg} flex items-center justify-center border border-white/[0.05] group-hover:scale-105 transition-transform duration-300 ${item.iconColor}`}>
-                  <item.icon size={26} />
-                </div>
-                <div className="flex-1">
-                  <div className="text-lg font-semibold text-white mb-0.5">{item.title}</div>
-                  <div className="text-sm text-white/30">{item.desc}</div>
-                </div>
-                <div className="w-9 h-9 rounded-xl bg-white/[0.03] border border-white/[0.05] flex items-center justify-center group-hover:bg-white/[0.08] transition-colors">
-                  <ChevronRight size={18} className="text-white/40" />
-                </div>
-              </LiquidCard>
-            ))}
-          </div>
-        </div>
-
-        {/* STATS - Liquid Glass */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-ios-slide-up delay-700 opacity-0 fill-mode-forwards">
-          {[
-            { val: '200+', label: 'В Telegram', icon: Globe, color: 'blue' },
-            { val: '416K+', label: 'Визитов в Roblox', icon: Activity, color: 'purple' },
-            { val: '3 года', label: 'Развития', icon: Calendar, color: 'green' }
-          ].map((item, idx) => (
-            <LiquidCard key={idx} className="p-8 rounded-[28px] text-center group">
-              <div className="text-4xl font-bold text-white mb-3 group-hover:scale-110 transition-transform duration-300 inline-block">
-                {item.val}
-              </div>
-              <div className="flex items-center justify-center gap-2 text-white/30 font-medium uppercase tracking-wider text-xs">
-                <item.icon size={14} className={`
-                  ${item.color === 'blue' ? 'text-blue-400' : ''}
-                  ${item.color === 'purple' ? 'text-purple-400' : ''}
-                  ${item.color === 'green' ? 'text-green-400' : ''}
-                `} />
-                {item.label}
-              </div>
-            </LiquidCard>
-          ))}
-        </div>
-
       </div>
+
+      {/* ===== FEATURES GRID (Twitch "Categories" Style) ===== */}
+      <div className="w-full max-w-[1600px] mx-auto mb-16">
+        <h2 className="text-xl font-bold text-[#efeff1] mb-4 hover:text-primary cursor-pointer transition-colors inline-flex items-center gap-1">
+          <span className="text-primary">Рекомендуемые</span> разделы
+        </h2>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          {/* Card 1 */}
+          <div 
+            onClick={() => setPage(Page.NEWS)}
+            className="group cursor-pointer relative"
+          >
+            <div className="aspect-video bg-[#1f1f23] rounded-md overflow-hidden mb-2 relative transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:shadow-[4px_4px_0px_#a8c7fa]">
+              <div className="absolute inset-0 flex items-center justify-center bg-[#2f2f35]">
+                 <Train size={48} className="text-[#53535f] group-hover:text-primary transition-colors" />
+              </div>
+              <div className="absolute top-2 left-2 bg-[#eb0400] text-white text-xs font-bold px-1.5 py-0.5 rounded-sm">
+                LIVE
+              </div>
+            </div>
+            <h3 className="font-bold text-[#efeff1] text-base leading-tight truncate group-hover:text-primary transition-colors">
+              Новости проекта
+            </h3>
+            <p className="text-[#adadb8] text-sm truncate">Последние обновления и патчноуты</p>
+            <div className="mt-1 flex gap-1">
+              <span className="bg-[#2f2f35] text-[#adadb8] text-xs px-2 py-0.5 rounded-full font-semibold">News</span>
+              <span className="bg-[#2f2f35] text-[#adadb8] text-xs px-2 py-0.5 rounded-full font-semibold">Updates</span>
+            </div>
+          </div>
+
+          {/* Card 2 */}
+          <div 
+            onClick={() => setPage(Page.WORKSHOP)}
+            className="group cursor-pointer relative"
+          >
+            <div className="aspect-video bg-[#1f1f23] rounded-md overflow-hidden mb-2 relative transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:shadow-[4px_4px_0px_#a8c7fa]">
+              <div className="absolute inset-0 flex items-center justify-center bg-[#2f2f35]">
+                 <Train size={48} className="text-[#53535f] group-hover:text-primary transition-colors" />
+              </div>
+            </div>
+            <h3 className="font-bold text-[#efeff1] text-base leading-tight truncate group-hover:text-primary transition-colors">
+              Мастерская Steam
+            </h3>
+            <p className="text-[#adadb8] text-sm truncate">Коллекция аддонов для игры</p>
+            <div className="mt-1 flex gap-1">
+              <span className="bg-[#2f2f35] text-[#adadb8] text-xs px-2 py-0.5 rounded-full font-semibold">Addons</span>
+            </div>
+          </div>
+
+          {/* Card 3 */}
+          <div 
+            onClick={() => setPage(Page.RULES)}
+            className="group cursor-pointer relative"
+          >
+             <div className="aspect-video bg-[#1f1f23] rounded-md overflow-hidden mb-2 relative transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:shadow-[4px_4px_0px_#a8c7fa]">
+              <div className="absolute inset-0 flex items-center justify-center bg-[#2f2f35]">
+                 <Shield size={48} className="text-[#53535f] group-hover:text-primary transition-colors" />
+              </div>
+            </div>
+            <h3 className="font-bold text-[#efeff1] text-base leading-tight truncate group-hover:text-primary transition-colors">
+              Правила сервера
+            </h3>
+            <p className="text-[#adadb8] text-sm truncate">Ознакомьтесь перед игрой</p>
+             <div className="mt-1 flex gap-1">
+              <span className="bg-[#2f2f35] text-[#adadb8] text-xs px-2 py-0.5 rounded-full font-semibold">Important</span>
+            </div>
+          </div>
+
+          {/* Card 4 */}
+          <div 
+            onClick={() => setPage(Page.FORUM)}
+            className="group cursor-pointer relative"
+          >
+             <div className="aspect-video bg-[#1f1f23] rounded-md overflow-hidden mb-2 relative transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:shadow-[4px_4px_0px_#a8c7fa]">
+              <div className="absolute inset-0 flex items-center justify-center bg-[#2f2f35]">
+                 <Users size={48} className="text-[#53535f] group-hover:text-primary transition-colors" />
+              </div>
+            </div>
+            <h3 className="font-bold text-[#efeff1] text-base leading-tight truncate group-hover:text-primary transition-colors">
+              Форум сообщества
+            </h3>
+            <p className="text-[#adadb8] text-sm truncate">Общение, жалобы и предложения</p>
+             <div className="mt-1 flex gap-1">
+              <span className="bg-[#2f2f35] text-[#adadb8] text-xs px-2 py-0.5 rounded-full font-semibold">Chat</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      
+      {/* Decorative separator */}
+      <div className="w-full max-w-[1600px] mx-auto h-[1px] bg-[#2f2f35] mb-12" />
+
     </div>
   );
 };

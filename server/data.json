@@ -59,7 +59,7 @@
       "tag": "Разработка",
       "tagColor": "bg-green-500",
       "readTime": "2 мин",
-      "views": 6,
+      "views": 15,
       "createdAt": "2025-12-04T12:00:00Z"
     },
     {
@@ -71,7 +71,7 @@
       "tag": "Важное",
       "tagColor": "bg-red-500",
       "readTime": "4 мин",
-      "views": 3,
+      "views": 8,
       "createdAt": "2025-12-03T12:00:00Z"
     },
     {
@@ -83,7 +83,7 @@
       "tag": "Сайт",
       "tagColor": "bg-brand-blue",
       "readTime": "1 мин",
-      "views": 4,
+      "views": 6,
       "createdAt": "2025-12-01T12:00:00Z"
     }
   ],
