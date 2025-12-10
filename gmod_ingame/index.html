@@ -31,18 +31,33 @@ html, body {
     user-select: none;
 }
 
-/* Background Overlay for Menu */
-.overlay-bg {
+/* Background */
+.bg-layer {
     position: fixed;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.85); /* Dark overlay like loading screen */
-    backdrop-filter: blur(8px);
     z-index: 0;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    pointer-events: none;
+    overflow: hidden;
 }
-body.menu-active .overlay-bg { opacity: 1; pointer-events: auto; }
+.bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.6;
+    transition: all 0.5s ease;
+}
+/* When menu is active, darken and blur slightly */
+body.menu-active .bg-image {
+    opacity: 0.4;
+    filter: blur(8px) brightness(0.7);
+    transform: scale(1.05);
+}
+
+.overlay-bg {
+    /* No longer needed as main overlay, but kept for transition logic if needed. 
+       Actually, let's remove the old overlay-bg styles or integrate them here.
+       The blur is now on the image itself. */
+    display: none; 
+}
 
 /* Screens Container */
 .screen {
@@ -263,8 +278,11 @@ body.spawn-mode .hud-element { opacity: 1; }
 </head>
 <body class="menu-active"> <!-- Start with menu active -->
 
-    <!-- Overlay Background -->
-    <div class="overlay-bg"></div>
+    <!-- Background Image -->
+    <div class="bg-layer">
+        <img src="https://i.ibb.co/sdFN8VZh/generated-image.jpg" class="bg-image" alt="Background">
+        <div class="bg-overlay"></div>
+    </div>
 
     <!-- HUD Elements (Visible after spawn) -->
     <div id="top-logo" class="hud-element">
