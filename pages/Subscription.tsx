@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Page } from '../types';
-import { ArrowLeft, Check, Star, Zap, Crown, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowLeft, Check, Star, Zap, Crown, ChevronDown, ChevronUp, CreditCard } from 'lucide-react';
 
 interface SubscriptionProps {
   setPage: (page: Page) => void;
@@ -8,6 +8,7 @@ interface SubscriptionProps {
 
 const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
   const [expandedPlan, setExpandedPlan] = useState<string | null>('improved');
+  const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'gmdonate'>('stripe');
 
   const plans = [
     {
@@ -104,9 +105,37 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
                         </div>
                       ))}
                     </div>
-                    <button className={`w-full py-2.5 rounded-lg text-sm font-bold text-white transition-colors ${btnClasses}`}>
+                    <button className={`w-full py-2.5 rounded-lg text-sm font-bold text-white transition-colors mb-3 ${btnClasses}`}>
                       Выбрать
                     </button>
+                    
+                    <div className="space-y-2">
+                      <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Способ оплаты</div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <button 
+                          onClick={() => setPaymentMethod('stripe')}
+                          className={`p-2 rounded-lg border flex items-center justify-center gap-1.5 transition-all ${
+                            paymentMethod === 'stripe' 
+                              ? 'bg-white text-black border-white' 
+                              : 'bg-[#181a20] border-[#2d313a] text-gray-400 hover:border-gray-600'
+                          }`}
+                        >
+                          <CreditCard size={14} />
+                          <span className="text-[10px] font-bold">Stripe</span>
+                        </button>
+                        <button 
+                          onClick={() => setPaymentMethod('gmdonate')}
+                          className={`p-2 rounded-lg border flex items-center justify-center gap-1.5 transition-all ${
+                            paymentMethod === 'gmdonate' 
+                              ? 'bg-blue-600 text-white border-blue-600' 
+                              : 'bg-[#181a20] border-[#2d313a] text-gray-400 hover:border-gray-600'
+                          }`}
+                        >
+                          <div className="w-3.5 h-3.5 bg-white rounded-sm flex items-center justify-center text-[8px] font-bold text-blue-600">G</div>
+                          <span className="text-[10px] font-bold">GM Donate</span>
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
