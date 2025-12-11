@@ -105,6 +105,7 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
                           <span>{feature}</span>
                         </div>
                       ))}
+                    </div>
 
                     {plan.id === 'regular' && !trialActivated && (
                       <button 
@@ -124,8 +125,7 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
                     )}
 
                     <button className={`w-full py-2.5 rounded-lg text-sm font-bold text-white transition-colors mb-3 ${btnClasses}`}>
-                      {plan.id === 'regular' ? 'Купить навсегда' : 'Выбрать'}lassName={`w-full py-2.5 rounded-lg text-sm font-bold text-white transition-colors mb-3 ${btnClasses}`}>
-                      Выбрать
+                      {plan.id === 'regular' ? 'Купить навсегда' : 'Выбрать'}
                     </button>
                     
                     <div className="space-y-2">
