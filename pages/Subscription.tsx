@@ -20,7 +20,7 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
   };
 
   const plan = {
-    name: 'SYSub',
+    name: 'SYSub Premium',
     price: 100,
     features: [
       'Поезда: Яуза, Яуза .1, Ока',
@@ -30,165 +30,152 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
   };
 
   return (
-    <div className="w-full min-h-screen pt-4 pb-24 px-4 bg-[#0f1115]">
-      <div className="max-w-[600px] mx-auto">
+    <div className="w-full min-h-screen pt-6 pb-24 px-4 bg-zinc-950">
+      <div className="max-w-md mx-auto">
         
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex items-center gap-3 mb-8">
           <button 
             onClick={() => setPage(Page.SHOP)}
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-[#181a20] border border-[#2d313a] text-gray-400 hover:text-white transition-colors"
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition-colors"
           >
-            <ArrowLeft size={16} />
+            <ArrowLeft size={20} strokeWidth={1.5} />
           </button>
-          <h1 className="text-xl font-bold text-white">Подписка</h1>
+          <h1 className="text-2xl font-bold text-white tracking-tight">Подписка</h1>
         </div>
 
-        <div className="bg-[#181a20] border border-[#2d313a] rounded-2xl overflow-hidden shadow-xl">
-          {/* Header */}
-          <div className="p-6 bg-gradient-to-br from-blue-600/20 to-purple-600/20 border-b border-[#2d313a] relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-4 opacity-10">
-              <Crown size={120} />
-            </div>
-            <div className="relative z-10">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mb-4 shadow-lg">
-                <Crown size={24} className="text-white" />
-              </div>
-              <h2 className="text-2xl font-bold text-white mb-1">{plan.name}</h2>
-              <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-bold text-blue-400">{plan.price} ₽</span>
-                <span className="text-sm text-gray-400">/ месяц</span>
-              </div>
-            </div>
-          </div>
+        <div className="bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden mb-6">
+          {/* Hero Section */}
+          <div className="p-8 pb-6 flex flex-col items-center text-center">
+             <div className="w-16 h-16 bg-blue-500/10 text-blue-500 rounded-2xl flex items-center justify-center mb-4">
+                <Crown size={32} strokeWidth={1.5} />
+             </div>
+             <h2 className="text-2xl font-bold text-white mb-2">{plan.name}</h2>
+             <div className="flex items-baseline gap-1 mb-6">
+                <span className="text-4xl font-bold text-white">{plan.price} ₽</span>
+                <span className="text-zinc-500">/ месяц</span>
+             </div>
 
-          {/* Features */}
-          <div className="p-6 space-y-6">
-            <div className="space-y-3">
-              {plan.features.map((feature, idx) => (
-                <div key={idx} className="flex items-center gap-3 text-sm text-gray-300">
-                  <div className="w-5 h-5 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
-                    <Check size={12} className="text-blue-400" />
-                  </div>
-                  <span>{feature}</span>
-                </div>
-              ))}
-            </div>
+             <div className="w-full space-y-4 mb-8 text-left">
+                {plan.features.map((feature, idx) => (
+                   <div key={idx} className="flex items-center gap-3">
+                      <div className="flex-shrink-0 w-5 h-5 rounded-full bg-white text-black flex items-center justify-center">
+                         <Check size={12} strokeWidth={3} />
+                      </div>
+                      <span className="text-zinc-300 text-sm font-medium">{feature}</span>
+                   </div>
+                ))}
+             </div>
 
-            <div className="h-px bg-[#2d313a]" />
-
-            {/* Actions */}
-            <div className="space-y-3">
+             <div className="w-full space-y-3">
               {isSubscribed ? (
-                <div className="w-full py-4 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-green-600 to-emerald-600 flex items-center justify-center gap-2 shadow-lg shadow-green-900/20">
-                  <Check size={20} />
+                <div className="w-full py-4 rounded-2xl text-sm font-semibold text-green-400 bg-green-500/10 border border-green-500/20 flex items-center justify-center gap-2">
+                  <Check size={18} strokeWidth={2} />
                   <span>Подписка активна</span>
                 </div>
               ) : (
                 <>
+                  <button 
+                    onClick={handleSubscribe}
+                    className="w-full py-3.5 rounded-2xl text-base font-semibold text-black bg-white hover:bg-zinc-200 active:scale-95 transition-all shadow-lg shadow-white/5"
+                  >
+                    Оформить подписку
+                  </button>
+
                   {!trialActivated ? (
                     <button 
                       onClick={() => setShowTrialRules(true)}
-                      className="w-full py-3 rounded-xl text-sm font-bold text-white bg-[#1c1f26] border border-green-500/30 hover:border-green-500/60 hover:bg-green-500/10 transition-all flex items-center justify-center gap-2 group"
+                      className="w-full py-3.5 rounded-2xl text-sm font-medium text-zinc-400 border border-zinc-800 hover:text-white hover:border-zinc-700 active:scale-95 transition-all flex items-center justify-center gap-2"
                     >
-                      <Clock size={16} className="text-green-500 group-hover:scale-110 transition-transform" />
-                      <span className="text-green-400">Попробовать бесплатно (5 дней)</span>
+                      <Clock size={16} strokeWidth={1.5} />
+                      <span>Попробовать бесплатно (5 дней)</span>
                     </button>
                   ) : (
-                    <div className="w-full py-3 rounded-xl text-sm font-bold text-green-400 bg-green-500/10 border border-green-500/20 flex items-center justify-center gap-2">
+                    <div className="w-full py-3.5 rounded-2xl text-sm font-medium text-green-400 bg-green-900/10 border border-green-900/30 flex items-center justify-center gap-2">
                       <Check size={16} />
                       <span>Пробный период активирован</span>
                     </div>
                   )}
-
-                  {!trialActivated && (
-                    <div className="pt-2 space-y-3">
-                      <button 
-                        onClick={handleSubscribe}
-                        className="w-full py-3.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 shadow-lg shadow-blue-900/20 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
-                      >
-                        Оформить подписку
-                      </button>
-                      
-                      <div className="bg-[#1c1f26] rounded-xl p-3 border border-[#2d313a]">
-                        <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2 text-center">Способ оплаты</div>
-                        <div className="grid grid-cols-2 gap-2">
-                          <button 
-                            onClick={() => setPaymentMethod('stripe')}
-                            className={`p-2.5 rounded-lg border flex items-center justify-center gap-2 transition-all ${
-                              paymentMethod === 'stripe' 
-                                ? 'bg-white text-black border-white shadow-md' 
-                                : 'bg-[#181a20] border-[#2d313a] text-gray-400 hover:border-gray-600'
-                            }`}
-                          >
-                            <CreditCard size={14} />
-                            <span className="text-xs font-bold">Stripe</span>
-                          </button>
-                          <button 
-                            onClick={() => setPaymentMethod('gmdonate')}
-                            className={`p-2.5 rounded-lg border flex items-center justify-center gap-2 transition-all ${
-                              paymentMethod === 'gmdonate' 
-                                ? 'bg-blue-600 text-white border-blue-600 shadow-md' 
-                                : 'bg-[#181a20] border-[#2d313a] text-gray-400 hover:border-gray-600'
-                            }`}
-                          >
-                            <div className="w-4 h-4 bg-white rounded flex items-center justify-center text-[9px] font-bold text-blue-600">G</div>
-                            <span className="text-xs font-bold">GM Donate</span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </>
               )}
-            </div>
+             </div>
           </div>
         </div>
 
-        <div className="mt-6 text-center px-4">
-          <p className="text-[10px] text-gray-600 leading-relaxed">
-            Подписка продлевается автоматически каждый месяц. Вы можете отменить её в любой момент в настройках профиля.
-            Нажимая кнопку "Оформить подписку", вы соглашаетесь с <button onClick={() => setPage(Page.TERMS)} className="text-blue-500 hover:text-blue-400 underline">условиями использования</button>.
+        {/* Payment Methods (Only show if not subscribed) */}
+        {!isSubscribed && (
+          <div className="bg-zinc-900/50 border border-zinc-800/50 rounded-2xl p-4">
+             <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-3 text-center">Способ оплаты</div>
+             <div className="grid grid-cols-2 gap-3">
+                <button 
+                   onClick={() => setPaymentMethod('stripe')}
+                   className={`py-3 rounded-xl border flex items-center justify-center gap-2 transition-all active:scale-95 ${
+                      paymentMethod === 'stripe' 
+                      ? 'bg-zinc-800 text-white border-zinc-700' 
+                      : 'bg-transparent border-zinc-800 text-zinc-500 hover:text-zinc-400'
+                   }`}
+                >
+                   <CreditCard size={16} strokeWidth={1.5} />
+                   <span className="text-xs font-semibold">Stripe</span>
+                </button>
+                <button 
+                   onClick={() => setPaymentMethod('gmdonate')}
+                   className={`py-3 rounded-xl border flex items-center justify-center gap-2 transition-all active:scale-95 ${
+                      paymentMethod === 'gmdonate' 
+                      ? 'bg-blue-600/10 text-blue-400 border-blue-500/20' 
+                      : 'bg-transparent border-zinc-800 text-zinc-500 hover:text-zinc-400'
+                   }`}
+                >
+                   <div className="w-4 h-4 bg-current rounded flex items-center justify-center text-[9px] font-bold text-black">G</div>
+                   <span className="text-xs font-semibold">GM Donate</span>
+                </button>
+             </div>
+          </div>
+        )}
+
+        <div className="mt-8 text-center px-4">
+          <p className="text-[10px] text-zinc-600 leading-relaxed">
+            Подписка продлевается автоматически. Вы можете отменить её в любой момент.
+            Нажимая кнопку "Оформить подписку", вы соглашаетесь с <button onClick={() => setPage(Page.TERMS)} className="text-zinc-400 hover:text-zinc-300 underline">условиями использования</button>.
           </p>
         </div>
 
         {/* Trial Rules Modal */}
         {showTrialRules && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-            <div className="bg-[#181a20] border border-[#2d313a] rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl">
-              <div className="p-4 border-b border-[#2d313a] flex items-center justify-between bg-[#1c1f26]">
-                <h3 className="font-bold text-white flex items-center gap-2 text-sm">
-                  <AlertTriangle size={16} className="text-yellow-500" />
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl animate-scale-in">
+              <div className="p-5 border-b border-zinc-800 flex items-center justify-between">
+                <h3 className="font-semibold text-white flex items-center gap-2 text-base">
+                  <AlertTriangle size={18} className="text-yellow-500" strokeWidth={1.5} />
                   Правила Trial
                 </h3>
-                <button onClick={() => setShowTrialRules(false)} className="text-gray-500 hover:text-white transition-colors">
-                  <X size={20} />
+                <button onClick={() => setShowTrialRules(false)} className="text-zinc-500 hover:text-white transition-colors">
+                  <X size={20} strokeWidth={1.5} />
                 </button>
               </div>
-              <div className="p-5 space-y-4 text-xs text-gray-300 leading-relaxed">
-                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3">
-                  <strong className="text-red-400 block mb-1">1. Мультиаккаунты запрещены</strong>
-                  Использование твинков (alt-аккаунтов) для повторной активации пробного периода строго запрещено.
+              <div className="p-6 space-y-5 text-sm text-zinc-400 leading-relaxed">
+                <div>
+                  <strong className="text-white block mb-1 text-sm font-medium">1. Мультиаккаунты запрещены</strong>
+                  Использование твинков для повторной активации пробного периода строго запрещено.
                 </div>
                 
                 <div>
-                  <strong className="text-white block mb-1">2. Блокировка за абуз</strong>
-                  Разработчики отслеживают все активации. При обнаружении злоупотребления, <span className="text-red-400 font-bold">все связанные аккаунты будут заблокированы</span>, а доступ к серверу закрыт навсегда.
+                  <strong className="text-white block mb-1 text-sm font-medium">2. Блокировка за абуз</strong>
+                  При обнаружении злоупотребления <span className="text-red-400">все аккаунты будут заблокированы</span>.
                 </div>
                 
                 <div>
-                  <strong className="text-white block mb-1">3. Окончание периода</strong>
-                  После истечения 5 дней доступ к бонусам подписки будет автоматически отключен.
+                  <strong className="text-white block mb-1 text-sm font-medium">3. Окончание периода</strong>
+                  После 5 дней доступ отключится автоматически.
                 </div>
                 
                 <button 
                   onClick={() => {
                     setShowTrialRules(false);
                     setTrialActivated(true);
-                    // Also activate subscription for trial
                     sessionState.isSubscribed = true;
                     setIsSubscribed(true);
                   }}
-                  className="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-xl transition-colors mt-2"
+                  className="w-full bg-white hover:bg-zinc-200 text-black font-semibold py-3.5 rounded-2xl transition-all active:scale-95 mt-4"
                 >
                   Всё понятно, оформить
                 </button>

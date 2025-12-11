@@ -1,251 +1,64 @@
-/* Google Fonts - Clean & Industrial */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-/* FNAF Fonts */
-@import url('https://fonts.googleapis.com/css2?family=VT323&family=Special+Elite&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @import "tailwindcss";
 
 @theme {
-  /* Metro / Industrial Palette */
-  --color-bg-base: #0f1115;      /* Deep graphite */
-  --color-bg-surface: #181a20;   /* Lighter graphite */
-  --color-bg-elevated: #22252b;  /* Elevated surface */
+  --color-background: #09090b;
+  --color-surface: #18181b;
+  --color-surface-hover: #27272a;
   
-  --color-border: #2d313a;       /* Subtle border */
-  --color-border-hover: #454b59;
+  --color-border: #27272a;
   
-  /* Metro Line Colors (Accents) */
-  --color-accent-red: #ef161e;   /* Sokolnicheskaya */
-  --color-accent-blue: #0078d7;  /* Arbatsko-Pokrovskaya */
-  --color-accent-green: #24b455; /* Zamoskvoretskaya */
-  
-  /* Text */
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #9ca3af;
-  --color-text-tertiary: #6b7280;
-  
-  /* Fonts */
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --color-primary: #ffffff;
+  --color-primary-foreground: #09090b;
 
-  /* Animations */
-  --animate-fade-in: fade-in 0.3s ease-out forwards;
-  --animate-slide-up: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --color-muted: #a1a1aa;
+  --color-muted-foreground: #71717a;
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --animate-fade-in: fade-in 0.2s ease-out forwards;
+  --animate-scale-in: scale-in 0.2s ease-out forwards;
 
   @keyframes fade-in {
     from { opacity: 0; }
     to { opacity: 1; }
   }
 
-  @keyframes slide-up {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+  @keyframes scale-in {
+    from { transform: scale(0.98); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
   }
 }
 
 /* Base */
 body {
-  background-color: var(--color-bg-base);
-  color: var(--color-text-primary);
+  background-color: var(--color-background);
+  color: var(--color-primary);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-  /* Prevent white flash during load/reload */
   opacity: 0;
-  animation: fade-in 0.2s ease-out forwards;
-}
-
-/* FNAF Theme Utilities */
-@layer utilities {
-  .font-fnaf-mono {
-    font-family: 'VT323', monospace;
-  }
-  .font-fnaf-type {
-    font-family: 'Special Elite', cursive;
-  }
-  
-  .fnaf-scanlines {
-    background: linear-gradient(
-      to bottom,
-      rgba(255,255,255,0),
-      rgba(255,255,255,0) 50%,
-      rgba(0,0,0,0.2) 50%,
-      rgba(0,0,0,0.2)
-    );
-    background-size: 100% 4px;
-    animation: scanline 10s linear infinite;
-    pointer-events: none;
-    z-index: 50;
-  }
-
-  .fnaf-vignette {
-    background: radial-gradient(
-      circle,
-      rgba(0,0,0,0) 60%,
-      rgba(0,0,0,0.6) 90%,
-      rgba(0,0,0,0.9) 100%
-    );
-    pointer-events: none;
-    z-index: 40;
-  }
-
-  .fnaf-static-overlay {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.1'/%3E%3C/svg%3E");
-    opacity: 0.15;
-    pointer-events: none;
-    animation: static-noise 0.5s steps(5) infinite;
-  }
-
-  .text-shadow-glitch {
-    text-shadow: 2px 0 #ff0000, -2px 0 #00ff00;
-    animation: glitch-text 3s infinite linear alternate-reverse;
-  }
-}
-
-@keyframes scanline {
-  0% { background-position: 0 0; }
-  100% { background-position: 0 100%; }
-}
-
-@keyframes static-noise {
-  0% { transform: translate(0,0); }
-  10% { transform: translate(-5%,-5%); }
-  20% { transform: translate(-10%,5%); }
-  30% { transform: translate(5%,-10%); }
-  40% { transform: translate(-5%,15%); }
-  50% { transform: translate(-10%,5%); }
-  60% { transform: translate(15%,0); }
-  70% { transform: translate(0,10%); }
-  80% { transform: translate(-15%,0); }
-  90% { transform: translate(10%,5%); }
-  100% { transform: translate(5%,0); }
-}
-
-@keyframes glitch-text {
-  0% { text-shadow: 2px 0 #ff0000, -2px 0 #00ff00; }
-  2% { text-shadow: 3px 0 #ff0000, -3px 0 #00ff00; }
-  4% { text-shadow: 2px 0 #ff0000, -2px 0 #00ff00; }
-  6% { text-shadow: 2px 0 #ff0000, -2px 0 #00ff00; }
-  8% { text-shadow: -2px 0 #ff0000, 2px 0 #00ff00; }
-  10% { text-shadow: 2px 0 #ff0000, -2px 0 #00ff00; }
-  100% { text-shadow: 2px 0 #ff0000, -2px 0 #00ff00; }
-}
-
-/* Pointers for interactive elements */
-button,
-[role="button"],
-a {
-  cursor: pointer;
+  animation: fade-in 0.3s ease-out forwards;
 }
 
 /* Utilities */
 @layer utilities {
-  .metro-card {
-    background-color: var(--color-bg-surface);
-    border: 1px solid var(--color-border);
-    transition: all 0.2s ease-out;
-    cursor: default;
-  }
-
-  .metro-card:hover {
-    border-color: var(--color-border-hover);
-    background-color: var(--color-bg-elevated);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-
-  /* If компонент помечен Tailwind классом cursor-pointer, показываем pointer */
-  .metro-card.cursor-pointer {
-    cursor: pointer;
-  }
-  .metro-card.cursor-pointer:hover {
-    cursor: pointer;
-  }
-
-  /* Disable hover lift for static cards */
-  .static-card,
-  .static-card:hover {
-    transform: none;
-    box-shadow: none;
-    border-color: var(--color-border);
-    background-color: var(--color-bg-surface);
-  }
-
-  .metro-button {
-    background-color: var(--color-text-primary);
-    color: var(--color-bg-base);
-    font-weight: 600;
-    padding: 10px 20px;
-    border-radius: 4px;
-    transition: all 0.2s;
-    font-size: 14px;
-    letter-spacing: -0.01em;
-    cursor: pointer;
-  }
-
-  .metro-button:hover {
-    background-color: #e5e7eb;
-    transform: translateY(-1px);
-  }
-
-  .metro-button-outline {
-    background-color: transparent;
-    border: 1px solid var(--color-border);
-    color: var(--color-text-primary);
-    font-weight: 500;
-    padding: 10px 20px;
-    border-radius: 4px;
-    transition: all 0.2s;
-    font-size: 14px;
-    cursor: pointer;
-  }
-
-  .metro-button-outline:hover {
-    border-color: var(--color-text-primary);
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-
-  .metro-input {
-    background-color: var(--color-bg-base);
-    border: 1px solid var(--color-border);
-    color: var(--color-text-primary);
-    border-radius: 4px;
-    transition: border-color 0.2s;
-  }
-
-  .metro-input:focus {
-    outline: none;
-    border-color: var(--color-accent-blue);
-  }
-  
-  /* Typography helpers */
-  .text-label {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-text-tertiary);
-    font-weight: 600;
-  }
-
   .glass-panel {
-    background: rgba(24, 26, 32, 0.8);
+    background: rgba(24, 24, 27, 0.6);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
 }
 
-/* Scrollbar */
+/* Interactive Elements */
+button, a {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-bg-base);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-border);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-border-hover);
+  width: 0px;
+  background: transparent;
 }
