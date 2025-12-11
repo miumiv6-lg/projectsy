@@ -127,7 +127,7 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
         <div className="mt-6 text-center px-4">
           <p className="text-[10px] text-gray-600 leading-relaxed">
             Подписка продлевается автоматически каждый месяц. Вы можете отменить её в любой момент в настройках профиля.
-            Нажимая кнопку "Оформить подписку", вы соглашаетесь с условиями использования.
+            Нажимая кнопку "Оформить подписку", вы соглашаетесь с <button onClick={() => setPage(Page.TERMS)} className="text-blue-500 hover:text-blue-400 underline">условиями использования</button>.
           </p>
         </div>
 

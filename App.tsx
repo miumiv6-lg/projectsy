@@ -11,6 +11,7 @@ import Shop from './pages/Shop';
 import Tickets from './pages/Tickets';
 import Subscription from './pages/Subscription';
 import Fnaf from './pages/Fnaf';
+import Terms from './pages/Terms';
 
 const AppContent: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>(Page.SHOP);
@@ -58,6 +59,7 @@ const AppContent: React.FC = () => {
       case Page.SHOP: return <Shop setPage={setCurrentPage} />;
       case Page.TICKETS: return <Tickets />;
       case Page.SUBSCRIPTION: return <Subscription setPage={setCurrentPage} />;
+      case Page.TERMS: return <Terms setPage={setCurrentPage} />;
       case Page.FNAF: return <Fnaf setPage={setCurrentPage} />;
       default: return <Shop setPage={setCurrentPage} />;
     }
