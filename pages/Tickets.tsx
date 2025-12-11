@@ -222,16 +222,15 @@ const Tickets: React.FC = () => {
             ))}
             
             {isLoading && (
-              <div className="flex gap-3 animate-pulse">
+              <div className="flex gap-3">
                 <div className="mt-0.5 w-7 h-7 rounded-full flex items-center justify-center border bg-[#0f0f10] border-white/5 text-zinc-400">
                   <Bot size={14} />
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="text-[11px] font-medium text-zinc-500 mb-1">Project SY AI</div>
                   <div className="text-zinc-500 text-sm flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce"></span>
-                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce delay-75"></span>
-                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce delay-150"></span>
+                    <div className="w-4 h-4 rounded-full border-2 border-zinc-500/60 border-t-transparent animate-spin" />
+                    <span>Думаю...</span>
                   </div>
                 </div>
               </div>
