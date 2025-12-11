@@ -1,34 +1,24 @@
 import React, { useState } from 'react';
 import { Page } from '../types';
-import { ArrowLeft, Check, Star, Zap, Crown, ChevronDown, ChevronUp, CreditCard, Clock, Info, AlertTriangle, X } from 'lucide-react';
+import { ArrowLeft, Check, Crown, CreditCard, Clock, Info, AlertTriangle, X } from 'lucide-react';
 
 interface SubscriptionProps {
   setPage: (page: Page) => void;
 }
 
 const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
-  const [expandedPlan, setExpandedPlan] = useState<string | null>('premium');
   const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'gmdonate'>('stripe');
   const [trialActivated, setTrialActivated] = useState(false);
   const [showTrialRules, setShowTrialRules] = useState(false);
 
-  const plans = [
-    {
-      id: 'premium',
-      name: 'SYSub',
-      price: 100,
-      icon: Crown,
-      color: 'blue',
-      features: [
-        'Поезда: Яуза, Яуза .1, Ока',
-        'Спавн 6 вагонов (вместо 4)',
-        'Доступ ко всем скинам'
-      ]
-    }
-  ];
-
-  const togglePlan = (id: string) => {
-    setExpandedPlan(expandedPlan === id ? null : id);
+  const plan = {
+    name: 'SYSub',
+    price: 100,
+    features: [
+      'Поезда: Яуза, Яуза .1, Ока',
+      'Спавн 6 вагонов (вместо 4)',
+      'Доступ ко всем скинам'
+    ]
   };
 
   return (
@@ -42,132 +32,110 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
           >
             <ArrowLeft size={16} />
           </button>
-          <h1 className="text-xl font-bold text-white">Подписка SYSub</h1>
+          <h1 className="text-xl font-bold text-white">Подписка</h1>
         </div>
 
-        <div className="space-y-3">
-          {plans.map((plan) => {
-            const isExpanded = expandedPlan === plan.id;
-            const colorClasses = {
-              blue: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
-              purple: 'text-purple-400 bg-purple-500/10 border-purple-500/20',
-              yellow: 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20'
-            }[plan.color];
-
-            const btnClasses = {
-              blue: 'bg-blue-600 hover:bg-blue-500',
-              purple: 'bg-purple-600 hover:bg-purple-500',
-              yellow: 'bg-yellow-600 hover:bg-yellow-500'
-            }[plan.color];
-
-            return (
-              <div 
-                key={plan.id}
-                className={`bg-[#181a20] border rounded-xl overflow-hidden transition-all duration-300 ${
-                  isExpanded ? 'border-gray-600 shadow-lg' : 'border-[#2d313a]'
-                }`}
-              >
-                <div 
-                  onClick={() => togglePlan(plan.id)}
-                  className="p-4 flex items-center justify-between cursor-pointer"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${colorClasses}`}>
-                      <plan.icon size={20} />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-white text-sm">{plan.name}</h3>
-                      <p className="text-xs text-gray-500">{plan.price} ₽ / мес</p>
-                    </div>
-                  </div>
-                  <div className={`transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
-                    <ChevronDown size={16} className="text-gray-500" />
-                  </div>
-                </div>
-
-                <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-[300px] opacity-100' : 'max-h-0 opacity-0'}`}>
-                  <div className="px-4 pb-4 pt-0 border-t border-[#2d313a] mt-2">
-                    <div className="grid grid-cols-1 gap-2 py-3">
-                      {plan.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center gap-2 text-xs text-gray-300">
-                          <Check size={12} className={plan.color === 'blue' ? 'text-blue-400' : plan.color === 'purple' ? 'text-purple-400' : 'text-yellow-400'} />
-                          <span>{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {plan.id === 'premium' && !trialActivated && (
-                      <button 
-                        onClick={() => setTrialActivated(true)}
-                        className="w-full py-2.5 rounded-lg text-sm font-bold text-white bg-green-600 hover:bg-green-500 transition-colors mb-2 flex items-center justify-center gap-2"
-                      >
-                        <Clock size={14} />
-                        <span>Попробовать бесплатно (5 дней)</span>
-                      </button>
-                    )}
-
-                    {plan.id === 'premium' && trialActivated && (
-                      <div className="w-full py-2.5 rounded-lg text-sm font-bold text-green-400 bg-green-500/10 border border-green-500/20 mb-2 flex items-center justify-center gap-2">
-                        <Check size={14} />
-                        <span>Пробный период активирован</span>
-                      </div>
-                    )}
-
-                    {plan.id === 'premium' && (
-                      <button 
-                        onClick={(e) => { e.stopPropagation(); setShowTrialRules(true); }}
-                        className="w-full text-center text-[10px] text-gray-500 hover:text-gray-300 mb-3 flex items-center justify-center gap-1 transition-colors"
-                      >
-                        <Info size={12} />
-                        <span>Правила пробного периода</span>
-                      </button>
-                    )}
-
-                    {!(plan.id === 'premium' && trialActivated) && (
-                      <>
-                        <button className={`w-full py-2.5 rounded-lg text-sm font-bold text-white transition-colors mb-3 ${btnClasses}`}>
-                          Выбрать
-                        </button>
-                        
-                        <div className="space-y-2">
-                          <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Способ оплаты</div>
-                          <div className="grid grid-cols-2 gap-2">
-                            <button 
-                              onClick={() => setPaymentMethod('stripe')}
-                              className={`p-2 rounded-lg border flex items-center justify-center gap-1.5 transition-all ${
-                                paymentMethod === 'stripe' 
-                                  ? 'bg-white text-black border-white' 
-                                  : 'bg-[#181a20] border-[#2d313a] text-gray-400 hover:border-gray-600'
-                              }`}
-                            >
-                              <CreditCard size={14} />
-                              <span className="text-[10px] font-bold">Stripe</span>
-                            </button>
-                            <button 
-                              onClick={() => setPaymentMethod('gmdonate')}
-                              className={`p-2 rounded-lg border flex items-center justify-center gap-1.5 transition-all ${
-                                paymentMethod === 'gmdonate' 
-                                  ? 'bg-blue-600 text-white border-blue-600' 
-                                  : 'bg-[#181a20] border-[#2d313a] text-gray-400 hover:border-gray-600'
-                              }`}
-                            >
-                              <div className="w-3.5 h-3.5 bg-white rounded-sm flex items-center justify-center text-[8px] font-bold text-blue-600">G</div>
-                              <span className="text-[10px] font-bold">GM Donate</span>
-                            </button>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
+        <div className="bg-[#181a20] border border-[#2d313a] rounded-2xl overflow-hidden shadow-xl">
+          {/* Header */}
+          <div className="p-6 bg-gradient-to-br from-blue-600/20 to-purple-600/20 border-b border-[#2d313a] relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-4 opacity-10">
+              <Crown size={120} />
+            </div>
+            <div className="relative z-10">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mb-4 shadow-lg">
+                <Crown size={24} className="text-white" />
               </div>
-            );
-          })}
+              <h2 className="text-2xl font-bold text-white mb-1">{plan.name}</h2>
+              <div className="flex items-baseline gap-1">
+                <span className="text-3xl font-bold text-blue-400">{plan.price} ₽</span>
+                <span className="text-sm text-gray-400">/ месяц</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Features */}
+          <div className="p-6 space-y-6">
+            <div className="space-y-3">
+              {plan.features.map((feature, idx) => (
+                <div key={idx} className="flex items-center gap-3 text-sm text-gray-300">
+                  <div className="w-5 h-5 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                    <Check size={12} className="text-blue-400" />
+                  </div>
+                  <span>{feature}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="h-px bg-[#2d313a]" />
+
+            {/* Actions */}
+            <div className="space-y-3">
+              {!trialActivated ? (
+                <button 
+                  onClick={() => setTrialActivated(true)}
+                  className="w-full py-3 rounded-xl text-sm font-bold text-white bg-[#1c1f26] border border-green-500/30 hover:border-green-500/60 hover:bg-green-500/10 transition-all flex items-center justify-center gap-2 group"
+                >
+                  <Clock size={16} className="text-green-500 group-hover:scale-110 transition-transform" />
+                  <span className="text-green-400">Попробовать бесплатно (5 дней)</span>
+                </button>
+              ) : (
+                <div className="w-full py-3 rounded-xl text-sm font-bold text-green-400 bg-green-500/10 border border-green-500/20 flex items-center justify-center gap-2">
+                  <Check size={16} />
+                  <span>Пробный период активирован</span>
+                </div>
+              )}
+
+              <button 
+                onClick={() => setShowTrialRules(true)}
+                className="w-full text-center text-xs text-gray-500 hover:text-gray-300 flex items-center justify-center gap-1 transition-colors"
+              >
+                <Info size={12} />
+                <span>Правила пробного периода</span>
+              </button>
+
+              {!trialActivated && (
+                <div className="pt-2 space-y-3">
+                  <button className="w-full py-3.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 shadow-lg shadow-blue-900/20 transition-all transform hover:scale-[1.02] active:scale-[0.98]">
+                    Оформить подписку
+                  </button>
+                  
+                  <div className="bg-[#1c1f26] rounded-xl p-3 border border-[#2d313a]">
+                    <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2 text-center">Способ оплаты</div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button 
+                        onClick={() => setPaymentMethod('stripe')}
+                        className={`p-2.5 rounded-lg border flex items-center justify-center gap-2 transition-all ${
+                          paymentMethod === 'stripe' 
+                            ? 'bg-white text-black border-white shadow-md' 
+                            : 'bg-[#181a20] border-[#2d313a] text-gray-400 hover:border-gray-600'
+                        }`}
+                      >
+                        <CreditCard size={14} />
+                        <span className="text-xs font-bold">Stripe</span>
+                      </button>
+                      <button 
+                        onClick={() => setPaymentMethod('gmdonate')}
+                        className={`p-2.5 rounded-lg border flex items-center justify-center gap-2 transition-all ${
+                          paymentMethod === 'gmdonate' 
+                            ? 'bg-blue-600 text-white border-blue-600 shadow-md' 
+                            : 'bg-[#181a20] border-[#2d313a] text-gray-400 hover:border-gray-600'
+                        }`}
+                      >
+                        <div className="w-4 h-4 bg-white rounded flex items-center justify-center text-[9px] font-bold text-blue-600">G</div>
+                        <span className="text-xs font-bold">GM Donate</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
-        <div className="mt-6 text-center">
-          <p className="text-[10px] text-gray-600">
-            Подписка продлевается автоматически. Отменить можно в любой момент.
+        <div className="mt-6 text-center px-4">
+          <p className="text-[10px] text-gray-600 leading-relaxed">
+            Подписка продлевается автоматически каждый месяц. Вы можете отменить её в любой момент в настройках профиля.
+            Нажимая кнопку "Оформить подписку", вы соглашаетесь с условиями использования.
           </p>
         </div>
 
