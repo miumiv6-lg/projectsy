@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Page } from '../types';
-import { ArrowLeft, Check, Star, Zap, Crown, ChevronDown, ChevronUp, CreditCard, Clock } from 'lucide-react';
+import { ArrowLeft, Check, Star, Zap, Crown, ChevronDown, ChevronUp, CreditCard, Clock, Info, AlertTriangle, X } from 'lucide-react';
 
 interface SubscriptionProps {
   setPage: (page: Page) => void;
@@ -10,6 +10,7 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
   const [expandedPlan, setExpandedPlan] = useState<string | null>('improved');
   const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'gmdonate'>('stripe');
   const [trialActivated, setTrialActivated] = useState(false);
+  const [showTrialRules, setShowTrialRules] = useState(false);
 
   const plans = [
     {
@@ -123,7 +124,17 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
                         <span>Пробный период активирован</span>
                       </div>
                     )}
+plan.id === 'regular' && (
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); setShowTrialRules(true); }}
+                        className="w-full text-center text-[10px] text-gray-500 hover:text-gray-300 mb-3 flex items-center justify-center gap-1 transition-colors"
+                      >
+                        <Info size={12} />
+                        <span>Правила пробного периода</span>
+                      </button>
+                    )}
 
+                    {
                     {!(plan.id === 'regular' && trialActivated) && (
                       <>
                         <button className={`w-full py-2.5 rounded-lg text-sm font-bold text-white transition-colors mb-3 ${btnClasses}`}>
@@ -162,6 +173,46 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
                   </div>
                 </div>
               </div>
+        {/* Trial Rules Modal */}
+        {showTrialRules && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+            <div className="bg-[#181a20] border border-[#2d313a] rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl">
+              <div className="p-4 border-b border-[#2d313a] flex items-center justify-between bg-[#1c1f26]">
+                <h3 className="font-bold text-white flex items-center gap-2 text-sm">
+                  <AlertTriangle size={16} className="text-yellow-500" />
+                  Правила Trial
+                </h3>
+                <button onClick={() => setShowTrialRules(false)} className="text-gray-500 hover:text-white transition-colors">
+                  <X size={20} />
+                </button>
+              </div>
+              <div className="p-5 space-y-4 text-xs text-gray-300 leading-relaxed">
+                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3">
+                  <strong className="text-red-400 block mb-1">1. Мультиаккаунты запрещены</strong>
+                  Использование твинков (alt-аккаунтов) для повторной активации пробного периода строго запрещено.
+                </div>
+                
+                <div>
+                  <strong className="text-white block mb-1">2. Блокировка за абуз</strong>
+                  Разработчики отслеживают все активации. При обнаружении злоупотребления, <span className="text-red-400 font-bold">все связанные аккаунты будут заблокированы</span>, а доступ к серверу закрыт навсегда.
+                </div>
+                
+                <div>
+                  <strong className="text-white block mb-1">3. Окончание периода</strong>
+                  После истечения 5 дней доступ к бонусам подписки будет автоматически отключен.
+                </div>
+                
+                <button 
+                  onClick={() => setShowTrialRules(false)}
+                  className="w-full bg-[#2d313a] hover:bg-[#363a45] text-white font-bold py-3 rounded-xl transition-colors mt-2"
+                >
+                  Всё понятно
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
             );
           })}
         </div>
