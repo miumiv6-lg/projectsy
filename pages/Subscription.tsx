@@ -125,7 +125,7 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
                     )}
 
                     <button className={`w-full py-2.5 rounded-lg text-sm font-bold text-white transition-colors mb-3 ${btnClasses}`}>
-                      {plan.id === 'regular' ? 'Купить навсегда' : 'Выбрать'}
+                      Выбрать
                     </button>
                     
                     <div className="space-y-2">
