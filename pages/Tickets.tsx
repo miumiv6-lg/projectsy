@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Clock, CheckCircle, AlertCircle, MessageSquare, Bug, UserX, HelpCircle, ChevronRight, Plus, CreditCard, Monitor, Smartphone } from 'lucide-react';
+import { Send, Clock, CheckCircle, AlertCircle, MessageSquare, Bug, UserX, HelpCircle, ChevronRight, Plus, CreditCard, Monitor } from 'lucide-react';
 
 interface Ticket {
   id: string;
@@ -18,7 +18,6 @@ const Tickets: React.FC = () => {
   const [description, setDescription] = useState('');
   
   // Specific Fields
-  const [device, setDevice] = useState('PC');
   const [violatorName, setViolatorName] = useState('');
   const [rule, setRule] = useState('');
   const [proofLink, setProofLink] = useState('');
@@ -78,28 +77,6 @@ const Tickets: React.FC = () => {
         return (
           <>
             <div className="grid grid-cols-2 gap-2 mb-3">
-              <button 
-                type="button"
-                onClick={() => setDevice('PC')}
-                className={`p-3 rounded-xl border flex items-center justify-center gap-2 transition-all ${
-                  device === 'PC' ? 'bg-blue-600 border-blue-500 text-white' : 'bg-[#181a20] border-[#2d313a] text-gray-400'
-                }`}
-              >
-                <Monitor size={16} />
-                <span className="text-xs font-bold">PC</span>
-              </button>
-              <button 
-                type="button"
-                onClick={() => setDevice('Mobile')}
-                className={`p-3 rounded-xl border flex items-center justify-center gap-2 transition-all ${
-                  device === 'Mobile' ? 'bg-blue-600 border-blue-500 text-white' : 'bg-[#181a20] border-[#2d313a] text-gray-400'
-                }`}
-              >
-                <Smartphone size={16} />
-                <span className="text-xs font-bold">Mobile</span>
-              </button>
-            </div>
-            <input
               type="text"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
