@@ -174,7 +174,7 @@ const Tickets: React.FC = () => {
   };
 
   return (
-    <div className="w-full min-h-screen pb-24 pt-4 px-4 animate-fade-in bg-[#0f1115]">
+    <div className="w-full min-h-screen pb-24 pt-4 px-4 bg-[#0f1115]">
       <div className="max-w-[600px] mx-auto">
         
         {/* Header & Tabs */}

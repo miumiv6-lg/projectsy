@@ -8,7 +8,7 @@ interface TermsProps {
 
 const Terms: React.FC<TermsProps> = ({ setPage }) => {
   return (
-    <div className="w-full min-h-screen pt-4 pb-24 px-4 animate-fade-in bg-[#0f1115]">
+    <div className="w-full min-h-screen pt-4 pb-24 px-4 bg-[#0f1115]">
       <div className="max-w-[600px] mx-auto">
         
         <div className="flex items-center gap-3 mb-6">
