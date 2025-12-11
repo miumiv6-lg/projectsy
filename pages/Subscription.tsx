@@ -13,7 +13,7 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
     {
       id: 'regular',
       name: 'Обычная',
-      price: 150,
+      price: 29,
       icon: Zap,
       color: 'blue',
       features: ['Лимит пропов x1.5', 'Базовые команды', 'Префикс [SYSub]', 'Бонус 100 SY']
@@ -21,7 +21,7 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
     {
       id: 'improved',
       name: 'Улучшенная',
-      price: 300,
+      price: 99,
       icon: Star,
       color: 'purple',
       features: ['Лимит пропов x2.0', 'Приоритетный вход', 'Расширенные команды', 'Цветной ник', 'Бонус 300 SY']
@@ -29,7 +29,7 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
     {
       id: 'powerful',
       name: 'Мощная',
-      price: 600,
+      price: 199,
       icon: Crown,
       color: 'yellow',
       features: ['Безлимит пропов', 'Макс. приоритет', 'Все команды', 'Личный скин', 'Бонус 1000 SY', 'Канал в Discord']
@@ -86,7 +86,7 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
                     </div>
                     <div>
                       <h3 className="font-bold text-white text-sm">{plan.name}</h3>
-                      <p className="text-xs text-gray-500">{plan.price} SY / мес</p>
+                      <p className="text-xs text-gray-500">{plan.price} ₽ / мес</p>
                     </div>
                   </div>
                   <div className={`transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>

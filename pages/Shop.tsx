@@ -1,6 +1,6 @@
 import React from 'react';
 import { Page } from '../types';
-import { ShoppingBag, Package, Star, ChevronRight } from 'lucide-react';
+import { ShoppingBag, Package, Star, ChevronRight, Plus } from 'lucide-react';
 
 interface ShopProps {
   setPage?: (page: Page) => void;
@@ -25,6 +25,9 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
             <div className="bg-[#181a20] px-3 py-1.5 rounded-full border border-[#2d313a] flex items-center gap-2">
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
               <span className="text-xs font-mono font-bold text-white">1250 SY</span>
+              <button className="w-4 h-4 bg-blue-600 rounded-full flex items-center justify-center text-white ml-1 hover:bg-blue-500 transition-colors">
+                <Plus size={10} />
+              </button>
             </div>
             <button className="w-9 h-9 bg-[#181a20] rounded-full flex items-center justify-center border border-[#2d313a] text-white hover:bg-[#22252b] transition-colors">
               <ShoppingBag size={18} />
