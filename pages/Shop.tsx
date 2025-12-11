@@ -6,21 +6,13 @@ interface ShopProps {
   setPage?: (page: Page) => void;
 }
 
+// Session storage for daily reward (persists until app reload)
+let sessionDailyReward = { claimed: false, index: null as number | null, reward: null as string | null };
+
 const Shop: React.FC<ShopProps> = ({ setPage }) => {
   const [showTopUp, setShowTopUp] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
-  const [dailyReward, setDailyReward] = useState<{ claimed: boolean, index: number | null, reward: string | null }>({ claimed: false, index: null, reward: null });
-
-  useEffect(() => {
-    const saved = localStorage.getItem('daily_reward');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      const today = new Date().toDateString();
-      if (parsed.date === today) {
-        setDailyReward({ claimed: true, index: parsed.index, reward: parsed.reward });
-      }
-    }
-  }, []);
+  const [dailyReward, setDailyReward] = useState(sessionDailyReward);
 
   const handleDailyClick = (index: number) => {
     if (dailyReward.claimed) return;
@@ -30,7 +22,7 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
     
     const newState = { claimed: true, index, reward: randomReward };
     setDailyReward(newState);
-    localStorage.setItem('daily_reward', JSON.stringify({ date: new Date().toDateString(), ...newState }));
+    sessionDailyReward = newState;
   }; 
 
   if (showHistory) {
