@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Clock, CheckCircle, AlertCircle, MessageSquare, Bug, UserX, HelpCircle, ChevronRight, ArrowLeft } from 'lucide-react';
+import { Send, Clock, CheckCircle, AlertCircle, MessageSquare, Bug, UserX, HelpCircle, ChevronRight, Plus } from 'lucide-react';
 
 interface Ticket {
   id: string;
@@ -21,10 +21,10 @@ const Tickets: React.FC = () => {
   const [showSuccess, setShowSuccess] = useState(false);
 
   const categories = [
-    { id: 'bug', label: 'Баг / Ошибка', icon: Bug, desc: 'Сообщить о технической проблеме' },
-    { id: 'player', label: 'Жалоба на игрока', icon: UserX, desc: 'Нарушение правил сервера' },
-    { id: 'donation', label: 'Проблема с донатом', icon: CheckCircle, desc: 'Не пришли средства или услуги' },
-    { id: 'other', label: 'Другое', icon: HelpCircle, desc: 'Вопросы и предложения' },
+    { id: 'bug', label: 'Баг', icon: Bug, color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20' },
+    { id: 'player', label: 'Жалоба', icon: UserX, color: 'text-orange-400', bg: 'bg-orange-500/10', border: 'border-orange-500/20' },
+    { id: 'donation', label: 'Донат', icon: CheckCircle, color: 'text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/20' },
+    { id: 'other', label: 'Другое', icon: HelpCircle, color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20' },
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -49,153 +49,125 @@ const Tickets: React.FC = () => {
   };
 
   return (
-    <div className="w-full min-h-screen pb-24 pt-6 px-4 animate-fade-in bg-[#0f1115]">
-      <div className="max-w-[800px] mx-auto">
-        <h1 className="text-3xl font-bold text-white mb-2">Поддержка</h1>
-        <p className="text-gray-400 text-sm mb-6">Мы поможем решить любую проблему</p>
-
-        {/* Tabs */}
-        <div className="flex p-1 bg-[#181a20] rounded-xl mb-8 border border-[#2d313a]">
-          <button
-            onClick={() => setActiveTab('new')}
-            className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all ${
-              activeTab === 'new' ? 'bg-[#2d313a] text-white shadow-lg' : 'text-gray-500 hover:text-gray-300'
-            }`}
-          >
-            Создать обращение
-          </button>
-          <button
-            onClick={() => setActiveTab('list')}
-            className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all ${
-              activeTab === 'list' ? 'bg-[#2d313a] text-white shadow-lg' : 'text-gray-500 hover:text-gray-300'
-            }`}
-          >
-            Мои тикеты
-          </button>
+    <div className="w-full min-h-screen pb-24 pt-4 px-4 animate-fade-in bg-[#0f1115]">
+      <div className="max-w-[600px] mx-auto">
+        
+        {/* Header & Tabs */}
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold text-white">Поддержка</h1>
+          <div className="flex bg-[#181a20] rounded-lg p-1 border border-[#2d313a]">
+            <button
+              onClick={() => setActiveTab('new')}
+              className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all ${
+                activeTab === 'new' ? 'bg-[#2d313a] text-white shadow-sm' : 'text-gray-500 hover:text-gray-300'
+              }`}
+            >
+              <Plus size={14} />
+            </button>
+            <button
+              onClick={() => setActiveTab('list')}
+              className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all ${
+                activeTab === 'list' ? 'bg-[#2d313a] text-white shadow-sm' : 'text-gray-500 hover:text-gray-300'
+              }`}
+            >
+              <MessageSquare size={14} />
+            </button>
+          </div>
         </div>
 
         {activeTab === 'new' ? (
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4 animate-fade-in">
             {showSuccess && (
-              <div className="bg-green-900/20 border border-green-900/50 text-green-400 p-4 rounded-xl flex items-center gap-3 animate-fade-in">
-                <CheckCircle size={24} />
-                <div>
-                  <div className="font-bold">Успешно отправлено</div>
-                  <div className="text-xs opacity-80">Мы ответим вам в ближайшее время.</div>
-                </div>
+              <div className="bg-green-500/10 border border-green-500/20 text-green-400 p-3 rounded-xl flex items-center gap-3 text-sm">
+                <CheckCircle size={16} />
+                <span>Обращение отправлено!</span>
               </div>
             )}
 
-            {!category ? (
-              <div className="grid grid-cols-1 gap-3">
-                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Выберите категорию</label>
-                {categories.map((cat) => (
-                  <button
-                    key={cat.id}
-                    type="button"
-                    onClick={() => setCategory(cat.id)}
-                    className="flex items-center gap-4 p-4 bg-[#181a20] border border-[#2d313a] rounded-xl hover:border-blue-500/50 hover:bg-[#1c1f26] transition-all text-left group"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-[#22252b] flex items-center justify-center group-hover:bg-blue-500/20 group-hover:text-blue-400 transition-colors">
-                      <cat.icon size={20} />
-                    </div>
-                    <div className="flex-grow">
-                      <div className="font-bold text-white text-sm">{cat.label}</div>
-                      <div className="text-xs text-gray-500">{cat.desc}</div>
-                    </div>
-                    <ChevronRight size={16} className="text-gray-600 group-hover:text-white transition-colors" />
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <div className="animate-fade-in">
-                <button 
-                  type="button" 
-                  onClick={() => setCategory('')}
-                  className="text-xs text-blue-400 hover:text-blue-300 mb-4 flex items-center gap-1"
+            {/* Compact Category Grid */}
+            <div className="grid grid-cols-2 gap-2">
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setCategory(cat.id)}
+                  className={`p-3 rounded-xl border transition-all flex items-center gap-3 ${
+                    category === cat.id 
+                      ? `${cat.bg} ${cat.border} ring-1 ring-offset-1 ring-offset-[#0f1115] ring-${cat.color.split('-')[1]}-500` 
+                      : 'bg-[#181a20] border-[#2d313a] hover:bg-[#22252b]'
+                  }`}
                 >
-                  <ArrowLeft size={12} />
-                  Выбрать другую категорию
+                  <div className={`p-1.5 rounded-lg ${cat.bg} ${cat.color}`}>
+                    <cat.icon size={16} />
+                  </div>
+                  <span className={`text-xs font-bold ${category === cat.id ? 'text-white' : 'text-gray-400'}`}>
+                    {cat.label}
+                  </span>
                 </button>
+              ))}
+            </div>
 
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Тема обращения</label>
-                    <input
-                      type="text"
-                      value={subject}
-                      onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Например: Застрял в текстурах на станции..."
-                      className="w-full bg-[#181a20] border border-[#2d313a] rounded-xl p-4 text-white placeholder-gray-600 focus:border-blue-500 focus:outline-none transition-colors"
-                    />
-                  </div>
+            {/* Inputs */}
+            <div className="space-y-3">
+              <input
+                type="text"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                placeholder="Тема обращения"
+                className="w-full bg-[#181a20] border border-[#2d313a] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:border-blue-500 focus:outline-none transition-colors"
+              />
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Опишите проблему..."
+                rows={5}
+                className="w-full bg-[#181a20] border border-[#2d313a] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:border-blue-500 focus:outline-none transition-colors resize-none"
+              />
+            </div>
 
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Подробное описание</label>
-                    <textarea
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      placeholder="Опишите проблему максимально подробно. Прикрепите ссылки на скриншоты если есть..."
-                      rows={6}
-                      className="w-full bg-[#181a20] border border-[#2d313a] rounded-xl p-4 text-white placeholder-gray-600 focus:border-blue-500 focus:outline-none transition-colors resize-none"
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-blue-900/20"
-                  >
-                    <Send size={18} />
-                    Отправить обращение
-                  </button>
-                </div>
-              </div>
-            )}
+            <button
+              type="submit"
+              disabled={!category || !subject || !description}
+              className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+            >
+              <Send size={16} />
+              <span>Отправить</span>
+            </button>
           </form>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2 animate-fade-in">
             {tickets.map((ticket) => (
-              <div key={ticket.id} className="bg-[#181a20] border border-[#2d313a] rounded-xl p-4 hover:border-gray-600 transition-colors cursor-pointer group">
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider border ${
-                      ticket.category === 'bug' ? 'bg-red-500/10 text-red-400 border-red-500/20' :
-                      ticket.category === 'donation' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
-                      'bg-blue-500/10 text-blue-400 border-blue-500/20'
-                    }`}>
-                      {categories.find(c => c.id === ticket.category)?.label || ticket.category}
-                    </span>
-                    <span className="text-xs text-gray-600">#{ticket.id}</span>
+              <div key={ticket.id} className="bg-[#181a20] border border-[#2d313a] rounded-xl p-3 flex items-center justify-between group hover:border-gray-600 transition-colors">
+                <div className="flex items-center gap-3">
+                  <div className={`p-2 rounded-lg ${
+                    ticket.category === 'bug' ? 'bg-red-500/10 text-red-400' :
+                    ticket.category === 'donation' ? 'bg-green-500/10 text-green-400' :
+                    'bg-blue-500/10 text-blue-400'
+                  }`}>
+                    {ticket.category === 'bug' ? <Bug size={16} /> :
+                     ticket.category === 'donation' ? <CheckCircle size={16} /> :
+                     <HelpCircle size={16} />}
                   </div>
-                  <span className="text-xs text-gray-500">{ticket.date}</span>
+                  <div>
+                    <h3 className="text-sm font-bold text-white leading-tight">{ticket.subject}</h3>
+                    <span className="text-[10px] text-gray-500">{ticket.date}</span>
+                  </div>
                 </div>
                 
-                <h3 className="font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">{ticket.subject}</h3>
-                
-                <div className="flex items-center justify-between pt-3 border-t border-[#2d313a]">
-                  <div className={`flex items-center gap-1.5 text-xs font-bold ${
-                    ticket.status === 'resolved' ? 'text-green-400' : 
-                    ticket.status === 'rejected' ? 'text-red-400' : 'text-yellow-400'
-                  }`}>
-                    {ticket.status === 'resolved' ? <CheckCircle size={14} /> : 
-                     ticket.status === 'rejected' ? <AlertCircle size={14} /> : <Clock size={14} />}
-                    {ticket.status === 'resolved' ? 'Решено' : 
-                     ticket.status === 'rejected' ? 'Отклонено' : 'В обработке'}
-                  </div>
-                  <div className="text-xs text-gray-500 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                    Подробнее <ChevronRight size={12} />
-                  </div>
+                <div className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${
+                  ticket.status === 'resolved' ? 'bg-green-500/10 text-green-400' : 
+                  ticket.status === 'rejected' ? 'bg-red-500/10 text-red-400' : 'bg-yellow-500/10 text-yellow-400'
+                }`}>
+                  {ticket.status === 'resolved' ? 'Решено' : 
+                   ticket.status === 'rejected' ? 'Отклонено' : 'В работе'}
                 </div>
               </div>
             ))}
             
             {tickets.length === 0 && (
-              <div className="text-center py-16">
-                <div className="w-20 h-20 bg-[#181a20] rounded-full flex items-center justify-center mx-auto mb-4 border border-[#2d313a]">
-                  <MessageSquare size={32} className="text-gray-600" />
-                </div>
-                <h3 className="text-white font-bold mb-1">Нет обращений</h3>
-                <p className="text-gray-500 text-xs">У вас пока нет активных тикетов</p>
+              <div className="text-center py-12">
+                <MessageSquare size={24} className="text-gray-700 mx-auto mb-2" />
+                <p className="text-gray-600 text-xs">История пуста</p>
               </div>
             )}
           </div>

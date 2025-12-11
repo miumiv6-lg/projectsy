@@ -95,8 +95,8 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
                   <Star size={14} className="text-blue-400 fill-blue-400" />
                   <span className="text-[10px] font-bold text-blue-400 uppercase tracking-wider">Рекомендуем</span>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-1">SYSub Premium</h3>
-                <p className="text-gray-400 text-[10px] max-w-[200px]">
+                <h3 className="text-lg font-bold text-white mb-1">SYSub</h3>
+                <p className="text-gray-400 text-sm max-w-[200px]">
                   Новые возможности для вашей игры.
                 </p>
               </div>
