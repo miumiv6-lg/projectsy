@@ -29,10 +29,11 @@ if (token) {
     const text = msg.text;
 
     if (text === '/start') {
-      await bot.sendMessage(chatId, 'Добро пожаловать в Metro Portal! 🚇\nНажмите на кнопку ниже, чтобы открыть приложение.', {
+      await bot.sendMessage(chatId, 'Добро пожаловать в Metro Portal! 🚇\nНажмите на кнопку ниже, чтобы открыть приложение.\n\n⚠️ Web App работает только в мобильном Telegram или Telegram Desktop.', {
         reply_markup: {
           inline_keyboard: [
-            [{ text: 'Открыть приложение', web_app: { url: webAppUrl } }]
+            [{ text: '🚇 Открыть приложение', web_app: { url: webAppUrl } }],
+            [{ text: '🌐 Открыть в браузере', url: webAppUrl }]
           ]
         }
       });
