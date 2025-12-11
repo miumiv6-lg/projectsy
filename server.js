@@ -14,7 +14,12 @@ const port = process.env.PORT || 3000;
 
 // Telegram Bot Setup
 const token = process.env.BOT_TOKEN;
-const webAppUrl = process.env.WEB_APP_URL || 'https://your-railway-app-url.up.railway.app'; // Railway URL will go here
+let webAppUrl = process.env.WEB_APP_URL || 'https://your-railway-app-url.up.railway.app';
+
+// Ensure URL starts with https://
+if (webAppUrl && !webAppUrl.startsWith('https://') && !webAppUrl.startsWith('http://')) {
+  webAppUrl = 'https://' + webAppUrl;
+}
 
 if (token) {
   const bot = new TelegramBot(token, { polling: true });
