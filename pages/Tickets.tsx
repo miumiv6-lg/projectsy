@@ -76,7 +76,7 @@ const Tickets: React.FC = () => {
       case 'tech':
         return (
           <>
-            <div className="grid grid-cols-2 gap-2 mb-3">
+            <input
               type="text"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
