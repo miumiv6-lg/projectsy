@@ -191,7 +191,7 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
               <Box size={18} />
             </div>
             <div>
-              <h3 className="text-sm font-medium text-white">Коллекция скинов</h3>
+              <h3 className="text-sm font-medium text-white">Каталог скинов</h3>
               <p className="text-xs text-zinc-500 mt-0.5">Осмотр моделей и покупка</p>
             </div>
           </div>

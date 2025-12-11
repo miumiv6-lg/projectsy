@@ -66,7 +66,7 @@ const SkinsCollection: React.FC<SkinsCollectionProps> = ({ setPage }) => {
           
           <div className="flex-grow">
             <h1 className="text-xl font-medium text-white tracking-tight">
-              {selectedCategory ? currentCategoryInfo?.name : 'Коллекция'}
+              {selectedCategory ? currentCategoryInfo?.name : 'Каталог'}
             </h1>
             <p className="text-xs text-zinc-500">
               {selectedCategory 
