@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Page } from '../types';
-import { ArrowLeft, Check, Star, Zap, Crown, ChevronDown, ChevronUp, CreditCard } from 'lucide-react';
+import { ArrowLeft, Check, Star, Zap, Crown, ChevronDown, ChevronUp, CreditCard, Clock } from 'lucide-react';
 
 interface SubscriptionProps {
   setPage: (page: Page) => void;
@@ -9,6 +9,7 @@ interface SubscriptionProps {
 const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
   const [expandedPlan, setExpandedPlan] = useState<string | null>('improved');
   const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'gmdonate'>('stripe');
+  const [trialActivated, setTrialActivated] = useState(false);
 
   const plans = [
     {
@@ -104,8 +105,26 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
                           <span>{feature}</span>
                         </div>
                       ))}
-                    </div>
+
+                    {plan.id === 'regular' && !trialActivated && (
+                      <button 
+                        onClick={() => setTrialActivated(true)}
+                        className="w-full py-2.5 rounded-lg text-sm font-bold text-white bg-green-600 hover:bg-green-500 transition-colors mb-2 flex items-center justify-center gap-2"
+                      >
+                        <Clock size={14} />
+                        <span>Попробовать бесплатно (5 дней)</span>
+                      </button>
+                    )}
+
+                    {plan.id === 'regular' && trialActivated && (
+                      <div className="w-full py-2.5 rounded-lg text-sm font-bold text-green-400 bg-green-500/10 border border-green-500/20 mb-2 flex items-center justify-center gap-2">
+                        <Check size={14} />
+                        <span>Пробный период активирован</span>
+                      </div>
+                    )}
+
                     <button className={`w-full py-2.5 rounded-lg text-sm font-bold text-white transition-colors mb-3 ${btnClasses}`}>
+                      {plan.id === 'regular' ? 'Купить навсегда' : 'Выбрать'}lassName={`w-full py-2.5 rounded-lg text-sm font-bold text-white transition-colors mb-3 ${btnClasses}`}>
                       Выбрать
                     </button>
                     
