@@ -41,6 +41,7 @@ export enum Page {
   FNAF = 'fnaf',
   TERMS = 'terms',
   SKINS = 'skins',
+  PROFILE = 'profile',
 }
 
 // Роли пользователей

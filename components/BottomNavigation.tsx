@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingBag, MessageSquare, LifeBuoy } from 'lucide-react';
+import { ShoppingBag, MessageSquare, LifeBuoy, User } from 'lucide-react';
 import { Page } from '../types';
 
 interface BottomNavigationProps {
@@ -35,6 +35,19 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ currentPage, setPag
           )}
           <LifeBuoy size={20} strokeWidth={currentPage === Page.TICKETS ? 2 : 1.5} />
           <span className="text-[10px] font-medium tracking-wide">Поддержка</span>
+        </button>
+
+        <button
+          onClick={() => setPage(Page.PROFILE)}
+          className={`relative flex flex-col items-center justify-center w-full h-full gap-1.5 transition-all duration-300 group ${
+            currentPage === Page.PROFILE ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'
+          }`}
+        >
+          {currentPage === Page.PROFILE && (
+            <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-[1px] bg-white shadow-[0_0_15px_rgba(255,255,255,0.8)] animate-fade-in"></div>
+          )}
+          <User size={20} strokeWidth={currentPage === Page.PROFILE ? 2 : 1.5} />
+          <span className="text-[10px] font-medium tracking-wide">Профиль</span>
         </button>
       </div>
     </div>
