@@ -72,7 +72,7 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
             <div className="space-y-3">
               {!trialActivated ? (
                 <button 
-                  onClick={() => setTrialActivated(true)}
+                  onClick={() => setShowTrialRules(true)}
                   className="w-full py-3 rounded-xl text-sm font-bold text-white bg-[#1c1f26] border border-green-500/30 hover:border-green-500/60 hover:bg-green-500/10 transition-all flex items-center justify-center gap-2 group"
                 >
                   <Clock size={16} className="text-green-500 group-hover:scale-110 transition-transform" />
@@ -84,14 +84,6 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
                   <span>Пробный период активирован</span>
                 </div>
               )}
-
-              <button 
-                onClick={() => setShowTrialRules(true)}
-                className="w-full text-center text-xs text-gray-500 hover:text-gray-300 flex items-center justify-center gap-1 transition-colors"
-              >
-                <Info size={12} />
-                <span>Правила пробного периода</span>
-              </button>
 
               {!trialActivated && (
                 <div className="pt-2 space-y-3">
@@ -169,10 +161,13 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
                 </div>
                 
                 <button 
-                  onClick={() => setShowTrialRules(false)}
-                  className="w-full bg-[#2d313a] hover:bg-[#363a45] text-white font-bold py-3 rounded-xl transition-colors mt-2"
+                  onClick={() => {
+                    setShowTrialRules(false);
+                    setTrialActivated(true);
+                  }}
+                  className="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-xl transition-colors mt-2"
                 >
-                  Всё понятно
+                  Всё понятно, оформить
                 </button>
               </div>
             </div>
