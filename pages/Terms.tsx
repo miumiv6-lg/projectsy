@@ -1,6 +1,6 @@
 import React from 'react';
 import { Page } from '../types';
-import { ArrowLeft, FileText, Shield, AlertCircle } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 interface TermsProps {
   setPage: (page: Page) => void;
@@ -8,72 +8,83 @@ interface TermsProps {
 
 const Terms: React.FC<TermsProps> = ({ setPage }) => {
   return (
-    <div className="w-full min-h-screen pt-6 pb-24 px-4 bg-zinc-950">
-      <div className="max-w-md mx-auto">
+    <div className="w-full min-h-screen bg-black pt-8 pb-24 px-6 animate-fade-in font-serif">
+      <div className="max-w-2xl mx-auto">
         
-        <div className="flex items-center gap-3 mb-8">
+        {/* Navigation */}
+        <div className="mb-12">
           <button 
             onClick={() => setPage(Page.SUBSCRIPTION)}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition-colors"
+            className="group flex items-center gap-3 text-zinc-500 hover:text-white transition-colors no-underline"
           >
-            <ArrowLeft size={20} strokeWidth={1.5} />
-          </button>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Условия</h1>
-        </div>
-
-        <div className="space-y-4">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500">
-                <FileText size={18} strokeWidth={1.5} />
-              </div>
-              <h2 className="font-semibold text-white">1. Общие положения</h2>
+            <div className="w-8 h-8 flex items-center justify-center rounded-full border border-white/10 group-hover:border-white/30 transition-colors font-sans">
+               <ArrowLeft size={14} />
             </div>
-            <p className="text-sm text-zinc-400 leading-relaxed">
-              Оформляя подписку SYSub, вы соглашаетесь с правилами сервера и условиями предоставления услуг. Администрация оставляет за собой право изменять условия подписки с предварительным уведомлением пользователей.
-            </p>
-          </div>
-
-          <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-8 h-8 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-500">
-                <Shield size={18} strokeWidth={1.5} />
-              </div>
-              <h2 className="font-semibold text-white">2. Возврат средств</h2>
-            </div>
-            <p className="text-sm text-zinc-400 leading-relaxed">
-              Средства за оформленную подписку не подлежат возврату, за исключением случаев технических ошибок со стороны сервиса. Если вы были заблокированы за нарушение правил сервера, подписка не компенсируется.
-            </p>
-          </div>
-
-          <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-8 h-8 rounded-full bg-yellow-500/10 flex items-center justify-center text-yellow-500">
-                <AlertCircle size={18} strokeWidth={1.5} />
-              </div>
-              <h2 className="font-semibold text-white">3. Пробный период</h2>
-            </div>
-            <p className="text-sm text-zinc-400 leading-relaxed">
-              Пробный период предоставляется единоразово. Попытка повторной активации через дополнительные аккаунты (твинки) приведет к перманентной блокировке всех связанных учетных записей.
-            </p>
-          </div>
-
-          <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6">
-            <h2 className="font-semibold text-white mb-2">4. Ответственность</h2>
-            <p className="text-sm text-zinc-400 leading-relaxed">
-              Подписка не дает иммунитета от наказаний за нарушение правил сервера. Владелец подписки обязан соблюдать все правила сообщества наравне с другими игроками.
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-8">
-          <button 
-            onClick={() => setPage(Page.SUBSCRIPTION)}
-            className="w-full bg-zinc-900 hover:bg-zinc-800 text-white font-medium py-3.5 rounded-2xl transition-colors border border-zinc-800"
-          >
-            Вернуться назад
+            <span className="text-xs font-sans font-medium uppercase tracking-widest">Вернуться</span>
           </button>
         </div>
+
+        {/* Article Header */}
+        <header className="mb-12 border-b border-white/10 pb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight tracking-tight font-sans">
+            Условия использования
+          </h1>
+          <div className="flex items-center gap-4 text-sm text-zinc-500 font-sans">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-full bg-zinc-800"></div>
+              <span>Metro Portal Team</span>
+            </div>
+            <span>•</span>
+            <time>11 Декабря, 2025</time>
+          </div>
+        </header>
+
+        {/* Article Content */}
+        <article className="prose prose-invert prose-lg max-w-none text-zinc-300 font-serif leading-relaxed">
+          <p className="text-xl text-white font-medium mb-8 leading-relaxed font-sans">
+            Добро пожаловать в Metro Portal. Используя наши сервисы, вы соглашаетесь с нижеизложенными правилами. Пожалуйста, внимательно ознакомьтесь с ними перед совершением покупок.
+          </p>
+
+          <h3 className="text-2xl font-bold text-white mt-12 mb-6 font-sans">1. Подписка SYSub Premium</h3>
+          <p>
+            Подписка предоставляет доступ к дополнительному контенту на сервере Metro. Мы гарантируем работоспособность заявленных функций на момент покупки. Администрация оставляет за собой право изменять состав бонусов с предварительным уведомлением в новостном канале.
+          </p>
+          <p>
+            Автоматическое продление происходит каждые 30 дней. Отменить подписку можно в любой момент через настройки профиля или обратившись в поддержку.
+          </p>
+
+          <h3 className="text-2xl font-bold text-white mt-12 mb-6 font-sans">2. Политика возврата</h3>
+          <p>
+            Все покупки внутри приложения являются окончательными. Возврат средств (refund) возможен только в случае технической ошибки со стороны сервиса (например, двойное списание).
+          </p>
+          <ul className="list-disc pl-5 space-y-2 marker:text-zinc-600">
+            <li>Блокировка аккаунта за нарушение правил сервера не является основанием для возврата.</li>
+            <li>Неиспользование привилегий не является основанием для возврата.</li>
+          </ul>
+
+          <h3 className="text-2xl font-bold text-white mt-12 mb-6 font-sans">3. Пробный период (Trial)</h3>
+          <p>
+            Мы предоставляем 5-дневный пробный период для новых пользователей.
+          </p>
+          <blockquote className="border-l-2 border-white pl-6 italic text-zinc-400 my-8">
+            "Создание мультиаккаунтов (твинков) для повторной активации пробного периода строго запрещено и карается перманентной блокировкой по железу."
+          </blockquote>
+          <p>
+            По истечении пробного периода доступ к премиум-функциям будет автоматически ограничен до момента оплаты подписки.
+          </p>
+
+          <h3 className="text-2xl font-bold text-white mt-12 mb-6 font-sans">4. Ответственность</h3>
+          <p>
+            Наличие платной подписки не освобождает пользователя от соблюдения общих правил проекта. Модерация относится ко всем игрокам одинаково непредвзято.
+          </p>
+
+          <hr className="border-white/10 my-12" />
+
+          <p className="text-sm text-zinc-600 font-sans text-center">
+            Metro Portal © 2025. Все права защищены.<br/>
+            Не является публичной офертой.
+          </p>
+        </article>
 
       </div>
     </div>
