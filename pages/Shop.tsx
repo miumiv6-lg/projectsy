@@ -19,10 +19,10 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
   ];
   
   const items = [
-    { id: 1, name: 'SYSub Plus', price: 150, type: 'Premium', desc: 'Месячная подписка с расширенными лимитами спавна.', image: null, tag: 'ХИТ' },
+    { id: 1, name: 'SYSub', price: 150, type: 'Premium', desc: 'Подписка с расширенными возможностями. 3 уровня на выбор.', image: null, tag: 'ХИТ' },
     { id: 2, name: '81-717 "Номерной"', price: 500, type: 'Trains', desc: 'Легендарный советский поезд. Классическая синяя ливрея.', image: null, tag: 'НОВИНКА' },
     { id: 3, name: 'Форма машиниста', price: 50, type: 'Skins', desc: 'Стандартная форма работника метрополитена.', image: null, tag: 'СКИН' },
-    { id: 4, name: 'Коллекция FNAF', price: 300, type: 'Bundles', desc: 'Лимитированный набор скинов аниматроников.', image: '/images/fnaf/freddy.webp', tag: 'EVENT' },
+    // { id: 4, name: 'Коллекция FNAF', price: 300, type: 'Bundles', desc: 'Лимитированный набор скинов аниматроников.', image: '/images/fnaf/freddy.webp', tag: 'EVENT' },
     { id: 5, name: '81-740 "Русич"', price: 750, type: 'Trains', desc: 'Современный поезд с сочлененными вагонами.', image: null, tag: 'ПОЕЗД' },
     { id: 6, name: 'VIP Статус', price: 1000, type: 'Premium', desc: 'Пожизненный VIP статус с уникальным цветом ника.', image: null, tag: 'VIP' },
   ];
@@ -92,9 +92,9 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
                 <div className="flex items-center gap-2 mb-2">
                   <span className="bg-blue-500/20 text-blue-400 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Рекомендуем</span>
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2">SYSub Plus</h3>
+                <h3 className="text-2xl font-bold text-white mb-2">SYSub</h3>
                 <p className="text-gray-400 text-xs mb-4 max-w-[70%]">
-                  Максимальные лимиты, приоритетный вход и ежемесячные бонусы.
+                  Три уровня подписки под любой стиль игры. Выберите свой максимум.
                 </p>
                 <div className="flex items-center gap-3">
                   <button 
@@ -103,43 +103,8 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
                   >
                     Подробнее
                   </button>
-                  <span className="text-white font-mono font-bold">150 SY</span>
+                  <span className="text-white font-mono font-bold">от 150 SY</span>
                 </div>
-              </div>
-            </div>
-
-            {/* FNAF Banner */}
-            <div className="relative overflow-hidden rounded-2xl bg-black border border-red-900/30 group">
-              <div className="absolute inset-0 bg-[url('https://media.giphy.com/media/oEI9uBYSzLpBK/giphy.gif')] opacity-5 mix-blend-screen pointer-events-none"></div>
-              <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-transparent z-10"></div>
-              
-              <div className="absolute right-0 top-0 h-full w-1/2 opacity-40 group-hover:opacity-60 transition-opacity duration-500">
-                 <img src="/images/fnaf/freddy.webp" alt="Freddy" className="w-full h-full object-cover object-center mask-image-gradient" />
-              </div>
-
-              <div className="relative z-20 p-5">
-                <div className="flex items-center gap-2 mb-1">
-                  <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
-                  <span className="text-red-600 text-[10px] font-bold tracking-[0.2em] uppercase">Security Breach</span>
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-2 font-mono tracking-tighter" style={{ textShadow: '2px 2px 0 #500' }}>
-                  FNAF EVENT
-                </h3>
-                <p className="text-gray-500 text-xs mb-4 max-w-[60%] border-l-2 border-red-900 pl-3">
-                  Эксклюзивные скины аниматроников доступны ограниченное время.
-                </p>
-                <button 
-                  onClick={() => {
-                    const audio = new Audio('/sounds/fnaf_btn_click.mp3');
-                    audio.volume = 0.5;
-                    audio.play().catch(e => console.error("Audio play failed", e));
-                    setPage?.(Page.FNAF);
-                  }}
-                  className="bg-red-900/20 hover:bg-red-900/40 border border-red-900/50 text-red-500 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2"
-                >
-                  <span className="w-1.5 h-1.5 bg-red-500 rounded-sm"></span>
-                  Открыть Терминал
-                </button>
               </div>
             </div>
           </div>
