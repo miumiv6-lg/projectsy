@@ -15,7 +15,7 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
   const plans = [
     {
       id: 'premium',
-      name: 'SYSub Premium',
+      name: 'SYSub',
       price: 100,
       icon: Crown,
       color: 'blue',
