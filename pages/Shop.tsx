@@ -1,29 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Page } from '../types';
 import { ShoppingBag, Package, Star, ChevronRight, Plus, History, CreditCard, Box, Gift, Lock } from 'lucide-react';
+import CaseOpeningModal from '../components/CaseOpeningModal';
 
 interface ShopProps {
   setPage?: (page: Page) => void;
 }
 
-// Session storage for daily reward (persists until app reload)
-let sessionDailyReward = { claimed: false, index: null as number | null, reward: null as string | null };
+// Session storage for daily case (persists until app reload)
+let sessionDailyCaseClaimed = false;
 
 const Shop: React.FC<ShopProps> = ({ setPage }) => {
   const [showTopUp, setShowTopUp] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
-  const [dailyReward, setDailyReward] = useState(sessionDailyReward);
+  const [isCaseModalOpen, setIsCaseModalOpen] = useState(false);
+  const [dailyCaseClaimed, setDailyCaseClaimed] = useState(sessionDailyCaseClaimed);
 
-  const handleDailyClick = (index: number) => {
-    if (dailyReward.claimed) return;
+  const handleOpenCase = () => {
+    if (dailyCaseClaimed) return;
+    setIsCaseModalOpen(true);
+  };
 
-    const rewards = ['-10% на скины', '-20% на скины', '-5% на донат', '10 SY', '50 SY'];
-    const randomReward = rewards[Math.floor(Math.random() * rewards.length)];
-    
-    const newState = { claimed: true, index, reward: randomReward };
-    setDailyReward(newState);
-    sessionDailyReward = newState;
-  }; 
+  const handleCaseClosed = () => {
+    setIsCaseModalOpen(false);
+    // Mark as claimed after closing
+    setDailyCaseClaimed(true);
+    sessionDailyCaseClaimed = true;
+  };
 
   if (showHistory) {
     return (
@@ -195,50 +198,56 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
           </div>
         </div>
 
-        {/* Daily Discounts */}
+        {/* Cases Section */}
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-3 px-1">
-            <Gift size={16} className="text-yellow-500" />
-            <h3 className="font-bold text-white text-sm">Ежедневная скидка</h3>
+            <Package size={16} className="text-yellow-500" />
+            <h3 className="font-bold text-white text-sm">Кейсы</h3>
           </div>
-          <div className="grid grid-cols-5 gap-2">
-            {[0, 1, 2, 3, 4].map((index) => {
-              const isClaimed = dailyReward.claimed;
-              const isSelected = dailyReward.index === index;
+          
+          <div 
+            onClick={handleOpenCase}
+            className={`relative overflow-hidden rounded-xl border p-4 transition-all group ${
+              dailyCaseClaimed 
+                ? 'bg-[#181a20] border-[#2d313a] opacity-60 cursor-not-allowed' 
+                : 'bg-gradient-to-br from-[#181a20] to-[#22252b] border-yellow-500/30 hover:border-yellow-500 cursor-pointer shadow-lg shadow-yellow-900/10'
+            }`}
+          >
+            {/* Background Pattern */}
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
+            
+            <div className="relative z-10 flex items-center gap-4">
+              <div className={`w-16 h-16 rounded-lg flex items-center justify-center shadow-lg ${
+                dailyCaseClaimed ? 'bg-[#22252b] text-gray-500' : 'bg-gradient-to-br from-yellow-600 to-yellow-500 text-white'
+              }`}>
+                <Gift size={32} />
+              </div>
               
-              return (
-                <button
-                  key={index}
-                  disabled={isClaimed}
-                  onClick={() => handleDailyClick(index)}
-                  className={`aspect-square rounded-xl border flex flex-col items-center justify-center relative overflow-hidden transition-all ${
-                    isSelected 
-                      ? 'bg-yellow-500/20 border-yellow-500' 
-                      : isClaimed 
-                        ? 'bg-[#181a20] border-[#2d313a] opacity-50 cursor-not-allowed'
-                        : 'bg-[#181a20] border-[#2d313a] hover:border-yellow-500/50 hover:bg-[#22252b] cursor-pointer'
-                  }`}
-                >
-                  {isSelected ? (
-                    <div className="text-center animate-fade-in p-1">
-                      <span className="text-[10px] font-bold text-yellow-400 leading-tight block">{dailyReward.reward}</span>
-                    </div>
-                  ) : (
-                    <>
-                      {isClaimed ? (
-                        <Lock size={16} className="text-gray-600" />
-                      ) : (
-                        <Gift size={20} className="text-gray-400" />
-                      )}
-                    </>
+              <div className="flex-grow">
+                <div className="flex items-center justify-between mb-1">
+                  <h3 className={`font-bold text-lg ${dailyCaseClaimed ? 'text-gray-500' : 'text-white'}`}>Ежедневный кейс</h3>
+                  {!dailyCaseClaimed && (
+                    <span className="bg-yellow-500 text-black text-[10px] font-bold px-2 py-0.5 rounded uppercase">Бесплатно</span>
                   )}
-                </button>
-              );
-            })}
+                </div>
+                <p className="text-xs text-gray-500">
+                  {dailyCaseClaimed 
+                    ? 'Вы уже открыли кейс сегодня. Приходите завтра!' 
+                    : 'Испытай удачу! Скины, валюта и бонусы внутри.'}
+                </p>
+              </div>
+
+              {!dailyCaseClaimed && (
+                <div className="bg-[#2d313a] p-2 rounded-full text-gray-400 group-hover:text-white group-hover:bg-blue-600 transition-all">
+                  <ChevronRight size={20} />
+                </div>
+              )}
+              
+              {dailyCaseClaimed && (
+                <Lock size={20} className="text-gray-600" />
+              )}
+            </div>
           </div>
-          <p className="text-[10px] text-gray-600 text-center mt-2">
-            Нажмите на блок, чтобы получить случайную скидку. Доступно раз в 24 часа.
-          </p>
         </div>
 
         {/* Empty State Message */}
@@ -246,11 +255,17 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
           <div className="w-16 h-16 bg-[#181a20] rounded-full flex items-center justify-center mx-auto mb-4 border border-[#2d313a]">
             <Package size={24} className="text-gray-600" />
           </div>
-          <h3 className="text-white font-bold mb-1">Товаров пока нет</h3>
-          <p className="text-gray-500 text-xs">Загляните позже, мы готовим что-то интересное</p>
+          <h3 className="text-white font-bold mb-1">Больше кейсов скоро</h3>
+          <p className="text-gray-500 text-xs">Мы работаем над новыми коллекциями</p>
         </div>
 
       </div>
+
+      {/* Case Opening Modal */}
+      <CaseOpeningModal 
+        isOpen={isCaseModalOpen} 
+        onClose={handleCaseClosed} 
+      />
     </div>
   );
 };

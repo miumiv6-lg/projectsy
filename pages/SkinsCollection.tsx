@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Page } from '../types';
-import { ArrowLeft, Search, Box, Shield, User } from 'lucide-react';
+import { ArrowLeft, Search, Box, Shield, User, Target, AlertTriangle, ChevronRight, RotateCw } from 'lucide-react';
 
 interface SkinsCollectionProps {
   setPage: (page: Page) => void;
@@ -8,12 +8,13 @@ interface SkinsCollectionProps {
 
 const SkinsCollection: React.FC<SkinsCollectionProps> = ({ setPage }) => {
   const [activeCategory, setActiveCategory] = useState('metro');
+  const [selectedSkinId, setSelectedSkinId] = useState<number | null>(null);
 
   const categories = [
-    { id: 'metro', name: 'Метро 2033', icon: Shield },
-    { id: 'stalker', name: 'S.T.A.L.K.E.R.', icon: AlertTriangle },
-    { id: 'military', name: 'Военные', icon: Target },
-    { id: 'civilians', name: 'Гражданские', icon: User },
+    { id: 'metro', name: 'Метро 2033', icon: Shield, description: 'Выжившие в туннелях' },
+    { id: 'stalker', name: 'S.T.A.L.K.E.R.', icon: AlertTriangle, description: 'Обитатели Зоны' },
+    { id: 'military', name: 'Военные', icon: Target, description: 'Орден и Спецназ' },
+    { id: 'civilians', name: 'Гражданские', icon: User, description: 'Жители станций' },
   ];
 
   const skins = {
@@ -38,13 +39,10 @@ const SkinsCollection: React.FC<SkinsCollectionProps> = ({ setPage }) => {
     ]
   };
 
-  // Helper icons for categories
-  function AlertTriangle(props: any) {
-    return <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
-  }
-  function Target(props: any) {
-    return <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-  }
+  // Get current skins based on category
+  const currentSkins = skins[activeCategory as keyof typeof skins];
+  // Selected skin object (default to first if none selected)
+  const activeSkin = currentSkins.find(s => s.id === selectedSkinId) || currentSkins[0];
 
   return (
     <div className="w-full min-h-screen pt-4 pb-24 px-4 bg-[#0f1115] flex flex-col">
@@ -61,59 +59,110 @@ const SkinsCollection: React.FC<SkinsCollectionProps> = ({ setPage }) => {
           <h1 className="text-xl font-bold text-white">Коллекция скинов</h1>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-6 flex-grow">
-          {/* Sidebar (Categories) */}
-          <div className="w-full md:w-64 flex-shrink-0 space-y-2 overflow-x-auto md:overflow-visible flex md:block pb-2 md:pb-0">
+        <div className="flex flex-col lg:flex-row gap-6 flex-grow h-[calc(100vh-140px)]">
+          
+          {/* Left Sidebar: Collections List */}
+          <div className="w-full lg:w-80 flex-shrink-0 flex flex-col gap-2 overflow-y-auto pr-2">
+            <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 px-1">Коллекции</h2>
             {categories.map((cat) => (
               <button
                 key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`flex items-center gap-3 p-3 rounded-xl border transition-all w-full min-w-[160px] md:min-w-0 ${
+                onClick={() => {
+                  setActiveCategory(cat.id);
+                  setSelectedSkinId(null); // Reset selection when changing category
+                }}
+                className={`flex items-center gap-4 p-4 rounded-xl border transition-all text-left group ${
                   activeCategory === cat.id
-                    ? 'bg-[#2d313a] border-blue-500 text-white shadow-lg'
-                    : 'bg-[#181a20] border-[#2d313a] text-gray-400 hover:bg-[#22252b]'
+                    ? 'bg-[#2d313a] border-blue-500 shadow-lg'
+                    : 'bg-[#181a20] border-[#2d313a] hover:bg-[#22252b] hover:border-gray-600'
                 }`}
               >
-                <div className={`p-2 rounded-lg ${activeCategory === cat.id ? 'bg-blue-500 text-white' : 'bg-[#22252b] text-gray-500'}`}>
-                  <cat.icon size={18} />
+                <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
+                  activeCategory === cat.id ? 'bg-blue-500 text-white' : 'bg-[#22252b] text-gray-500 group-hover:text-gray-300'
+                }`}>
+                  <cat.icon size={24} />
                 </div>
-                <span className="font-bold text-sm">{cat.name}</span>
+                <div>
+                  <span className={`font-bold block ${activeCategory === cat.id ? 'text-white' : 'text-gray-300'}`}>
+                    {cat.name}
+                  </span>
+                  <span className="text-xs text-gray-500">{cat.description}</span>
+                </div>
+                {activeCategory === cat.id && (
+                  <div className="ml-auto">
+                    <ChevronRight size={16} className="text-blue-500" />
+                  </div>
+                )}
               </button>
             ))}
           </div>
 
-          {/* Main Content (Skins Grid) */}
-          <div className="flex-grow">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-              {skins[activeCategory as keyof typeof skins].map((skin) => (
-                <div key={skin.id} className="bg-[#181a20] border border-[#2d313a] rounded-xl overflow-hidden group hover:border-gray-500 transition-all">
-                  {/* Placeholder for 3D Model/Image */}
-                  <div className={`aspect-[3/4] ${skin.image} relative flex items-center justify-center`}>
-                    <Box size={32} className="text-white/20" />
-                    <div className="absolute top-2 right-2 px-2 py-1 bg-black/60 backdrop-blur-sm rounded text-[10px] font-bold text-white border border-white/10">
-                      {skin.price} SY
-                    </div>
-                  </div>
-                  
-                  <div className="p-3">
-                    <h3 className="font-bold text-white text-sm mb-1">{skin.name}</h3>
-                    <div className="flex items-center justify-between">
-                      <span className={`text-[10px] font-bold uppercase tracking-wider ${
-                        skin.rarity === 'legendary' ? 'text-yellow-500' :
-                        skin.rarity === 'epic' ? 'text-purple-500' :
-                        skin.rarity === 'rare' ? 'text-blue-500' :
-                        'text-gray-500'
-                      }`}>
-                        {skin.rarity}
-                      </span>
-                      <button className="w-6 h-6 bg-[#2d313a] rounded flex items-center justify-center text-white hover:bg-blue-600 transition-colors">
-                        <Search size={12} />
-                      </button>
-                    </div>
-                  </div>
+          {/* Right Area: Inspection & Selection */}
+          <div className="flex-grow flex flex-col bg-[#181a20] border border-[#2d313a] rounded-2xl overflow-hidden">
+            
+            {/* 3D Viewer Area (Placeholder) */}
+            <div className="flex-grow relative bg-gradient-to-b from-[#111] to-[#181a20] flex items-center justify-center min-h-[300px]">
+              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+              
+              {/* Rarity Badge */}
+              <div className="absolute top-6 left-6">
+                 <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${
+                    activeSkin.rarity === 'legendary' ? 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20' :
+                    activeSkin.rarity === 'epic' ? 'bg-purple-500/10 text-purple-500 border-purple-500/20' :
+                    activeSkin.rarity === 'rare' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
+                    'bg-gray-500/10 text-gray-500 border-gray-500/20'
+                 }`}>
+                   {activeSkin.rarity}
+                 </span>
+              </div>
+
+              {/* 3D Model Placeholder */}
+              <div className="relative z-10 flex flex-col items-center animate-fade-in">
+                <div className={`w-48 h-64 rounded-2xl ${activeSkin.image} shadow-2xl flex items-center justify-center mb-4 border border-white/10`}>
+                  <Box size={64} className="text-white/20" />
                 </div>
-              ))}
+                <div className="flex items-center gap-2 text-gray-500 text-xs">
+                  <RotateCw size={12} />
+                  <span>Покрутите модель (скоро)</span>
+                </div>
+              </div>
+
+              {/* Info Overlay */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#181a20] to-transparent">
+                <h2 className="text-3xl font-bold text-white mb-1">{activeSkin.name}</h2>
+                <div className="flex items-center justify-between">
+                  <div className="text-2xl font-bold text-blue-400">{activeSkin.price} SY</div>
+                  <button className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-xl transition-colors shadow-lg shadow-blue-900/20">
+                    Купить
+                  </button>
+                </div>
+              </div>
             </div>
+
+            {/* Skin Selector (Horizontal List) */}
+            <div className="h-32 border-t border-[#2d313a] bg-[#1c1f26] p-4">
+              <div className="flex gap-3 overflow-x-auto h-full pb-2 items-center">
+                {currentSkins.map((skin) => (
+                  <button
+                    key={skin.id}
+                    onClick={() => setSelectedSkinId(skin.id)}
+                    className={`flex-shrink-0 w-20 h-20 rounded-xl border-2 transition-all relative overflow-hidden group ${
+                      activeSkin.id === skin.id
+                        ? 'border-blue-500 ring-2 ring-blue-500/20'
+                        : 'border-[#2d313a] hover:border-gray-500 opacity-70 hover:opacity-100'
+                    }`}
+                  >
+                    <div className={`w-full h-full ${skin.image}`}></div>
+                    {activeSkin.id === skin.id && (
+                      <div className="absolute inset-0 bg-blue-500/20 flex items-center justify-center">
+                        <div className="w-2 h-2 bg-white rounded-full shadow-lg"></div>
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+
           </div>
         </div>
 
