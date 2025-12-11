@@ -17,7 +17,10 @@ app.use(express.json());
 app.use(cors());
 
 // AI Chat Configuration
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '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';
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
+const OPENROUTER_MODEL = process.env.OPENROUTER_MODEL || 'mistralai/devstral-2512:free';
+const OPENROUTER_HTTP_REFERER = process.env.OPENROUTER_HTTP_REFERER;
+const OPENROUTER_APP_TITLE = process.env.OPENROUTER_APP_TITLE || 'Project SY';
 const SYSTEM_PROMPT = `
 You are the interactive AI Support Agent for Project SY, a Metro 2033 simulator server.
 Your goal is to help players and, if necessary, gather information to create a support ticket.
@@ -61,16 +64,41 @@ Example of final response:
 
 app.post('/api/chat', async (req, res) => {
   try {
-    const { messages } = req.body;
+    if (!OPENROUTER_API_KEY) {
+      return res.status(500).json({
+        error: {
+          message: 'OPENROUTER_API_KEY is not set on the server. Add it to the environment (.env / Railway Variables) and redeploy.'
+        }
+      });
+    }
+
+    const { messages } = req.body || {};
+
+    if (!Array.isArray(messages)) {
+      return res.status(400).json({
+        error: {
+          message: 'Invalid request: `messages` must be an array'
+        }
+      });
+    }
+
+    const httpReferer =
+      OPENROUTER_HTTP_REFERER ||
+      process.env.WEB_APP_URL ||
+      req.get('origin') ||
+      req.get('referer') ||
+      'https://example.com';
 
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+        "HTTP-Referer": httpReferer,
+        "X-Title": OPENROUTER_APP_TITLE,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        "model": "mistralai/devstral-2512:free",
+        "model": OPENROUTER_MODEL,
         "messages": [
           { "role": "system", "content": SYSTEM_PROMPT },
           ...messages
@@ -78,11 +106,24 @@ app.post('/api/chat', async (req, res) => {
       })
     });
 
-    const data = await response.json();
-    res.json(data);
+    const data = await response.json().catch(() => null);
+
+    if (!data) {
+      return res.status(502).json({
+        error: {
+          message: 'Upstream (OpenRouter) returned a non-JSON response'
+        }
+      });
+    }
+
+    res.status(response.status).json(data);
   } catch (error) {
     console.error('AI Chat Error:', error);
-    res.status(500).json({ error: 'Failed to fetch AI response' });
+    res.status(500).json({
+      error: {
+        message: 'Failed to fetch AI response'
+      }
+    });
   }
 });
 

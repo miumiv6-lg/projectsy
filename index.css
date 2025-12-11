@@ -61,6 +61,14 @@ body {
 
 /* Utilities */
 @layer utilities {
+  .pt-safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
   .cursor-card {
     background: #050505;
     border: 1px solid var(--color-border);

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Loader2, Check, CreditCard, Bug, UserX, HelpCircle, History } from 'lucide-react';
+import { Send, Bot, User, CreditCard, Bug, UserX, HelpCircle, History } from 'lucide-react';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -131,7 +131,7 @@ const Tickets: React.FC = () => {
       <div className="px-5 py-3 flex items-center justify-between border-b border-white/5 bg-[#09090b]/80 backdrop-blur-md z-10 sticky top-0">
         <div className="flex items-center gap-2">
            <Bot size={18} className="text-zinc-400" />
-           <span className="text-sm font-medium tracking-wide text-zinc-200">AI Assistant</span>
+           <span className="text-sm font-medium tracking-wide text-zinc-200">Support Assistant</span>
         </div>
         <div className="flex bg-zinc-900/80 rounded-lg p-0.5 border border-white/10">
           <button
@@ -158,76 +158,91 @@ const Tickets: React.FC = () => {
           {/* Chat Area */}
           <div 
             ref={scrollRef}
-            className="flex-grow overflow-y-auto p-4 space-y-6 pb-36"
+            className="flex-grow overflow-y-auto p-4 space-y-5 pb-56 no-scrollbar"
           >
             {messages.map((msg, idx) => (
-              <div key={idx} className={`group flex flex-col gap-1 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
-                
-                {/* Message Meta (Role Name) */}
-                <div className={`flex items-center gap-2 text-[10px] uppercase tracking-wider font-semibold text-zinc-600 px-1 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                   {msg.role === 'user' ? 'You' : 'Project SY AI'}
+              <div key={idx} className="flex gap-3">
+                <div
+                  className={`mt-0.5 w-7 h-7 rounded-full flex items-center justify-center border ${
+                    msg.role === 'user'
+                      ? 'bg-[#18181b] border-white/10 text-zinc-300'
+                      : 'bg-[#0f0f10] border-white/5 text-zinc-400'
+                  }`}
+                >
+                  {msg.role === 'user' ? <User size={14} /> : <Bot size={14} />}
                 </div>
 
-                <div className={`relative max-w-[90%] md:max-w-[80%] ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
-                  <div className={`px-4 py-3 text-[13px] leading-6 whitespace-pre-wrap shadow-sm ${
-                    msg.role === 'user'
-                      ? 'bg-[#27272a] text-zinc-100 rounded-2xl rounded-tr-sm border border-white/5'
-                      : 'bg-transparent text-zinc-300 pl-0'
-                  }`}>
+                <div className="min-w-0 flex-1">
+                  <div className="text-[11px] font-medium text-zinc-500 mb-1">
+                    {msg.role === 'user' ? 'You' : 'Project SY AI'}
+                  </div>
+                  <div
+                    className={`px-4 py-3 text-[13px] leading-6 whitespace-pre-wrap rounded-lg border ${
+                      msg.role === 'user'
+                        ? 'bg-[#18181b] border-white/10 text-zinc-100'
+                        : 'bg-[#0f0f10] border-white/5 text-zinc-200'
+                    }`}
+                  >
                     {msg.content}
                   </div>
-                </div>
 
-                {/* Ticket Card (Cursor-style Widget) */}
-                {msg.isTicketPrompt && msg.ticketData && (
-                  <div className="ml-0 mt-2 max-w-[300px] animate-in fade-in slide-in-from-bottom-2 duration-300">
-                    <div className="bg-[#121212] border border-zinc-800 rounded-lg overflow-hidden shadow-2xl ring-1 ring-white/5">
-                      <div className="bg-zinc-900/50 px-3 py-2 border-b border-zinc-800 flex items-center justify-between">
-                         <span className="text-[11px] font-medium text-zinc-400">Confirm Ticket</span>
-                         <div className="flex gap-1.5">
+                  {/* Ticket Card (Cursor-style Widget) */}
+                  {msg.isTicketPrompt && msg.ticketData && (
+                    <div className="mt-3 max-w-[360px] animate-in fade-in slide-in-from-bottom-2 duration-300">
+                      <div className="bg-[#0f0f10] border border-white/10 rounded-lg overflow-hidden shadow-2xl ring-1 ring-white/5">
+                        <div className="bg-[#09090b] px-3 py-2 border-b border-white/10 flex items-center justify-between">
+                          <span className="text-[11px] font-medium text-zinc-400">Confirm ticket</span>
+                          <div className="flex gap-1.5">
                             <div className="w-2 h-2 rounded-full bg-red-500/20"></div>
                             <div className="w-2 h-2 rounded-full bg-yellow-500/20"></div>
                             <div className="w-2 h-2 rounded-full bg-green-500/20"></div>
-                         </div>
-                      </div>
-                      <div className="p-3 space-y-2">
-                        <div className="space-y-1">
-                          <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Subject</div>
-                          <div className="text-xs text-zinc-200 font-medium">{msg.ticketData.subject}</div>
+                          </div>
                         </div>
-                        <div className="space-y-1">
-                          <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Category</div>
-                          <div className="text-xs text-blue-400 font-mono bg-blue-500/10 px-1.5 py-0.5 rounded w-fit">{msg.ticketData.category}</div>
+                        <div className="p-3 space-y-2">
+                          <div className="space-y-1">
+                            <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Subject</div>
+                            <div className="text-xs text-zinc-200 font-medium">{msg.ticketData.subject}</div>
+                          </div>
+                          <div className="space-y-1">
+                            <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Category</div>
+                            <div className="text-xs text-blue-400 font-mono bg-blue-500/10 px-1.5 py-0.5 rounded w-fit">{msg.ticketData.category}</div>
+                          </div>
+                          <button
+                            onClick={() => handleCreateTicket(msg.ticketData!)}
+                            className="w-full mt-2 bg-[#ededed] hover:bg-white text-black text-xs font-semibold py-2 rounded-[6px] transition-colors"
+                          >
+                            Submit ticket
+                          </button>
                         </div>
-                        <button 
-                          onClick={() => handleCreateTicket(msg.ticketData!)}
-                          className="w-full mt-2 bg-[#ededed] hover:bg-white text-black text-xs font-semibold py-2 rounded-[4px] transition-colors"
-                        >
-                          Submit Ticket
-                        </button>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             ))}
             
             {isLoading && (
-              <div className="flex flex-col items-start gap-2 animate-pulse">
-                <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider font-semibold text-zinc-600 px-1">
-                   Project SY AI
+              <div className="flex gap-3 animate-pulse">
+                <div className="mt-0.5 w-7 h-7 rounded-full flex items-center justify-center border bg-[#0f0f10] border-white/5 text-zinc-400">
+                  <Bot size={14} />
                 </div>
-                <div className="text-zinc-500 text-sm flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce"></span>
-                  <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce delay-75"></span>
-                  <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce delay-150"></span>
+                <div className="min-w-0 flex-1">
+                  <div className="text-[11px] font-medium text-zinc-500 mb-1">Project SY AI</div>
+                  <div className="text-zinc-500 text-sm flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce"></span>
+                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce delay-75"></span>
+                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce delay-150"></span>
+                  </div>
                 </div>
               </div>
             )}
           </div>
 
           {/* Input Area - Cursor Style */}
-          <div className="fixed bottom-0 left-0 right-0 p-4 bg-[#09090b]/90 backdrop-blur-xl border-t border-white/5 z-20">
+          <div
+            className="fixed left-0 right-0 p-4 bg-[#09090b]/90 backdrop-blur-xl border-t border-white/5 z-20"
+            style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom))' }}
+          >
             <div className="max-w-2xl mx-auto">
               <form onSubmit={handleSend} className="relative group">
                 <div className="absolute inset-0 bg-blue-500/5 rounded-lg blur-xl group-focus-within:bg-blue-500/10 transition-all"></div>
@@ -236,7 +251,7 @@ const Tickets: React.FC = () => {
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    placeholder="Ask anything..."
+                    placeholder="Message support…"
                     className="w-full bg-transparent text-[13px] text-zinc-200 p-3 pr-10 outline-none placeholder:text-zinc-600 font-normal"
                     autoComplete="off"
                   />
