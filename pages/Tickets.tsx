@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Bug, UserX, HelpCircle, Plus, CreditCard, MessageSquare, Check, X } from 'lucide-react';
+import { Send, Bug, UserX, HelpCircle, CreditCard, MessageSquare, Check, Plus, ChevronRight } from 'lucide-react';
 
 interface Ticket {
   id: string;
@@ -31,10 +31,10 @@ const Tickets: React.FC = () => {
   const [showSuccess, setShowSuccess] = useState(false);
 
   const categories = [
-    { id: 'tech', label: 'Bug Report', icon: Bug },
-    { id: 'player', label: 'Report Player', icon: UserX },
-    { id: 'donate', label: 'Billing Issue', icon: CreditCard },
-    { id: 'other', label: 'Other', icon: HelpCircle },
+    { id: 'tech', label: 'Баг / Ошибка', icon: Bug },
+    { id: 'player', label: 'Жалоба', icon: UserX },
+    { id: 'donate', label: 'Донат', icon: CreditCard },
+    { id: 'other', label: 'Другое', icon: HelpCircle },
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -42,13 +42,13 @@ const Tickets: React.FC = () => {
     if (!category) return;
 
     let finalSubject = subject;
-    if (category === 'player') finalSubject = `Report: ${violatorName}`;
-    if (category === 'donate') finalSubject = `Billing: ${amount}₽`;
-    if (category === 'tech') finalSubject = `Bug: ${subject}`;
+    if (category === 'player') finalSubject = `Жалоба: ${violatorName}`;
+    if (category === 'donate') finalSubject = `Донат: ${amount}₽`;
+    if (category === 'tech') finalSubject = `Баг: ${subject}`;
 
     const newTicket: Ticket = {
       id: Math.random().toString(36).substr(2, 9),
-      subject: finalSubject || 'New Ticket',
+      subject: finalSubject || 'Новое обращение',
       status: 'pending',
       date: new Date().toLocaleDateString('ru-RU'),
       category
@@ -80,15 +80,15 @@ const Tickets: React.FC = () => {
               type="text"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
-              placeholder="Brief description of the bug..."
-              className="cursor-input w-full rounded-lg px-4 py-3 text-sm mb-3"
+              placeholder="Краткое описание"
+              className="cursor-input w-full rounded-xl px-4 py-3.5 text-sm mb-3"
             />
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Steps to reproduce..."
+              placeholder="Шаги воспроизведения..."
               rows={5}
-              className="cursor-input w-full rounded-lg px-4 py-3 text-sm resize-none"
+              className="cursor-input w-full rounded-xl px-4 py-3.5 text-sm resize-none"
             />
           </>
         );
@@ -99,29 +99,29 @@ const Tickets: React.FC = () => {
               type="text"
               value={violatorName}
               onChange={(e) => setViolatorName(e.target.value)}
-              placeholder="Violator nickname"
-              className="cursor-input w-full rounded-lg px-4 py-3 text-sm mb-3"
+              placeholder="Ник нарушителя"
+              className="cursor-input w-full rounded-xl px-4 py-3.5 text-sm mb-3"
             />
             <input
               type="text"
               value={rule}
               onChange={(e) => setRule(e.target.value)}
-              placeholder="Rule broken"
-              className="cursor-input w-full rounded-lg px-4 py-3 text-sm mb-3"
+              placeholder="Нарушенное правило"
+              className="cursor-input w-full rounded-xl px-4 py-3.5 text-sm mb-3"
             />
             <input
               type="text"
               value={proofLink}
               onChange={(e) => setProofLink(e.target.value)}
-              placeholder="Proof link (Imgur/YouTube)"
-              className="cursor-input w-full rounded-lg px-4 py-3 text-sm mb-3"
+              placeholder="Ссылка на доказательства"
+              className="cursor-input w-full rounded-xl px-4 py-3.5 text-sm mb-3"
             />
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Additional comments..."
+              placeholder="Комментарий..."
               rows={3}
-              className="cursor-input w-full rounded-lg px-4 py-3 text-sm resize-none"
+              className="cursor-input w-full rounded-xl px-4 py-3.5 text-sm resize-none"
             />
           </>
         );
@@ -132,22 +132,22 @@ const Tickets: React.FC = () => {
               type="text"
               value={transactionId}
               onChange={(e) => setTransactionId(e.target.value)}
-              placeholder="Transaction ID / Receipt #"
-              className="cursor-input w-full rounded-lg px-4 py-3 text-sm mb-3"
+              placeholder="ID транзакции / Чек"
+              className="cursor-input w-full rounded-xl px-4 py-3.5 text-sm mb-3"
             />
             <input
               type="number"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              placeholder="Amount (₽)"
-              className="cursor-input w-full rounded-lg px-4 py-3 text-sm mb-3"
+              placeholder="Сумма (₽)"
+              className="cursor-input w-full rounded-xl px-4 py-3.5 text-sm mb-3"
             />
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Describe the issue..."
+              placeholder="Описание проблемы..."
               rows={4}
-              className="cursor-input w-full rounded-lg px-4 py-3 text-sm resize-none"
+              className="cursor-input w-full rounded-xl px-4 py-3.5 text-sm resize-none"
             />
           </>
         );
@@ -158,15 +158,15 @@ const Tickets: React.FC = () => {
               type="text"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
-              placeholder="Subject"
-              className="cursor-input w-full rounded-lg px-4 py-3 text-sm mb-3"
+              placeholder="Тема обращения"
+              className="cursor-input w-full rounded-xl px-4 py-3.5 text-sm mb-3"
             />
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Details..."
+              placeholder="Подробное описание..."
               rows={5}
-              className="cursor-input w-full rounded-lg px-4 py-3 text-sm resize-none"
+              className="cursor-input w-full rounded-xl px-4 py-3.5 text-sm resize-none"
             />
           </>
         );
@@ -174,28 +174,28 @@ const Tickets: React.FC = () => {
   };
 
   return (
-    <div className="w-full min-h-screen pb-24 pt-8 px-6 bg-black">
+    <div className="w-full min-h-screen pb-24 pt-8 px-6 bg-black animate-fade-in">
       <div className="max-w-md mx-auto">
         
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-xl font-medium text-white tracking-tight">Support</h1>
-          <div className="flex bg-white/5 rounded-lg p-0.5 border border-white/10">
+          <h1 className="text-xl font-medium text-white tracking-tight">Поддержка</h1>
+          <div className="flex bg-zinc-900 rounded-lg p-1 border border-white/5">
             <button
               onClick={() => setActiveTab('new')}
               className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                activeTab === 'new' ? 'bg-white text-black shadow-sm' : 'text-white/50 hover:text-white'
+                activeTab === 'new' ? 'bg-white text-black shadow-sm' : 'text-zinc-500 hover:text-white'
               }`}
             >
-              New Ticket
+              Новое
             </button>
             <button
               onClick={() => setActiveTab('list')}
               className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                activeTab === 'list' ? 'bg-white text-black shadow-sm' : 'text-white/50 hover:text-white'
+                activeTab === 'list' ? 'bg-white text-black shadow-sm' : 'text-zinc-500 hover:text-white'
               }`}
             >
-              History
+              История
             </button>
           </div>
         </div>
@@ -203,9 +203,9 @@ const Tickets: React.FC = () => {
         {activeTab === 'new' ? (
           <form onSubmit={handleSubmit} className="space-y-4 animate-fade-in">
             {showSuccess && (
-              <div className="bg-green-500/10 border border-green-500/20 text-green-400 p-4 rounded-xl flex items-center gap-3 text-sm">
+              <div className="bg-white text-black p-4 rounded-xl flex items-center gap-3 text-sm font-medium animate-scale-in">
                 <Check size={16} />
-                <span>Ticket created successfully.</span>
+                <span>Отправлено успешно</span>
               </div>
             )}
 
@@ -216,14 +216,14 @@ const Tickets: React.FC = () => {
                   key={cat.id}
                   type="button"
                   onClick={() => setCategory(cat.id)}
-                  className={`p-4 rounded-xl border transition-all flex flex-col items-start gap-3 active:scale-[0.98] ${
+                  className={`p-4 rounded-xl border transition-all flex flex-col items-start gap-3 active:scale-[0.98] group ${
                     category === cat.id 
                       ? 'bg-white text-black border-white' 
-                      : 'bg-transparent border-white/10 hover:bg-white/5'
+                      : 'bg-transparent border-white/10 hover:bg-white/5 text-zinc-500'
                   }`}
                 >
-                  <cat.icon size={18} className={category === cat.id ? 'text-black' : 'text-white/70'} />
-                  <span className={`text-xs font-medium ${category === cat.id ? 'text-black' : 'text-white/70'}`}>
+                  <cat.icon size={18} className={category === cat.id ? 'text-black' : 'text-zinc-500 group-hover:text-white'} />
+                  <span className={`text-xs font-medium ${category === cat.id ? 'text-black' : 'text-zinc-500 group-hover:text-white'}`}>
                     {cat.label}
                   </span>
                 </button>
@@ -237,17 +237,17 @@ const Tickets: React.FC = () => {
                 
                 <button
                   type="submit"
-                  className="w-full bg-white hover:bg-zinc-200 text-black font-medium py-3 rounded-lg flex items-center justify-center gap-2 transition-all active:scale-[0.98] mt-4"
+                  className="w-full bg-white hover:bg-zinc-200 text-black font-medium py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98] mt-4 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
                 >
                   <Send size={14} />
-                  <span>Submit Ticket</span>
+                  <span>Отправить обращение</span>
                 </button>
               </div>
             )}
             
             {!category && (
-              <div className="text-center py-12 text-white/30 text-xs font-mono">
-                SELECT_CATEGORY_TO_PROCEED_
+              <div className="text-center py-12">
+                <p className="text-zinc-600 text-xs font-mono">ВЫБЕРИТЕ КАТЕГОРИЮ</p>
               </div>
             )}
 
@@ -255,13 +255,9 @@ const Tickets: React.FC = () => {
         ) : (
           <div className="space-y-3 animate-fade-in">
             {tickets.map((ticket) => (
-              <div key={ticket.id} className="cursor-card rounded-xl p-4 flex items-center justify-between group">
+              <div key={ticket.id} className="cursor-card rounded-xl p-4 flex items-center justify-between group hover:border-white/20">
                 <div className="flex items-center gap-4">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center border ${
-                    ticket.category === 'tech' ? 'bg-red-500/10 border-red-500/20 text-red-400' :
-                    ticket.category === 'donate' ? 'bg-green-500/10 border-green-500/20 text-green-400' :
-                    'bg-blue-500/10 border-blue-500/20 text-blue-400'
-                  }`}>
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-zinc-900 border border-white/5 text-zinc-400">
                     {ticket.category === 'tech' ? <Bug size={14} /> :
                      ticket.category === 'donate' ? <CreditCard size={14} /> :
                      ticket.category === 'player' ? <UserX size={14} /> :
@@ -269,26 +265,34 @@ const Tickets: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-sm font-medium text-white leading-tight max-w-[150px] truncate mb-0.5">{ticket.subject}</h3>
-                    <span className="text-xs text-white/30 font-mono">{ticket.id} • {ticket.date}</span>
+                    <span className="text-xs text-zinc-600 font-mono tracking-tight">{ticket.id} • {ticket.date}</span>
                   </div>
                 </div>
                 
-                <div className={`px-2 py-1 rounded text-[10px] font-medium uppercase tracking-wider border ${
-                  ticket.status === 'resolved' ? 'bg-green-500/10 border-green-500/20 text-green-400' : 
-                  ticket.status === 'rejected' ? 'bg-red-500/10 border-red-500/20 text-red-400' : 
-                  'bg-yellow-500/10 border-yellow-500/20 text-yellow-400'
-                }`}>
-                  {ticket.status}
+                <div className="flex items-center gap-2">
+                   <div className={`w-2 h-2 rounded-full ${
+                      ticket.status === 'resolved' ? 'bg-white shadow-[0_0_5px_white]' : 
+                      ticket.status === 'rejected' ? 'bg-red-500' : 
+                      'bg-zinc-600'
+                   }`}></div>
+                   <span className={`text-[10px] font-medium uppercase tracking-wider ${
+                      ticket.status === 'resolved' ? 'text-white' : 
+                      ticket.status === 'rejected' ? 'text-zinc-500' : 
+                      'text-zinc-500'
+                   }`}>
+                      {ticket.status === 'resolved' ? 'Решено' : 
+                       ticket.status === 'rejected' ? 'Закрыто' : 'В работе'}
+                   </span>
                 </div>
               </div>
             ))}
             
             {tickets.length === 0 && (
-              <div className="text-center py-16">
-                <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center mx-auto mb-4 border border-white/10 text-white/20">
+              <div className="text-center py-24">
+                <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center mx-auto mb-4 border border-white/10 text-white/10">
                    <MessageSquare size={20} />
                 </div>
-                <p className="text-white/30 text-xs font-mono">NO_TICKETS_FOUND</p>
+                <p className="text-zinc-700 text-xs font-mono">НЕТ ОБРАЩЕНИЙ</p>
               </div>
             )}
           </div>

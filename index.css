@@ -13,7 +13,7 @@
   --color-primary: #ffffff;
   --color-primary-foreground: #000000;
 
-  --color-accent: #37996b; /* Cursor-like Green/Blue tint sometimes seen, or just use white */
+  --color-accent: #37996b;
   --color-accent-glow: rgba(55, 153, 107, 0.5);
 
   --color-muted: #888888;
@@ -22,9 +22,10 @@
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  --animate-fade-in: fade-in 0.4s ease-out forwards;
-  --animate-slide-up: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  --animate-glow: glow 2s ease-in-out infinite alternate;
+  --animate-fade-in: fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-slide-up: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-scale-in: scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-pulse-slow: pulse-slow 3s infinite ease-in-out;
 
   @keyframes fade-in {
     from { opacity: 0; }
@@ -32,13 +33,18 @@
   }
 
   @keyframes slide-up {
-    from { transform: translateY(10px); opacity: 0; }
+    from { transform: translateY(20px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
   }
+  
+  @keyframes scale-in {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
 
-  @keyframes glow {
-    from { box-shadow: 0 0 10px -5px var(--color-accent); }
-    to { box-shadow: 0 0 20px -5px var(--color-accent); }
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
   }
 }
 
@@ -48,43 +54,49 @@ body {
   color: var(--color-primary);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   opacity: 0;
-  animation: fade-in 0.3s ease-out forwards;
+  animation: fade-in 0.5s ease-out forwards;
 }
 
 /* Utilities */
 @layer utilities {
   .cursor-card {
-    background: rgba(10, 10, 10, 0.6);
-    backdrop-filter: blur(12px);
+    background: #050505;
     border: 1px solid var(--color-border);
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .cursor-card:hover {
     border-color: var(--color-border-hover);
-    background: rgba(20, 20, 20, 0.8);
+    background: #0a0a0a;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
   }
 
   .cursor-button {
     background: var(--color-primary);
     color: var(--color-primary-foreground);
     border: 1px solid transparent;
-    transition: all 0.2s;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
   
   .cursor-button:hover {
     background: #e5e5e5;
     transform: translateY(-1px);
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+  }
+
+  .cursor-button:active {
+    transform: scale(0.98);
   }
 
   .cursor-button-secondary {
     background: transparent;
     border: 1px solid var(--color-border);
     color: var(--color-muted);
-    transition: all 0.2s;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .cursor-button-secondary:hover {
@@ -94,28 +106,37 @@ body {
   }
 
   .cursor-input {
-    background: #050505;
+    background: #0A0A0A;
     border: 1px solid var(--color-border);
     color: white;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
   }
 
   .cursor-input:focus {
     outline: none;
-    border-color: #333;
-    background: #0a0a0a;
+    border-color: #404040;
+    background: #0f0f0f;
+    box-shadow: 0 0 0 1px #404040;
   }
 
-  /* Text Gradients */
+  .glass-panel {
+    background: rgba(5, 5, 5, 0.7);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
   .text-gradient {
     background: linear-gradient(to bottom right, #ffffff, #888888);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
+  
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
