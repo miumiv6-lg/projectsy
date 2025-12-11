@@ -57,7 +57,7 @@ const AppContent: React.FC = () => {
       onContextMenu={(e) => e.preventDefault()}
     >
       <main className="flex-grow flex flex-col w-full max-w-[100vw] overflow-x-hidden">
-        <PageTransition key={currentPage}>
+        <PageTransition>
           {renderPage()}
         </PageTransition>
       </main>
