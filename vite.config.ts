@@ -28,7 +28,6 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: {
           main: path.resolve(__dirname, 'index.html'),
-          gmod: path.resolve(__dirname, 'gmod.html'),
         },
       },
     },
