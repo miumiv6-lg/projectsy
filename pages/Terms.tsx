@@ -32,7 +32,7 @@ const Terms: React.FC<TermsProps> = ({ setPage }) => {
           <div className="flex items-center gap-4 text-sm text-zinc-500 font-sans">
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-full bg-zinc-800"></div>
-              <span>Metro Portal Team</span>
+              <span>Project SY Team</span>
             </div>
             <span>•</span>
             <time>11 Декабря, 2025</time>
@@ -42,12 +42,12 @@ const Terms: React.FC<TermsProps> = ({ setPage }) => {
         {/* Article Content */}
         <article className="prose prose-invert prose-lg max-w-none text-zinc-300 font-serif leading-relaxed">
           <p className="text-xl text-white font-medium mb-8 leading-relaxed font-sans">
-            Добро пожаловать в Metro Portal. Используя наши сервисы, вы соглашаетесь с нижеизложенными правилами. Пожалуйста, внимательно ознакомьтесь с ними перед совершением покупок.
+            Добро пожаловать в Project SY. Используя наши сервисы, вы соглашаетесь с нижеизложенными правилами. Пожалуйста, внимательно ознакомьтесь с ними перед совершением покупок.
           </p>
 
           <h3 className="text-2xl font-bold text-white mt-12 mb-6 font-sans">1. Подписка SYSub Premium</h3>
           <p>
-            Подписка предоставляет доступ к дополнительному контенту на сервере Metro. Мы гарантируем работоспособность заявленных функций на момент покупки. Администрация оставляет за собой право изменять состав бонусов с предварительным уведомлением в новостном канале.
+            Подписка предоставляет доступ к дополнительному контенту на сервере Project SY. Мы гарантируем работоспособность заявленных функций на момент покупки. Администрация оставляет за собой право изменять состав бонусов с предварительным уведомлением в новостном канале.
           </p>
           <p>
             Автоматическое продление происходит каждые 30 дней. Отменить подписку можно в любой момент через настройки профиля или обратившись в поддержку.
@@ -81,7 +81,7 @@ const Terms: React.FC<TermsProps> = ({ setPage }) => {
           <hr className="border-white/10 my-12" />
 
           <p className="text-sm text-zinc-600 font-sans text-center">
-            Metro Portal © 2025. Все права защищены.<br/>
+            Project SY © 2025. Все права защищены.<br/>
             Не является публичной офертой.
           </p>
         </article>

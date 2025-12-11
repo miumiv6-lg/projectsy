@@ -29,7 +29,7 @@ if (token) {
     const text = msg.text;
 
     if (text === '/start') {
-      await bot.sendMessage(chatId, 'Добро пожаловать в Metro Portal! 🚇\nНажмите на кнопку ниже, чтобы открыть приложение.', {
+      await bot.sendMessage(chatId, 'Добро пожаловать в Project SY! 🚇\nНажмите на кнопку ниже, чтобы открыть приложение.', {
         reply_markup: {
           inline_keyboard: [
             [{ text: '🚇 Открыть приложение', web_app: { url: webAppUrl } }]
