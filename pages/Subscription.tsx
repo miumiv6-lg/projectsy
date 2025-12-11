@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Page } from '../types';
 import { ArrowLeft, Check, Crown, CreditCard, Clock, Info, AlertTriangle, X } from 'lucide-react';
+import { sessionState } from '../utils/sessionState';
 
 interface SubscriptionProps {
   setPage: (page: Page) => void;
@@ -10,6 +11,13 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
   const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'gmdonate'>('stripe');
   const [trialActivated, setTrialActivated] = useState(false);
   const [showTrialRules, setShowTrialRules] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(sessionState.isSubscribed);
+
+  const handleSubscribe = () => {
+    // Fake subscription logic
+    sessionState.isSubscribed = true;
+    setIsSubscribed(true);
+  };
 
   const plan = {
     name: 'SYSub',
@@ -70,55 +78,67 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
 
             {/* Actions */}
             <div className="space-y-3">
-              {!trialActivated ? (
-                <button 
-                  onClick={() => setShowTrialRules(true)}
-                  className="w-full py-3 rounded-xl text-sm font-bold text-white bg-[#1c1f26] border border-green-500/30 hover:border-green-500/60 hover:bg-green-500/10 transition-all flex items-center justify-center gap-2 group"
-                >
-                  <Clock size={16} className="text-green-500 group-hover:scale-110 transition-transform" />
-                  <span className="text-green-400">Попробовать бесплатно (5 дней)</span>
-                </button>
+              {isSubscribed ? (
+                <div className="w-full py-4 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-green-600 to-emerald-600 flex items-center justify-center gap-2 shadow-lg shadow-green-900/20">
+                  <Check size={20} />
+                  <span>Подписка активна</span>
+                </div>
               ) : (
-                <div className="w-full py-3 rounded-xl text-sm font-bold text-green-400 bg-green-500/10 border border-green-500/20 flex items-center justify-center gap-2">
-                  <Check size={16} />
-                  <span>Пробный период активирован</span>
-                </div>
-              )}
-
-              {!trialActivated && (
-                <div className="pt-2 space-y-3">
-                  <button className="w-full py-3.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 shadow-lg shadow-blue-900/20 transition-all transform hover:scale-[1.02] active:scale-[0.98]">
-                    Оформить подписку
-                  </button>
-                  
-                  <div className="bg-[#1c1f26] rounded-xl p-3 border border-[#2d313a]">
-                    <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2 text-center">Способ оплаты</div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <button 
-                        onClick={() => setPaymentMethod('stripe')}
-                        className={`p-2.5 rounded-lg border flex items-center justify-center gap-2 transition-all ${
-                          paymentMethod === 'stripe' 
-                            ? 'bg-white text-black border-white shadow-md' 
-                            : 'bg-[#181a20] border-[#2d313a] text-gray-400 hover:border-gray-600'
-                        }`}
-                      >
-                        <CreditCard size={14} />
-                        <span className="text-xs font-bold">Stripe</span>
-                      </button>
-                      <button 
-                        onClick={() => setPaymentMethod('gmdonate')}
-                        className={`p-2.5 rounded-lg border flex items-center justify-center gap-2 transition-all ${
-                          paymentMethod === 'gmdonate' 
-                            ? 'bg-blue-600 text-white border-blue-600 shadow-md' 
-                            : 'bg-[#181a20] border-[#2d313a] text-gray-400 hover:border-gray-600'
-                        }`}
-                      >
-                        <div className="w-4 h-4 bg-white rounded flex items-center justify-center text-[9px] font-bold text-blue-600">G</div>
-                        <span className="text-xs font-bold">GM Donate</span>
-                      </button>
+                <>
+                  {!trialActivated ? (
+                    <button 
+                      onClick={() => setShowTrialRules(true)}
+                      className="w-full py-3 rounded-xl text-sm font-bold text-white bg-[#1c1f26] border border-green-500/30 hover:border-green-500/60 hover:bg-green-500/10 transition-all flex items-center justify-center gap-2 group"
+                    >
+                      <Clock size={16} className="text-green-500 group-hover:scale-110 transition-transform" />
+                      <span className="text-green-400">Попробовать бесплатно (5 дней)</span>
+                    </button>
+                  ) : (
+                    <div className="w-full py-3 rounded-xl text-sm font-bold text-green-400 bg-green-500/10 border border-green-500/20 flex items-center justify-center gap-2">
+                      <Check size={16} />
+                      <span>Пробный период активирован</span>
                     </div>
-                  </div>
-                </div>
+                  )}
+
+                  {!trialActivated && (
+                    <div className="pt-2 space-y-3">
+                      <button 
+                        onClick={handleSubscribe}
+                        className="w-full py-3.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 shadow-lg shadow-blue-900/20 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+                      >
+                        Оформить подписку
+                      </button>
+                      
+                      <div className="bg-[#1c1f26] rounded-xl p-3 border border-[#2d313a]">
+                        <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2 text-center">Способ оплаты</div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <button 
+                            onClick={() => setPaymentMethod('stripe')}
+                            className={`p-2.5 rounded-lg border flex items-center justify-center gap-2 transition-all ${
+                              paymentMethod === 'stripe' 
+                                ? 'bg-white text-black border-white shadow-md' 
+                                : 'bg-[#181a20] border-[#2d313a] text-gray-400 hover:border-gray-600'
+                            }`}
+                          >
+                            <CreditCard size={14} />
+                            <span className="text-xs font-bold">Stripe</span>
+                          </button>
+                          <button 
+                            onClick={() => setPaymentMethod('gmdonate')}
+                            className={`p-2.5 rounded-lg border flex items-center justify-center gap-2 transition-all ${
+                              paymentMethod === 'gmdonate' 
+                                ? 'bg-blue-600 text-white border-blue-600 shadow-md' 
+                                : 'bg-[#181a20] border-[#2d313a] text-gray-400 hover:border-gray-600'
+                            }`}
+                          >
+                            <div className="w-4 h-4 bg-white rounded flex items-center justify-center text-[9px] font-bold text-blue-600">G</div>
+                            <span className="text-xs font-bold">GM Donate</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>
@@ -164,6 +184,9 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
                   onClick={() => {
                     setShowTrialRules(false);
                     setTrialActivated(true);
+                    // Also activate subscription for trial
+                    sessionState.isSubscribed = true;
+                    setIsSubscribed(true);
                   }}
                   className="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-xl transition-colors mt-2"
                 >

@@ -2,19 +2,17 @@ import React, { useState } from 'react';
 import { Page } from '../types';
 import { ShoppingBag, Package, Star, ChevronRight, Plus, History, CreditCard, Box, Gift, Lock } from 'lucide-react';
 import CaseOpeningModal from '../components/CaseOpeningModal';
+import { sessionState } from '../utils/sessionState';
 
 interface ShopProps {
   setPage?: (page: Page) => void;
 }
 
-// Session storage for daily case (persists until app reload)
-let sessionDailyCaseClaimed = false;
-
 const Shop: React.FC<ShopProps> = ({ setPage }) => {
   const [showTopUp, setShowTopUp] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [isCaseModalOpen, setIsCaseModalOpen] = useState(false);
-  const [dailyCaseClaimed, setDailyCaseClaimed] = useState(sessionDailyCaseClaimed);
+  const [dailyCaseClaimed, setDailyCaseClaimed] = useState(sessionState.dailyCaseClaimed);
 
   const handleOpenCase = () => {
     if (dailyCaseClaimed) return;
@@ -25,7 +23,7 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
     setIsCaseModalOpen(false);
     // Mark as claimed after closing
     setDailyCaseClaimed(true);
-    sessionDailyCaseClaimed = true;
+    sessionState.dailyCaseClaimed = true;
   };
 
   if (showHistory) {
@@ -65,7 +63,7 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
                   <span className="text-[10px] text-gray-500">05.12.2025 • Подписка</span>
                 </div>
               </div>
-              <span className="text-sm font-bold text-white">-150 SY</span>
+              <span className="text-sm font-bold text-white">-100 SY</span>
             </div>
             
             <div className="mt-4 p-4 bg-blue-900/10 border border-blue-500/20 rounded-xl text-center">
