@@ -48,15 +48,15 @@ const Fnaf: React.FC<FnafProps> = ({ setPage }) => {
       <div className="relative z-10 p-6 pb-24 max-w-md mx-auto">
         <button 
           onClick={() => setPage(Page.SHOP)}
-          className="flex items-center gap-2 text-red-500 hover:text-white transition-colors mb-8 text-xs font-bold uppercase tracking-widest border border-red-900/30 px-4 py-2 rounded-lg bg-red-950/10"
+          className="flex items-center gap-2 text-white/50 hover:text-white transition-colors mb-8 text-xs font-bold uppercase tracking-widest border border-white/10 px-4 py-2 rounded-lg bg-black hover:bg-white/5"
         >
           <ArrowLeft size={14} />
-          <span>Exit System</span>
+          <span>Abort</span>
         </button>
 
-        <div className="border border-red-900/30 rounded-3xl p-1 mb-8 relative group bg-red-950/5">
+        <div className="cursor-card rounded-2xl p-1 mb-8 relative group border-red-900/50">
           <div className="absolute -top-3 left-6 bg-black px-2 text-red-500 text-[10px] tracking-[0.3em] font-bold uppercase">Security Breach</div>
-          <div className="p-6 relative overflow-hidden rounded-2xl">
+          <div className="p-6 relative overflow-hidden rounded-xl">
              <div className="absolute top-0 right-0 p-4 opacity-10">
                 <AlertTriangle size={64} className="text-red-600" />
              </div>
@@ -64,40 +64,40 @@ const Fnaf: React.FC<FnafProps> = ({ setPage }) => {
              <h1 className="text-4xl font-black text-white mb-2 tracking-tighter text-red-600">
                FNAF
              </h1>
-             <p className="text-zinc-400 text-sm leading-relaxed max-w-[80%]">
+             <p className="text-white/40 text-sm leading-relaxed max-w-[80%] font-sans">
                Limited time event. Exclusive skins from the Fazbear Universe.
              </p>
           </div>
         </div>
 
         <div className="grid gap-6 mb-8">
-          <div className="border border-zinc-800 bg-zinc-900/50 rounded-3xl p-5">
-            <div className="aspect-square bg-zinc-900 rounded-2xl mb-4 relative overflow-hidden border border-zinc-800 group">
-              <img src="/images/fnaf/freddy.webp" alt="Freddy" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 grayscale group-hover:grayscale-0" />
+          <div className="cursor-card rounded-2xl p-5">
+            <div className="aspect-square bg-zinc-900 rounded-xl mb-4 relative overflow-hidden border border-white/5 group">
+              <img src="/images/fnaf/freddy.webp" alt="Freddy" className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500 grayscale group-hover:grayscale-0" />
               <div className="absolute bottom-3 right-3 text-[10px] text-red-400 font-bold bg-black/90 px-3 py-1.5 rounded-full border border-red-900/30">GLAMROCK FREDDY</div>
             </div>
-            <h3 className="text-xl text-white font-bold mb-1 tracking-tight">Freddy Fazbear</h3>
-            <p className="text-xs text-zinc-500 mb-5 leading-relaxed">The face of Fazbear Entertainment. Now available as a playable skin.</p>
+            <h3 className="text-xl text-white font-medium mb-1 tracking-tight">Freddy Fazbear</h3>
+            <p className="text-xs text-white/40 mb-5 leading-relaxed font-sans">The face of Fazbear Entertainment. Now available as a playable skin.</p>
             <button className="w-full bg-red-600 hover:bg-red-500 text-white py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all shadow-lg shadow-red-900/20 active:scale-95">
               Purchase - 300 SY
             </button>
           </div>
 
-          <div className="border border-zinc-800 bg-zinc-900/50 rounded-3xl p-5 flex flex-col">
-            <div className="flex items-center gap-2 mb-4 text-green-500 border-b border-zinc-800 pb-3">
+          <div className="cursor-card rounded-2xl p-5 flex flex-col">
+            <div className="flex items-center gap-2 mb-4 text-green-500 border-b border-white/5 pb-3">
               <Terminal size={14} />
               <span className="text-[10px] tracking-widest font-bold">SYSTEM LOG</span>
             </div>
             <div 
               ref={terminalRef}
-              className="flex-grow bg-black rounded-xl p-4 font-mono text-[10px] overflow-y-auto h-[150px] border border-zinc-800 text-green-500/80"
+              className="flex-grow bg-black rounded-xl p-4 font-mono text-[10px] overflow-y-auto h-[150px] border border-white/5 text-green-500/80"
             >
               {/* Terminal output will appear here */}
             </div>
           </div>
         </div>
 
-        <div className="text-center text-[8px] text-zinc-700 uppercase tracking-[0.2em] font-sans">
+        <div className="text-center text-[8px] text-white/20 uppercase tracking-[0.2em] font-sans">
           Fazbear Entertainment © 2025
         </div>
 

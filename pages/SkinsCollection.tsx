@@ -43,33 +43,33 @@ const SkinsCollection: React.FC<SkinsCollectionProps> = ({ setPage }) => {
   const currentSkins = skins[activeCategory as keyof typeof skins];
 
   return (
-    <div className="w-full min-h-screen pt-6 pb-24 px-4 bg-zinc-950 flex flex-col">
+    <div className="w-full min-h-screen pt-8 pb-24 px-6 bg-black flex flex-col">
       <div className="max-w-md mx-auto w-full flex-grow flex flex-col">
         
         {/* Header */}
-        <div className="flex items-center gap-3 mb-8">
+        <div className="flex items-center gap-4 mb-8">
           <button 
             onClick={() => setPage(Page.SHOP)}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-lg border border-white/10 text-white/50 hover:text-white hover:border-white/20 transition-all"
           >
-            <ArrowLeft size={20} strokeWidth={1.5} />
+            <ArrowLeft size={16} />
           </button>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Коллекция</h1>
+          <h1 className="text-xl font-medium text-white tracking-tight">Коллекция</h1>
         </div>
 
-        {/* Category Tabs */}
+        {/* Category Tabs (Minimalist) */}
         <div className="flex gap-2 overflow-x-auto pb-6 mb-2 scrollbar-hide no-scrollbar">
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl border whitespace-nowrap transition-all text-sm font-medium ${
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-md border text-xs font-medium transition-all ${
                 activeCategory === cat.id
                   ? 'bg-white text-black border-white'
-                  : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white'
+                  : 'bg-transparent border-white/10 text-white/50 hover:text-white hover:border-white/30'
               }`}
             >
-              <cat.icon size={16} strokeWidth={1.5} />
+              <cat.icon size={12} />
               <span>{cat.name}</span>
             </button>
           ))}
@@ -80,37 +80,37 @@ const SkinsCollection: React.FC<SkinsCollectionProps> = ({ setPage }) => {
           {currentSkins.map((skin) => (
             <div 
               key={skin.id}
-              className="group flex flex-col p-3 rounded-3xl bg-zinc-900 border border-zinc-800 active:scale-[0.98] transition-all"
+              className="cursor-card group flex flex-col p-3 rounded-xl hover:bg-white/5"
             >
               {/* Preview Placeholder */}
-              <div className={`aspect-square w-full rounded-2xl ${skin.image} mb-3 relative overflow-hidden`}>
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+              <div className={`aspect-square w-full rounded-lg ${skin.image} mb-3 relative overflow-hidden ring-1 ring-white/5`}>
+                <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-300"></div>
                 {isSubscribed && (
-                   <div className="absolute top-2 right-2 bg-black/40 backdrop-blur-md text-white p-1.5 rounded-lg">
-                      <Crown size={12} fill="currentColor" className="text-yellow-400" />
+                   <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white p-1 rounded-md border border-white/10">
+                      <Crown size={10} fill="currentColor" className="text-yellow-400" />
                    </div>
                 )}
               </div>
               
               <div className="mb-3">
                 <div className="flex items-center justify-between mb-1">
-                   <h3 className="font-semibold text-white text-sm truncate">{skin.name}</h3>
+                   <h3 className="font-medium text-white text-sm truncate">{skin.name}</h3>
                 </div>
-                <div className="flex items-center gap-2">
-                   <span className={`w-1.5 h-1.5 rounded-full ${
-                      skin.rarity === 'legendary' ? 'bg-yellow-500' :
-                      skin.rarity === 'epic' ? 'bg-purple-500' :
+                <div className="flex items-center gap-1.5">
+                   <span className={`w-1 h-1 rounded-full ${
+                      skin.rarity === 'legendary' ? 'bg-yellow-500 shadow-[0_0_5px_rgba(234,179,8,0.5)]' :
+                      skin.rarity === 'epic' ? 'bg-purple-500 shadow-[0_0_5px_rgba(168,85,247,0.5)]' :
                       skin.rarity === 'rare' ? 'bg-blue-500' :
                       'bg-zinc-500'
                    }`}></span>
-                   <span className="text-xs text-zinc-500 capitalize">{skin.rarity}</span>
+                   <span className="text-[10px] text-white/40 capitalize font-mono tracking-tight">{skin.rarity}</span>
                 </div>
               </div>
 
               {/* Action Button */}
-              <button className={`w-full py-2.5 rounded-xl font-semibold text-xs flex items-center justify-center gap-2 transition-all mt-auto ${
+              <button className={`w-full py-2 rounded-lg font-medium text-xs flex items-center justify-center gap-2 transition-all mt-auto ${
                 isSubscribed
-                  ? 'bg-zinc-800 text-white hover:bg-zinc-700'
+                  ? 'bg-white/10 text-white hover:bg-white/20'
                   : 'bg-white text-black hover:bg-zinc-200'
               }`}>
                 {isSubscribed ? (
