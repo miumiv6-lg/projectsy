@@ -40,6 +40,7 @@ export enum Page {
   SUBSCRIPTION = 'subscription',
   FNAF = 'fnaf',
   TERMS = 'terms',
+  SKINS = 'skins',
 }
 
 // Роли пользователей

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Page } from '../types';
-import { ShoppingBag, Package, Star, ChevronRight, Plus, History, CreditCard } from 'lucide-react';
+import { ShoppingBag, Package, Star, ChevronRight, Plus, History, CreditCard, Box, Gift, Lock } from 'lucide-react';
 
 interface ShopProps {
   setPage?: (page: Page) => void;
@@ -9,13 +9,29 @@ interface ShopProps {
 const Shop: React.FC<ShopProps> = ({ setPage }) => {
   const [showTopUp, setShowTopUp] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const [dailyReward, setDailyReward] = useState<{ claimed: boolean, index: number | null, reward: string | null }>({ claimed: false, index: null, reward: null });
 
-  // Removed filters and search state as requested
-  
-  // Only SYSub remains, but it's displayed in the banner.
-  // The grid items list is empty as requested ("remove list of items... except subscription").
-  // Since subscription is in the banner, the items list is effectively empty for the grid.
-  const items: any[] = []; 
+  useEffect(() => {
+    const saved = localStorage.getItem('daily_reward');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      const today = new Date().toDateString();
+      if (parsed.date === today) {
+        setDailyReward({ claimed: true, index: parsed.index, reward: parsed.reward });
+      }
+    }
+  }, []);
+
+  const handleDailyClick = (index: number) => {
+    if (dailyReward.claimed) return;
+
+    const rewards = ['-10% на скины', '-20% на скины', '-5% на донат', '10 SY', '50 SY'];
+    const randomReward = rewards[Math.floor(Math.random() * rewards.length)];
+    
+    const newState = { claimed: true, index, reward: randomReward };
+    setDailyReward(newState);
+    localStorage.setItem('daily_reward', JSON.stringify({ date: new Date().toDateString(), ...newState }));
+  }; 
 
   if (showHistory) {
     return (
@@ -145,7 +161,7 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
         {/* Featured Banner (SYSub) */}
         <div 
           onClick={() => setPage?.(Page.SUBSCRIPTION)}
-          className="relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-900/20 to-[#181a20] border border-blue-500/20 p-4 mb-6 cursor-pointer group"
+          className="relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-900/20 to-[#181a20] border border-blue-500/20 p-4 mb-4 cursor-pointer group"
         >
           <div className="absolute right-0 top-0 h-full w-1/3 bg-gradient-to-l from-blue-600/10 to-transparent"></div>
           <div className="relative z-10 flex items-center justify-between">
@@ -163,6 +179,74 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
               <ChevronRight size={20} />
             </div>
           </div>
+        </div>
+
+        {/* Skins Collection Block */}
+        <div 
+          onClick={() => setPage?.(Page.SKINS)}
+          className="bg-[#181a20] border border-[#2d313a] rounded-xl p-4 mb-6 cursor-pointer hover:border-gray-500 transition-all group relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-8 opacity-5 transform rotate-12 scale-150 pointer-events-none">
+            <Box size={100} />
+          </div>
+          <div className="relative z-10 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-[#22252b] rounded-lg flex items-center justify-center text-gray-400 group-hover:text-white transition-colors">
+                <Box size={24} />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-white">Коллекция скинов</h3>
+                <p className="text-xs text-gray-500">Осмотр моделей и покупка</p>
+              </div>
+            </div>
+            <ChevronRight size={20} className="text-gray-600 group-hover:text-white transition-colors" />
+          </div>
+        </div>
+
+        {/* Daily Discounts */}
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-3 px-1">
+            <Gift size={16} className="text-yellow-500" />
+            <h3 className="font-bold text-white text-sm">Ежедневная скидка</h3>
+          </div>
+          <div className="grid grid-cols-5 gap-2">
+            {[0, 1, 2, 3, 4].map((index) => {
+              const isClaimed = dailyReward.claimed;
+              const isSelected = dailyReward.index === index;
+              
+              return (
+                <button
+                  key={index}
+                  disabled={isClaimed}
+                  onClick={() => handleDailyClick(index)}
+                  className={`aspect-square rounded-xl border flex flex-col items-center justify-center relative overflow-hidden transition-all ${
+                    isSelected 
+                      ? 'bg-yellow-500/20 border-yellow-500' 
+                      : isClaimed 
+                        ? 'bg-[#181a20] border-[#2d313a] opacity-50 cursor-not-allowed'
+                        : 'bg-[#181a20] border-[#2d313a] hover:border-yellow-500/50 hover:bg-[#22252b] cursor-pointer'
+                  }`}
+                >
+                  {isSelected ? (
+                    <div className="text-center animate-fade-in p-1">
+                      <span className="text-[10px] font-bold text-yellow-400 leading-tight block">{dailyReward.reward}</span>
+                    </div>
+                  ) : (
+                    <>
+                      {isClaimed ? (
+                        <Lock size={16} className="text-gray-600" />
+                      ) : (
+                        <Gift size={20} className="text-gray-400" />
+                      )}
+                    </>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+          <p className="text-[10px] text-gray-600 text-center mt-2">
+            Нажмите на блок, чтобы получить случайную скидку. Доступно раз в 24 часа.
+          </p>
         </div>
 
         {/* Empty State Message */}
