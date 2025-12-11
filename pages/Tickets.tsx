@@ -6,6 +6,7 @@ interface Message {
   content: string;
   isTicketPrompt?: boolean;
   ticketData?: TicketData;
+  ticketStatus?: 'idle' | 'submitting' | 'submitted';
 }
 
 interface TicketData {
@@ -101,6 +102,7 @@ const Tickets: React.FC = () => {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isTicketReplyLoading, setIsTicketReplyLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const [tickets, setTickets] = useState<Ticket[]>([
@@ -115,7 +117,7 @@ const Tickets: React.FC = () => {
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading || isTicketReplyLoading) return;
 
     const userMessage: Message = { role: 'user', content: input };
     setMessages(prev => [...prev, userMessage]);
@@ -158,7 +160,8 @@ const Tickets: React.FC = () => {
         role: 'assistant', 
         content: aiContent,
         isTicketPrompt: !!ticketData,
-        ticketData
+        ticketData,
+        ticketStatus: ticketData ? 'idle' : undefined
       }]);
 
     } catch (error: any) {
@@ -169,20 +172,45 @@ const Tickets: React.FC = () => {
     }
   };
 
-  const handleCreateTicket = (data: TicketData) => {
+  const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const handleCreateTicket = async (messageIndex: number, data: TicketData) => {
+    setMessages((prev) =>
+      prev.map((m, i) => {
+        if (i !== messageIndex) return m;
+        if (!m.isTicketPrompt || !m.ticketData) return m;
+        if (m.ticketStatus && m.ticketStatus !== 'idle') return m;
+        return { ...m, ticketStatus: 'submitting' };
+      })
+    );
+
+    await sleep(3000);
+
+    const ticketId = Math.random().toString(36).slice(2, 9);
     const newTicket: Ticket = {
-      id: Math.random().toString(36).substr(2, 9),
+      id: ticketId,
       subject: data.subject,
       status: 'pending',
       date: new Date().toLocaleDateString('ru-RU'),
       category: data.category
     };
-    
-    setTickets(prev => [newTicket, ...prev]);
-    setMessages(prev => [...prev, { 
-      role: 'assistant', 
-      content: '✅ Тикет успешно создан! Администратор рассмотрит его в ближайшее время.' 
-    }]);
+
+    setTickets((prev) => [newTicket, ...prev]);
+    setMessages((prev) =>
+      prev.map((m, i) => (i === messageIndex ? { ...m, ticketStatus: 'submitted' } : m))
+    );
+
+    setIsTicketReplyLoading(true);
+    await sleep(1200);
+    setIsTicketReplyLoading(false);
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: 'assistant',
+        content: `✅ Тикет создан и отправлен администрации.\nНомер обращения: #${ticketId}.\nЕсли добавишь доказательства (ссылку/демку/скрин), я могу приложить их к тикету.`
+      }
+    ]);
   };
 
   const getCategoryIcon = (cat: string) => {
@@ -302,10 +330,20 @@ const Tickets: React.FC = () => {
                             <div className="text-xs text-blue-400 font-mono bg-blue-500/10 px-1.5 py-0.5 rounded w-fit">{getCategoryLabel(msg.ticketData.category)}</div>
                           </div>
                           <button
-                            onClick={() => handleCreateTicket(msg.ticketData!)}
-                            className="w-full mt-2 bg-[#ededed] hover:bg-white text-black text-xs font-semibold py-2 rounded-[6px] transition-colors"
+                            onClick={() => handleCreateTicket(idx, msg.ticketData!)}
+                            disabled={msg.ticketStatus !== 'idle'}
+                            className="w-full mt-2 bg-[#ededed] hover:bg-white disabled:bg-[#2a2a2e] disabled:text-zinc-400 text-black text-xs font-semibold py-2 rounded-[6px] transition-colors flex items-center justify-center gap-2"
                           >
-                            Отправить тикет
+                            {msg.ticketStatus === 'submitting' ? (
+                              <>
+                                <span className="w-4 h-4 rounded-full border-2 border-zinc-400/60 border-t-transparent animate-spin" />
+                                <span>Отправляю...</span>
+                              </>
+                            ) : msg.ticketStatus === 'submitted' ? (
+                              'Тикет создан'
+                            ) : (
+                              'Отправить тикет'
+                            )}
                           </button>
                         </div>
                       </div>
@@ -315,7 +353,7 @@ const Tickets: React.FC = () => {
               </div>
             ))}
             
-            {isLoading && (
+            {(isLoading || isTicketReplyLoading) && (
               <div className="flex gap-3">
                 <div className="mt-0.5 w-7 h-7 rounded-full flex items-center justify-center border bg-[#0f0f10] border-white/5 text-zinc-400">
                   <Bot size={14} />
@@ -351,7 +389,7 @@ const Tickets: React.FC = () => {
                   <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
                      <button 
                       type="submit" 
-                      disabled={!input.trim() || isLoading}
+                      disabled={!input.trim() || isLoading || isTicketReplyLoading}
                       className="p-1.5 text-zinc-500 hover:text-zinc-300 disabled:opacity-30 transition-colors"
                     >
                       <Send size={14} />
