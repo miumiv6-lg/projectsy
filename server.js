@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors());
 
 // AI Chat Configuration
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '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';
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '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';
 const SYSTEM_PROMPT = `
 You are the interactive AI Support Agent for Project SY, a Metro 2033 simulator server.
 Your goal is to help players and, if necessary, gather information to create a support ticket.
@@ -70,7 +70,7 @@ app.post('/api/chat', async (req, res) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        "model": "tngtech/deepseek-r1t2-chimera:free",
+        "model": "mistralai/devstral-2512:free",
         "messages": [
           { "role": "system", "content": SYSTEM_PROMPT },
           ...messages
