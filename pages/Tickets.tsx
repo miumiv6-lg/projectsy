@@ -22,10 +22,82 @@ interface Ticket {
   category: string;
 }
 
+const renderInline = (text: string): React.ReactNode[] => {
+  const nodes: React.ReactNode[] = [];
+  let i = 0;
+  let buf = '';
+
+  const flush = () => {
+    if (buf) {
+      nodes.push(buf);
+      buf = '';
+    }
+  };
+
+  while (i < text.length) {
+    if (text[i] === '`') {
+      const end = text.indexOf('`', i + 1);
+      if (end !== -1) {
+        flush();
+        const code = text.slice(i + 1, end);
+        nodes.push(
+          <code
+            key={`code-${i}`}
+            className="font-mono text-[12px] bg-black/30 px-1 py-0.5 rounded border border-white/10"
+          >
+            {code}
+          </code>
+        );
+        i = end + 1;
+        continue;
+      }
+    }
+
+    if (text[i] === '*' && text[i + 1] === '*') {
+      const end = text.indexOf('**', i + 2);
+      if (end !== -1) {
+        flush();
+        const strong = text.slice(i + 2, end);
+        nodes.push(
+          <strong key={`strong-${i}`} className="font-semibold">
+            {strong}
+          </strong>
+        );
+        i = end + 2;
+        continue;
+      }
+    }
+
+    buf += text[i];
+    i += 1;
+  }
+
+  flush();
+  return nodes;
+};
+
+const renderMessageContent = (text: string) => {
+  const lines = text.split('\n');
+  return (
+    <>
+      {lines.map((line, idx) => (
+        <React.Fragment key={idx}>
+          {renderInline(line)}
+          {idx < lines.length - 1 ? <br /> : null}
+        </React.Fragment>
+      ))}
+    </>
+  );
+};
+
 const Tickets: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'chat' | 'history'>('chat');
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: 'Привет! Я виртуальный помощник Project SY. Опишите вашу проблему, и я помогу создать обращение к администрации.' }
+    {
+      role: 'assistant',
+      content:
+        'Привет! Я помощник поддержки Project SY по серверу Metrostroi (Garry\'s Mod). Опиши проблему — помогу разобраться и, если нужно, оформить тикет администрации.'
+    }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -67,9 +139,7 @@ const Tickets: React.FC = () => {
 
       let aiContent = data.choices?.[0]?.message?.content;
       
-      if (!aiContent) {
-        throw new Error('Invalid response format from AI provider');
-      }
+      if (!aiContent) throw new Error('Неверный формат ответа от AI-провайдера');
       
       // Parse for Ticket Data
       let ticketData: TicketData | undefined;
@@ -124,6 +194,30 @@ const Tickets: React.FC = () => {
     }
   };
 
+  const getCategoryLabel = (cat: string) => {
+    switch (cat) {
+      case 'tech':
+        return 'Техническая проблема';
+      case 'player':
+        return 'Жалоба на игрока';
+      case 'donate':
+        return 'Донат';
+      default:
+        return 'Другое';
+    }
+  };
+
+  const getStatusLabel = (status: Ticket['status']) => {
+    switch (status) {
+      case 'resolved':
+        return 'решено';
+      case 'rejected':
+        return 'отклонено';
+      default:
+        return 'ожидает';
+    }
+  };
+
   return (
     <div className="w-full h-screen bg-[#09090b] text-zinc-100 flex flex-col pt-safe-top font-sans selection:bg-blue-500/30">
       
@@ -131,7 +225,7 @@ const Tickets: React.FC = () => {
       <div className="px-5 py-3 flex items-center justify-between border-b border-white/5 bg-[#09090b]/80 backdrop-blur-md z-10 sticky top-0">
         <div className="flex items-center gap-2">
            <Bot size={18} className="text-zinc-400" />
-           <span className="text-sm font-medium tracking-wide text-zinc-200">Support Assistant</span>
+           <span className="text-sm font-medium tracking-wide text-zinc-200">Служба поддержки</span>
         </div>
         <div className="flex bg-zinc-900/80 rounded-lg p-0.5 border border-white/10">
           <button
@@ -140,7 +234,7 @@ const Tickets: React.FC = () => {
               activeTab === 'chat' ? 'bg-[#27272a] text-white shadow-sm ring-1 ring-white/5' : 'text-zinc-500 hover:text-zinc-300'
             }`}
           >
-            Chat
+            Чат
           </button>
           <button
             onClick={() => setActiveTab('history')}
@@ -148,7 +242,7 @@ const Tickets: React.FC = () => {
               activeTab === 'history' ? 'bg-[#27272a] text-white shadow-sm ring-1 ring-white/5' : 'text-zinc-500 hover:text-zinc-300'
             }`}
           >
-            History
+            История
           </button>
         </div>
       </div>
@@ -174,7 +268,7 @@ const Tickets: React.FC = () => {
 
                 <div className="min-w-0 flex-1">
                   <div className="text-[11px] font-medium text-zinc-500 mb-1">
-                    {msg.role === 'user' ? 'You' : 'Project SY AI'}
+                    {msg.role === 'user' ? 'Вы' : 'Project SY • Поддержка'}
                   </div>
                   <div
                     className={`px-4 py-3 text-[13px] leading-6 whitespace-pre-wrap rounded-lg border ${
@@ -183,7 +277,7 @@ const Tickets: React.FC = () => {
                         : 'bg-[#0f0f10] border-white/5 text-zinc-200'
                     }`}
                   >
-                    {msg.content}
+                    {renderMessageContent(msg.content)}
                   </div>
 
                   {/* Ticket Card (Cursor-style Widget) */}
@@ -191,7 +285,7 @@ const Tickets: React.FC = () => {
                     <div className="mt-3 max-w-[360px] animate-in fade-in slide-in-from-bottom-2 duration-300">
                       <div className="bg-[#0f0f10] border border-white/10 rounded-lg overflow-hidden shadow-2xl ring-1 ring-white/5">
                         <div className="bg-[#09090b] px-3 py-2 border-b border-white/10 flex items-center justify-between">
-                          <span className="text-[11px] font-medium text-zinc-400">Confirm ticket</span>
+                          <span className="text-[11px] font-medium text-zinc-400">Подтверждение тикета</span>
                           <div className="flex gap-1.5">
                             <div className="w-2 h-2 rounded-full bg-red-500/20"></div>
                             <div className="w-2 h-2 rounded-full bg-yellow-500/20"></div>
@@ -200,18 +294,18 @@ const Tickets: React.FC = () => {
                         </div>
                         <div className="p-3 space-y-2">
                           <div className="space-y-1">
-                            <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Subject</div>
+                            <div className="text-[10px] text-zinc-500 uppercase tracking-wider">ТЕМА</div>
                             <div className="text-xs text-zinc-200 font-medium">{msg.ticketData.subject}</div>
                           </div>
                           <div className="space-y-1">
-                            <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Category</div>
-                            <div className="text-xs text-blue-400 font-mono bg-blue-500/10 px-1.5 py-0.5 rounded w-fit">{msg.ticketData.category}</div>
+                            <div className="text-[10px] text-zinc-500 uppercase tracking-wider">КАТЕГОРИЯ</div>
+                            <div className="text-xs text-blue-400 font-mono bg-blue-500/10 px-1.5 py-0.5 rounded w-fit">{getCategoryLabel(msg.ticketData.category)}</div>
                           </div>
                           <button
                             onClick={() => handleCreateTicket(msg.ticketData!)}
                             className="w-full mt-2 bg-[#ededed] hover:bg-white text-black text-xs font-semibold py-2 rounded-[6px] transition-colors"
                           >
-                            Submit ticket
+                            Отправить тикет
                           </button>
                         </div>
                       </div>
@@ -227,7 +321,7 @@ const Tickets: React.FC = () => {
                   <Bot size={14} />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-[11px] font-medium text-zinc-500 mb-1">Project SY AI</div>
+                  <div className="text-[11px] font-medium text-zinc-500 mb-1">Project SY • Поддержка</div>
                   <div className="text-zinc-500 text-sm flex items-center gap-2">
                     <div className="w-4 h-4 rounded-full border-2 border-zinc-500/60 border-t-transparent animate-spin" />
                     <span>Думаю...</span>
@@ -250,7 +344,7 @@ const Tickets: React.FC = () => {
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    placeholder="Message support…"
+                    placeholder="Сообщение в поддержку…"
                     className="w-full bg-transparent text-[13px] text-zinc-200 p-3 pr-10 outline-none placeholder:text-zinc-600 font-normal"
                     autoComplete="off"
                   />
@@ -266,9 +360,9 @@ const Tickets: React.FC = () => {
                 </div>
                 <div className="mt-2 flex items-center justify-between px-1">
                    <div className="text-[10px] text-zinc-600 flex items-center gap-1.5">
-                     <span className="px-1.5 py-0.5 bg-[#27272a] rounded border border-white/5">Enter</span> to send
+                     <span className="px-1.5 py-0.5 bg-[#27272a] rounded border border-white/5">Enter</span> — отправить
                    </div>
-                   <div className="text-[10px] text-zinc-700">Powered by Mistral</div>
+                   <div className="text-[10px] text-zinc-700">На базе Mistral</div>
                 </div>
               </form>
             </div>
@@ -291,15 +385,15 @@ const Tickets: React.FC = () => {
               </div>
               <h3 className="text-[13px] font-medium text-zinc-200 mb-1 group-hover:text-blue-400 transition-colors">{ticket.subject}</h3>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#27272a] text-zinc-400 border border-white/5 capitalize">{ticket.category}</span>
-                <span className="text-[10px] text-zinc-600 capitalize">{ticket.status}</span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#27272a] text-zinc-400 border border-white/5">{getCategoryLabel(ticket.category)}</span>
+                <span className="text-[10px] text-zinc-600">{getStatusLabel(ticket.status)}</span>
               </div>
             </div>
           ))}
           {tickets.length === 0 && (
             <div className="text-center py-24 opacity-50">
               <History size={32} className="mx-auto mb-4 text-zinc-600" />
-              <p className="text-zinc-500 text-sm">No tickets found</p>
+              <p className="text-zinc-500 text-sm">Обращений не найдено</p>
             </div>
           )}
         </div>
