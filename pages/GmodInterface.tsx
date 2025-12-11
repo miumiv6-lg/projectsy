@@ -1079,7 +1079,7 @@ const GmodInterface: React.FC<GmodInterfaceProps> = ({ setPage }) => {
           </div>
         )
       }
-    </div >
+    </div>
   );
 };
 

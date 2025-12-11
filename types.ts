@@ -1,17 +1,42 @@
+declare global {
+  interface Window {
+    Telegram: {
+      WebApp: {
+        ready: () => void;
+        expand: () => void;
+        close: () => void;
+        setHeaderColor: (color: string) => void;
+        setBackgroundColor: (color: string) => void;
+        MainButton: {
+          text: string;
+          color: string;
+          textColor: string;
+          isVisible: boolean;
+          isActive: boolean;
+          show: () => void;
+          hide: () => void;
+          onClick: (callback: () => void) => void;
+          offClick: (callback: () => void) => void;
+          showProgress: (leaveActive: boolean) => void;
+          hideProgress: () => void;
+        };
+        initDataUnsafe: {
+          user?: {
+            id: number;
+            first_name: string;
+            last_name?: string;
+            username?: string;
+            language_code?: string;
+          };
+        };
+      };
+    };
+  }
+}
+
 export enum Page {
-  HOME = 'home',
-  PLAY = 'play',
-  ABOUT = 'about',
-  TEAM = 'team',
-  THEORY = 'theory',
-  FAQ = 'faq',
-  NEWS = 'news',
-  CONTACTS = 'contacts',
-  FORUM = 'forum',
-  ADMIN = 'admin',
-  PROFILE = 'profile',
-  WORKSHOP = 'workshop',
-  RULES = 'rules',
+  SHOP = 'shop',
+  TICKETS = 'tickets',
 }
 
 // Роли пользователей
