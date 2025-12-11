@@ -37,6 +37,8 @@ declare global {
 export enum Page {
   SHOP = 'shop',
   TICKETS = 'tickets',
+  SUBSCRIPTION = 'subscription',
+  FNAF = 'fnaf',
 }
 
 // Роли пользователей

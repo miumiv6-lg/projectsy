@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { Page } from '../types';
 import { ShoppingBag, Package, Star, ArrowRight } from 'lucide-react';
 
-const Shop: React.FC = () => {
+interface ShopProps {
+  setPage?: (page: Page) => void;
+}
+
+const Shop: React.FC<ShopProps> = ({ setPage }) => {
   const [activeCategory, setActiveCategory] = useState('All');
 
   const categories = [
@@ -64,6 +68,7 @@ const Shop: React.FC = () => {
                 <span className="text-white font-mono text-lg font-bold">150 SY</span>
                 <button 
                   className="metro-button-outline text-xs py-2 px-3"
+                  onClick={() => setPage?.(Page.SUBSCRIPTION)}
                 >
                   Подробнее
                 </button>
@@ -104,6 +109,7 @@ const Shop: React.FC = () => {
                       const audio = new Audio('/sounds/fnaf_btn_click.mp3');
                       audio.volume = 0.5;
                       audio.play().catch(e => console.error("Audio play failed", e));
+                      setPage?.(Page.FNAF);
                     }}
                   >
                     Терминал
