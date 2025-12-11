@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Send, Bug, UserX, HelpCircle, CreditCard, MessageSquare, Check, Plus, ChevronRight } from 'lucide-react';
+import { Send, Bug, UserX, HelpCircle, CreditCard, MessageSquare, Check, Plus, ChevronRight, Bot, Sparkles } from 'lucide-react';
+import AiChat from '../components/AiChat';
 
 interface Ticket {
   id: string;
@@ -12,6 +13,7 @@ interface Ticket {
 const Tickets: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'new' | 'list'>('new');
   const [category, setCategory] = useState<string>('');
+  const [showAiChat, setShowAiChat] = useState(false);
   
   // Form States
   const [subject, setSubject] = useState('');
@@ -200,6 +202,25 @@ const Tickets: React.FC = () => {
           </div>
         </div>
 
+        {/* AI Assistant Banner */}
+        <div 
+          onClick={() => setShowAiChat(true)}
+          className="cursor-card p-4 rounded-xl mb-6 flex items-center justify-between group cursor-pointer bg-gradient-to-r from-blue-900/20 to-transparent border-blue-500/20 hover:border-blue-500/40"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-900/30">
+              <Sparkles size={20} fill="currentColor" className="text-white" />
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-white">AI Помощник</h3>
+              <p className="text-xs text-blue-200/60">Мгновенные ответы на вопросы</p>
+            </div>
+          </div>
+          <button className="px-3 py-1.5 rounded-lg bg-white/10 text-xs font-medium text-white hover:bg-white/20 transition-colors">
+            Спросить
+          </button>
+        </div>
+
         {activeTab === 'new' ? (
           <form onSubmit={handleSubmit} className="space-y-4 animate-fade-in">
             {showSuccess && (
@@ -298,6 +319,7 @@ const Tickets: React.FC = () => {
           </div>
         )}
       </div>
+      {showAiChat && <AiChat onClose={() => setShowAiChat(false)} />}
     </div>
   );
 };
