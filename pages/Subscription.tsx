@@ -7,35 +7,23 @@ interface SubscriptionProps {
 }
 
 const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
-  const [expandedPlan, setExpandedPlan] = useState<string | null>('improved');
+  const [expandedPlan, setExpandedPlan] = useState<string | null>('premium');
   const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'gmdonate'>('stripe');
   const [trialActivated, setTrialActivated] = useState(false);
   const [showTrialRules, setShowTrialRules] = useState(false);
 
   const plans = [
     {
-      id: 'regular',
-      name: 'Обычная',
-      price: 29,
-      icon: Zap,
-      color: 'blue',
-      features: ['Лимит пропов x1.5', 'Базовые команды', 'Префикс [SYSub]', 'Бонус 100 SY']
-    },
-    {
-      id: 'improved',
-      name: 'Улучшенная',
-      price: 99,
-      icon: Star,
-      color: 'purple',
-      features: ['Лимит пропов x2.0', 'Приоритетный вход', 'Расширенные команды', 'Цветной ник', 'Бонус 300 SY']
-    },
-    {
-      id: 'powerful',
-      name: 'Мощная',
-      price: 199,
+      id: 'premium',
+      name: 'SYSub Premium',
+      price: 100,
       icon: Crown,
-      color: 'yellow',
-      features: ['Безлимит пропов', 'Макс. приоритет', 'Все команды', 'Личный скин', 'Бонус 1000 SY']
+      color: 'blue',
+      features: [
+        'Поезда: Яуза, Яуза .1, Ока',
+        'Спавн 6 вагонов (вместо 4)',
+        'Доступ ко всем скинам'
+      ]
     }
   ];
 
@@ -108,7 +96,7 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
                       ))}
                     </div>
 
-                    {plan.id === 'regular' && !trialActivated && (
+                    {plan.id === 'premium' && !trialActivated && (
                       <button 
                         onClick={() => setTrialActivated(true)}
                         className="w-full py-2.5 rounded-lg text-sm font-bold text-white bg-green-600 hover:bg-green-500 transition-colors mb-2 flex items-center justify-center gap-2"
@@ -118,14 +106,14 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
                       </button>
                     )}
 
-                    {plan.id === 'regular' && trialActivated && (
+                    {plan.id === 'premium' && trialActivated && (
                       <div className="w-full py-2.5 rounded-lg text-sm font-bold text-green-400 bg-green-500/10 border border-green-500/20 mb-2 flex items-center justify-center gap-2">
                         <Check size={14} />
                         <span>Пробный период активирован</span>
                       </div>
                     )}
 
-                    {plan.id === 'regular' && (
+                    {plan.id === 'premium' && (
                       <button 
                         onClick={(e) => { e.stopPropagation(); setShowTrialRules(true); }}
                         className="w-full text-center text-[10px] text-gray-500 hover:text-gray-300 mb-3 flex items-center justify-center gap-1 transition-colors"
@@ -135,7 +123,7 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
                       </button>
                     )}
 
-                    {!(plan.id === 'regular' && trialActivated) && (
+                    {!(plan.id === 'premium' && trialActivated) && (
                       <>
                         <button className={`w-full py-2.5 rounded-lg text-sm font-bold text-white transition-colors mb-3 ${btnClasses}`}>
                           Выбрать
