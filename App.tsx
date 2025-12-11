@@ -1,6 +1,4 @@
-import React, { useState, useLayoutEffect, useRef, useEffect } from 'react';
-// @ts-ignore
-import Lenis from 'lenis';
+import React, { useState, useLayoutEffect, useEffect } from 'react';
 import { Page } from './types';
 import BottomNavigation from './components/BottomNavigation';
 import PageTransition from './components/PageTransition';
@@ -16,7 +14,6 @@ import SkinsCollection from './pages/SkinsCollection';
 
 const AppContent: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>(Page.SHOP);
-  const lenisRef = useRef<any>(null);
 
   // Initialize Telegram Web App
   useEffect(() => {
@@ -29,30 +26,17 @@ const AppContent: React.FC = () => {
       tg.setHeaderColor('#000000');
       tg.setBackgroundColor('#000000');
       // Set bottom bar color if supported (for full immersion)
+      // @ts-ignore
       if (tg.setBottomBarColor) {
+        // @ts-ignore
         tg.setBottomBarColor('#000000');
       }
     }
   }, []);
 
-  // SYNCHRONOUS scroll reset
+  // Scroll reset
   useLayoutEffect(() => {
-    // Only init Lenis if in browser
-    if (typeof window !== 'undefined') {
-      try {
-        if (lenisRef.current) {
-          lenisRef.current.stop();
-          lenisRef.current.destroy();
-          lenisRef.current = null;
-        }
-      } catch (e) {
-        console.error("Lenis cleanup error:", e);
-      }
-
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }
+    window.scrollTo(0, 0);
   }, [currentPage]);
 
   const renderPage = () => {
@@ -69,8 +53,7 @@ const AppContent: React.FC = () => {
 
   return (
     <div
-      className="min-h-screen text-white flex flex-col antialiased overflow-x-hidden selection:bg-white/20"
-      style={{ backgroundColor: '#000000' }} 
+      className="min-h-screen text-white flex flex-col antialiased bg-black selection:bg-white/20"
       onContextMenu={(e) => e.preventDefault()}
     >
       <main className="flex-grow flex flex-col w-full max-w-[100vw] overflow-x-hidden">

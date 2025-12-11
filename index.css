@@ -22,9 +22,9 @@
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  --animate-fade-in: fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  --animate-slide-up: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  --animate-scale-in: scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-in: fade-in 0.3s ease-out forwards;
+  --animate-slide-up: slide-up 0.4s ease-out forwards;
+  --animate-scale-in: scale-in 0.3s ease-out forwards;
   --animate-pulse-slow: pulse-slow 3s infinite ease-in-out;
 
   @keyframes fade-in {
@@ -33,12 +33,12 @@
   }
 
   @keyframes slide-up {
-    from { transform: translateY(20px); opacity: 0; }
+    from { transform: translateY(10px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
   }
   
   @keyframes scale-in {
-    from { transform: scale(0.95); opacity: 0; }
+    from { transform: scale(0.98); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
   }
 
@@ -56,8 +56,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  opacity: 0;
-  animation: fade-in 0.5s ease-out forwards;
+  margin: 0;
 }
 
 /* Utilities */
@@ -65,14 +64,12 @@ body {
   .cursor-card {
     background: #050505;
     border: 1px solid var(--color-border);
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.2s ease-out;
   }
 
   .cursor-card:hover {
     border-color: var(--color-border-hover);
     background: #0a0a0a;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
   }
 
   .cursor-button {
@@ -85,7 +82,7 @@ body {
   .cursor-button:hover {
     background: #e5e5e5;
     transform: translateY(-1px);
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
   }
 
   .cursor-button:active {
@@ -120,7 +117,7 @@ body {
   }
 
   .glass-panel {
-    background: rgba(5, 5, 5, 0.7);
+    background: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(20px);
     border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
