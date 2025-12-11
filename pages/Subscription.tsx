@@ -34,7 +34,7 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
       price: 199,
       icon: Crown,
       color: 'yellow',
-      features: ['Безлимит пропов', 'Макс. приоритет', 'Все команды', 'Личный скин', 'Бонус 1000 SY', 'Канал в Discord']
+      features: ['Безлимит пропов', 'Макс. приоритет', 'Все команды', 'Личный скин', 'Бонус 1000 SY']
     }
   ];
 
