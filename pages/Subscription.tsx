@@ -124,7 +124,8 @@ const Subscription: React.FC<SubscriptionProps> = ({ setPage }) => {
                         <span>Пробный период активирован</span>
                       </div>
                     )}
-plan.id === 'regular' && (
+
+                    {plan.id === 'regular' && (
                       <button 
                         onClick={(e) => { e.stopPropagation(); setShowTrialRules(true); }}
                         className="w-full text-center text-[10px] text-gray-500 hover:text-gray-300 mb-3 flex items-center justify-center gap-1 transition-colors"
@@ -134,7 +135,6 @@ plan.id === 'regular' && (
                       </button>
                     )}
 
-                    {
                     {!(plan.id === 'regular' && trialActivated) && (
                       <>
                         <button className={`w-full py-2.5 rounded-lg text-sm font-bold text-white transition-colors mb-3 ${btnClasses}`}>
@@ -173,6 +173,16 @@ plan.id === 'regular' && (
                   </div>
                 </div>
               </div>
+            );
+          })}
+        </div>
+
+        <div className="mt-6 text-center">
+          <p className="text-[10px] text-gray-600">
+            Подписка продлевается автоматически. Отменить можно в любой момент.
+          </p>
+        </div>
+
         {/* Trial Rules Modal */}
         {showTrialRules && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
@@ -212,16 +222,6 @@ plan.id === 'regular' && (
             </div>
           </div>
         )}
-
-            );
-          })}
-        </div>
-
-        <div className="mt-6 text-center">
-          <p className="text-[10px] text-gray-600">
-            Подписка продлевается автоматически. Отменить можно в любой момент.
-          </p>
-        </div>
 
       </div>
     </div>
