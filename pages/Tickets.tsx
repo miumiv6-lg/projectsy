@@ -44,7 +44,7 @@ const Tickets: React.FC = () => {
     let finalSubject = subject;
     if (category === 'player') finalSubject = `Жалоба на ${violatorName}`;
     if (category === 'donate') finalSubject = `Проблема с донатом (${amount}₽)`;
-    if (category === 'tech') finalSubject = `Баг (${device}): ${subject}`;
+    if (category === 'tech') finalSubject = `Баг: ${subject}`;
 
     const newTicket: Ticket = {
       id: Math.random().toString(36).substr(2, 9),
