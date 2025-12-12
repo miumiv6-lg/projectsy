@@ -44,7 +44,7 @@ const renderInline = (text: string): React.ReactNode[] => {
         nodes.push(
           <code
             key={`code-${i}`}
-            className="font-mono text-[12px] bg-black/30 px-1 py-0.5 rounded border border-white/10"
+            className="font-mono text-[12px] bg-white/5 px-1 py-0.5 rounded border border-[var(--color-border)]"
           >
             {code}
           </code>
@@ -247,19 +247,19 @@ const Tickets: React.FC = () => {
   };
 
   return (
-    <div className="w-full h-screen bg-[#09090b] text-zinc-100 flex flex-col pt-safe-top font-sans selection:bg-blue-500/30">
+    <div className="w-full h-screen bg-background text-zinc-100 flex flex-col pt-safe-top font-sans selection:bg-white/15">
       
       {/* Minimal Header */}
-      <div className="px-5 py-3 flex items-center justify-between border-b border-white/5 bg-[#09090b]/80 backdrop-blur-md z-10 sticky top-0">
+      <div className="px-4 py-3 flex items-center justify-between border-b border-[var(--color-border)] glass-panel z-10 sticky top-0">
         <div className="flex items-center gap-2">
            <Bot size={18} className="text-zinc-400" />
-           <span className="text-sm font-medium tracking-wide text-zinc-200">Служба поддержки</span>
+           <span className="text-sm font-semibold tracking-wide text-zinc-200">Поддержка</span>
         </div>
-        <div className="flex bg-zinc-900/80 rounded-lg p-0.5 border border-white/10">
+        <div className="cursor-card flex rounded-xl p-1">
           <button
             onClick={() => setActiveTab('chat')}
             className={`px-3 py-1 rounded-[6px] text-[11px] font-medium transition-all ${
-              activeTab === 'chat' ? 'bg-[#27272a] text-white shadow-sm ring-1 ring-white/5' : 'text-zinc-500 hover:text-zinc-300'
+              activeTab === 'chat' ? 'bg-[var(--color-surface-hover)] text-white border border-[var(--color-border)]' : 'text-zinc-400 hover:text-white'
             }`}
           >
             Чат
@@ -267,7 +267,7 @@ const Tickets: React.FC = () => {
           <button
             onClick={() => setActiveTab('history')}
             className={`px-3 py-1 rounded-[6px] text-[11px] font-medium transition-all ${
-              activeTab === 'history' ? 'bg-[#27272a] text-white shadow-sm ring-1 ring-white/5' : 'text-zinc-500 hover:text-zinc-300'
+              activeTab === 'history' ? 'bg-[var(--color-surface-hover)] text-white border border-[var(--color-border)]' : 'text-zinc-400 hover:text-white'
             }`}
           >
             История
@@ -287,8 +287,8 @@ const Tickets: React.FC = () => {
                 <div
                   className={`mt-0.5 w-7 h-7 rounded-full flex items-center justify-center border ${
                     msg.role === 'user'
-                      ? 'bg-[#18181b] border-white/10 text-zinc-300'
-                      : 'bg-[#0f0f10] border-white/5 text-zinc-400'
+                      ? 'bg-[var(--color-surface-hover)] border-[var(--color-border)] text-zinc-200'
+                      : 'bg-[var(--color-surface)] border-[var(--color-border)] text-zinc-300'
                   }`}
                 >
                   {msg.role === 'user' ? <User size={14} /> : <Bot size={14} />}
@@ -301,24 +301,20 @@ const Tickets: React.FC = () => {
                   <div
                     className={`px-4 py-3 text-[13px] leading-6 whitespace-pre-wrap rounded-lg border ${
                       msg.role === 'user'
-                        ? 'bg-[#18181b] border-white/10 text-zinc-100'
-                        : 'bg-[#0f0f10] border-white/5 text-zinc-200'
+                        ? 'bg-[var(--color-surface-hover)] border-[var(--color-border)] text-zinc-100'
+                        : 'bg-[var(--color-surface)] border-[var(--color-border)] text-zinc-200'
                     }`}
                   >
                     {renderMessageContent(msg.content)}
                   </div>
 
-                  {/* Ticket Card (Cursor-style Widget) */}
+                  {/* Ticket Card */}
                   {msg.isTicketPrompt && msg.ticketData && (
                     <div className="mt-3 max-w-[360px] animate-in fade-in slide-in-from-bottom-2 duration-300">
-                      <div className="bg-[#0f0f10] border border-white/10 rounded-lg overflow-hidden shadow-2xl ring-1 ring-white/5">
-                        <div className="bg-[#09090b] px-3 py-2 border-b border-white/10 flex items-center justify-between">
-                          <span className="text-[11px] font-medium text-zinc-400">Подтверждение тикета</span>
-                          <div className="flex gap-1.5">
-                            <div className="w-2 h-2 rounded-full bg-red-500/20"></div>
-                            <div className="w-2 h-2 rounded-full bg-yellow-500/20"></div>
-                            <div className="w-2 h-2 rounded-full bg-green-500/20"></div>
-                          </div>
+                      <div className="cursor-card rounded-2xl overflow-hidden">
+                        <div className="px-4 py-3 border-b border-[var(--color-border)] flex items-center justify-between">
+                          <span className="text-[11px] font-semibold text-zinc-300 tracking-wide">Тикет</span>
+                          <span className="text-[10px] text-zinc-500">Проверка перед отправкой</span>
                         </div>
                         <div className="p-3 space-y-2">
                           <div className="space-y-1">
@@ -327,12 +323,12 @@ const Tickets: React.FC = () => {
                           </div>
                           <div className="space-y-1">
                             <div className="text-[10px] text-zinc-500 uppercase tracking-wider">КАТЕГОРИЯ</div>
-                            <div className="text-xs text-blue-400 font-mono bg-blue-500/10 px-1.5 py-0.5 rounded w-fit">{getCategoryLabel(msg.ticketData.category)}</div>
+                            <div className="text-xs text-zinc-200 font-mono bg-white/5 px-1.5 py-0.5 rounded w-fit border border-[var(--color-border)]">{getCategoryLabel(msg.ticketData.category)}</div>
                           </div>
                           <button
                             onClick={() => handleCreateTicket(idx, msg.ticketData!)}
                             disabled={msg.ticketStatus !== 'idle'}
-                            className="w-full mt-2 bg-[#ededed] hover:bg-white disabled:bg-[#2a2a2e] disabled:text-zinc-400 text-black text-xs font-semibold py-2 rounded-[6px] transition-colors flex items-center justify-center gap-2"
+                            className="w-full mt-3 cursor-button disabled:opacity-40 text-xs font-semibold py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2"
                           >
                             {msg.ticketStatus === 'submitting' ? (
                               <>
@@ -355,7 +351,7 @@ const Tickets: React.FC = () => {
             
             {(isLoading || isTicketReplyLoading) && (
               <div className="flex gap-3">
-                <div className="mt-0.5 w-7 h-7 rounded-full flex items-center justify-center border bg-[#0f0f10] border-white/5 text-zinc-400">
+                <div className="mt-0.5 w-7 h-7 rounded-full flex items-center justify-center border bg-[var(--color-surface)] border-[var(--color-border)] text-zinc-300">
                   <Bot size={14} />
                 </div>
                 <div className="min-w-0 flex-1">
@@ -371,26 +367,25 @@ const Tickets: React.FC = () => {
 
           {/* Input Area - Cursor Style */}
           <div
-            className="fixed left-0 right-0 p-4 bg-[#09090b]/90 backdrop-blur-xl border-t border-white/5 z-20"
+            className="fixed left-0 right-0 p-4 glass-panel border-t border-[var(--color-border)] z-20"
             style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom))' }}
           >
             <div className="max-w-2xl mx-auto">
               <form onSubmit={handleSend} className="relative group">
-                <div className="absolute inset-0 bg-blue-500/5 rounded-lg blur-xl group-focus-within:bg-blue-500/10 transition-all"></div>
-                <div className="relative bg-[#18181b] border border-[#27272a] rounded-lg shadow-lg overflow-hidden group-focus-within:border-zinc-600 transition-colors">
+                <div className="relative cursor-card rounded-2xl overflow-hidden">
                   <input
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Сообщение в поддержку…"
-                    className="w-full bg-transparent text-[13px] text-zinc-200 p-3 pr-10 outline-none placeholder:text-zinc-600 font-normal"
+                    className="w-full bg-transparent text-[13px] text-zinc-200 p-3 pr-10 outline-none placeholder:text-zinc-500 font-normal"
                     autoComplete="off"
                   />
                   <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
                      <button 
                       type="submit" 
                       disabled={!input.trim() || isLoading || isTicketReplyLoading}
-                      className="p-1.5 text-zinc-500 hover:text-zinc-300 disabled:opacity-30 transition-colors"
+                      className="p-1.5 text-zinc-400 hover:text-white disabled:opacity-30 transition-colors"
                     >
                       <Send size={14} />
                     </button>
@@ -398,9 +393,9 @@ const Tickets: React.FC = () => {
                 </div>
                 <div className="mt-2 flex items-center justify-between px-1">
                    <div className="text-[10px] text-zinc-600 flex items-center gap-1.5">
-                     <span className="px-1.5 py-0.5 bg-[#27272a] rounded border border-white/5">Enter</span> — отправить
+                     <span className="px-1.5 py-0.5 bg-white/5 rounded border border-[var(--color-border)] text-zinc-300">Enter</span> — отправить
                    </div>
-                   <div className="text-[10px] text-zinc-700">На базе Mistral</div>
+                   <div className="text-[10px] text-zinc-700">Project SY</div>
                 </div>
               </form>
             </div>
@@ -410,7 +405,7 @@ const Tickets: React.FC = () => {
         /* History View - Minimalist List */
         <div className="flex-grow overflow-y-auto p-4 space-y-2 pb-24">
           {tickets.map((ticket) => (
-            <div key={ticket.id} className="bg-[#121212] border border-[#27272a] rounded-lg p-3 hover:bg-[#18181b] transition-colors cursor-pointer group">
+            <div key={ticket.id} className="cursor-card rounded-2xl p-4 cursor-pointer">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <div className={`w-1.5 h-1.5 rounded-full ${
@@ -421,9 +416,9 @@ const Tickets: React.FC = () => {
                 </div>
                 <span className="text-[10px] text-zinc-600">{ticket.date}</span>
               </div>
-              <h3 className="text-[13px] font-medium text-zinc-200 mb-1 group-hover:text-blue-400 transition-colors">{ticket.subject}</h3>
+              <h3 className="text-[13px] font-semibold text-zinc-200 mb-1">{ticket.subject}</h3>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#27272a] text-zinc-400 border border-white/5">{getCategoryLabel(ticket.category)}</span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-zinc-300 border border-[var(--color-border)]">{getCategoryLabel(ticket.category)}</span>
                 <span className="text-[10px] text-zinc-600">{getStatusLabel(ticket.status)}</span>
               </div>
             </div>

@@ -24,13 +24,13 @@ const AppContent: React.FC = () => {
       tg.expand();
       
       // Set header color to match app background
-      tg.setHeaderColor('#000000');
-      tg.setBackgroundColor('#000000');
+      tg.setHeaderColor('#0b0d10');
+      tg.setBackgroundColor('#0b0d10');
       // Set bottom bar color if supported (for full immersion)
       // @ts-ignore
       if (tg.setBottomBarColor) {
         // @ts-ignore
-        tg.setBottomBarColor('#000000');
+        tg.setBottomBarColor('#0b0d10');
       }
     }
   }, []);
@@ -55,7 +55,7 @@ const AppContent: React.FC = () => {
 
   return (
     <div
-      className="min-h-screen text-white flex flex-col antialiased bg-black selection:bg-white/20"
+      className="min-h-screen text-white flex flex-col antialiased bg-background selection:bg-white/15"
       onContextMenu={(e) => e.preventDefault()}
     >
       <main className="flex-grow flex flex-col w-full max-w-[100vw] overflow-x-hidden">

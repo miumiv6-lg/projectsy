@@ -28,9 +28,9 @@ const ITEMS: CaseItem[] = [
 
 const RARITY_COLORS = {
   common: 'border-zinc-700',
-  rare: 'border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.3)]',
-  epic: 'border-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.3)]',
-  legendary: 'border-yellow-500 shadow-[0_0_20px_rgba(234,179,8,0.4)]',
+  rare: 'border-blue-500',
+  epic: 'border-purple-500',
+  legendary: 'border-yellow-500',
 };
 
 const CaseOpeningModal: React.FC<CaseOpeningModalProps> = ({ isOpen, onClose }) => {
@@ -93,10 +93,10 @@ const CaseOpeningModal: React.FC<CaseOpeningModalProps> = ({ isOpen, onClose }) 
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-xl p-4 animate-fade-in">
-      <div className="w-full max-w-lg bg-[#050505] border border-white/10 rounded-3xl overflow-hidden flex flex-col relative shadow-2xl animate-scale-in">
+      <div className="w-full max-w-lg bg-[var(--color-surface)] border border-[var(--color-border)] rounded-3xl overflow-hidden flex flex-col relative shadow-2xl animate-scale-in">
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 text-zinc-500 hover:text-white transition-colors bg-white/5 rounded-full p-2"
+          className="absolute top-4 right-4 z-20 text-zinc-400 hover:text-white transition-colors bg-white/5 rounded-full p-2"
         >
           <X size={16} />
         </button>
@@ -105,16 +105,12 @@ const CaseOpeningModal: React.FC<CaseOpeningModalProps> = ({ isOpen, onClose }) 
         <div className="relative min-h-[400px] flex flex-col justify-center items-center p-6">
           
           {showWinScreen && winner ? (
-            <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-[#050505]/90 backdrop-blur-sm animate-fade-in p-6">
+            <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-[color:rgba(18,21,28,0.95)] backdrop-blur-sm animate-fade-in p-6">
               <div className="text-center w-full">
                 <div className="text-zinc-500 text-xs font-mono mb-6 uppercase tracking-widest">Новый предмет</div>
                 
-                <div className={`w-48 h-48 mx-auto mb-8 rounded-2xl border ${RARITY_COLORS[winner.rarity]} flex items-center justify-center relative bg-zinc-900 group`}>
-                  <div className={`absolute inset-0 ${winner.image} opacity-20 blur-xl group-hover:opacity-30 transition-opacity`}></div>
-                  <Gift size={64} className="text-white relative z-10 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" strokeWidth={1} />
-                  
-                  {/* Particles/Glow effect based on rarity */}
-                  <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10"></div>
+                <div className={`w-48 h-48 mx-auto mb-8 rounded-2xl border ${RARITY_COLORS[winner.rarity]} flex items-center justify-center relative bg-[var(--color-surface-hover)]`}>
+                  <Gift size={64} className="text-white" strokeWidth={1} />
                 </div>
                 
                 <h3 className="text-2xl font-medium text-white mb-2 tracking-tight">{winner.name}</h3>
@@ -129,7 +125,7 @@ const CaseOpeningModal: React.FC<CaseOpeningModalProps> = ({ isOpen, onClose }) 
                 
                 <button 
                   onClick={onClose}
-                  className="w-full bg-white text-black font-medium py-4 rounded-xl hover:bg-zinc-200 transition-all active:scale-[0.98] shadow-[0_0_20px_rgba(255,255,255,0.1)] text-sm tracking-wide"
+                  className="w-full cursor-button font-medium py-4 rounded-xl active:scale-[0.98] text-sm tracking-wide"
                 >
                   Забрать награду
                 </button>
@@ -143,13 +139,9 @@ const CaseOpeningModal: React.FC<CaseOpeningModalProps> = ({ isOpen, onClose }) 
               </div>
 
               {/* Roulette Window */}
-              <div className="relative h-32 w-full flex items-center overflow-hidden mb-10 mask-linear-fade">
+              <div className="relative h-32 w-full flex items-center overflow-hidden mb-10">
                 {/* Center Indicator */}
-                <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-white z-20 transform -translate-x-1/2 shadow-[0_0_10px_white]"></div>
-                
-                {/* Gradient Overlays for depth */}
-                <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#050505] to-transparent z-10 pointer-events-none"></div>
-                <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#050505] to-transparent z-10 pointer-events-none"></div>
+                <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-white/70 z-20 transform -translate-x-1/2"></div>
 
                 <div 
                   ref={scrollRef}
@@ -158,7 +150,7 @@ const CaseOpeningModal: React.FC<CaseOpeningModalProps> = ({ isOpen, onClose }) 
                   {rouletteItems.map((item, index) => (
                     <div 
                       key={index}
-                      className={`flex-shrink-0 w-28 h-28 bg-[#0a0a0a] border ${RARITY_COLORS[item.rarity]} rounded-xl flex flex-col items-center justify-center relative overflow-hidden`}
+                      className={`flex-shrink-0 w-28 h-28 bg-[var(--color-surface-hover)] border ${RARITY_COLORS[item.rarity]} rounded-xl flex flex-col items-center justify-center relative overflow-hidden`}
                     >
                       <div className={`absolute inset-0 ${item.image} opacity-10`}></div>
                       <Box size={24} className="text-zinc-400 mb-3 relative z-10" strokeWidth={1.5} />
@@ -174,8 +166,8 @@ const CaseOpeningModal: React.FC<CaseOpeningModalProps> = ({ isOpen, onClose }) 
                 disabled={isOpening}
                 className={`w-full py-4 rounded-xl font-medium text-sm transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 ${
                   isOpening 
-                    ? 'bg-zinc-900 text-zinc-500 cursor-not-allowed border border-white/5' 
-                    : 'bg-white text-black hover:bg-zinc-200 shadow-[0_0_20px_rgba(255,255,255,0.15)]'
+                    ? 'bg-[var(--color-surface-hover)] text-zinc-500 cursor-not-allowed border border-[var(--color-border)]' 
+                    : 'cursor-button'
                 }`}
               >
                 {isOpening ? (

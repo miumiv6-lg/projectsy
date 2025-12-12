@@ -18,7 +18,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ currentPage, setPag
           }`}
         >
           {currentPage === Page.SHOP && (
-            <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-[1px] bg-white shadow-[0_0_15px_rgba(255,255,255,0.8)] animate-fade-in"></div>
+            <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[var(--color-accent)]" />
           )}
           <ShoppingBag size={20} strokeWidth={currentPage === Page.SHOP ? 2 : 1.5} />
           <span className="text-[10px] font-medium tracking-wide">Магазин</span>
@@ -31,7 +31,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ currentPage, setPag
           }`}
         >
           {currentPage === Page.TICKETS && (
-            <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-[1px] bg-white shadow-[0_0_15px_rgba(255,255,255,0.8)] animate-fade-in"></div>
+            <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[var(--color-accent)]" />
           )}
           <LifeBuoy size={20} strokeWidth={currentPage === Page.TICKETS ? 2 : 1.5} />
           <span className="text-[10px] font-medium tracking-wide">Поддержка</span>
@@ -44,7 +44,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ currentPage, setPag
           }`}
         >
           {currentPage === Page.PROFILE && (
-            <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-[1px] bg-white shadow-[0_0_15px_rgba(255,255,255,0.8)] animate-fade-in"></div>
+            <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[var(--color-accent)]" />
           )}
           <User size={20} strokeWidth={currentPage === Page.PROFILE ? 2 : 1.5} />
           <span className="text-[10px] font-medium tracking-wide">Профиль</span>

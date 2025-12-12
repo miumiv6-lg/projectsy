@@ -3,21 +3,21 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #000000;
-  --color-surface: #0a0a0a;
-  --color-surface-hover: #121212;
+  --color-background: #0b0d10;
+  --color-surface: #12151c;
+  --color-surface-hover: #171b24;
   
-  --color-border: #1f1f1f;
-  --color-border-hover: #2e2e2e;
+  --color-border: #232a36;
+  --color-border-hover: #2f394a;
   
-  --color-primary: #ffffff;
-  --color-primary-foreground: #000000;
+  --color-primary: #f5f7fb;
+  --color-primary-foreground: #0b0d10;
 
-  --color-accent: #37996b;
-  --color-accent-glow: rgba(55, 153, 107, 0.5);
+  --color-accent: #2aabee;
+  --color-accent-hover: #1f9ad6;
 
-  --color-muted: #888888;
-  --color-muted-foreground: #666666;
+  --color-muted: #a2aabb;
+  --color-muted-foreground: #6c7486;
 
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -53,6 +53,7 @@ body {
   background-color: var(--color-background);
   color: var(--color-primary);
   font-family: var(--font-sans);
+  color-scheme: dark;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
@@ -70,27 +71,25 @@ body {
   }
 
   .cursor-card {
-    background: #050505;
+    background: var(--color-surface);
     border: 1px solid var(--color-border);
-    transition: all 0.2s ease-out;
+    transition: background-color 0.15s ease-out, border-color 0.15s ease-out;
   }
 
   .cursor-card:hover {
     border-color: var(--color-border-hover);
-    background: #0a0a0a;
+    background: var(--color-surface-hover);
   }
 
   .cursor-button {
-    background: var(--color-primary);
-    color: var(--color-primary-foreground);
+    background: var(--color-accent);
+    color: #ffffff;
     border: 1px solid transparent;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: background-color 0.15s ease-out, transform 0.1s ease-out;
   }
   
   .cursor-button:hover {
-    background: #e5e5e5;
-    transform: translateY(-1px);
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    background: var(--color-accent-hover);
   }
 
   .cursor-button:active {
@@ -101,39 +100,32 @@ body {
     background: transparent;
     border: 1px solid var(--color-border);
     color: var(--color-muted);
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: background-color 0.15s ease-out, border-color 0.15s ease-out, color 0.15s ease-out;
   }
 
   .cursor-button-secondary:hover {
-    border-color: var(--color-primary);
+    border-color: var(--color-border-hover);
     color: var(--color-primary);
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.04);
   }
 
   .cursor-input {
-    background: #0A0A0A;
+    background: var(--color-surface);
     border: 1px solid var(--color-border);
     color: white;
-    transition: all 0.2s ease;
+    transition: background-color 0.15s ease-out, border-color 0.15s ease-out;
   }
 
   .cursor-input:focus {
     outline: none;
-    border-color: #404040;
-    background: #0f0f0f;
-    box-shadow: 0 0 0 1px #404040;
+    border-color: var(--color-border-hover);
+    background: var(--color-surface-hover);
   }
 
   .glass-panel {
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .text-gradient {
-    background: linear-gradient(to bottom right, #ffffff, #888888);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    background: rgba(11, 13, 16, 0.88);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
   }
   
   .no-scrollbar::-webkit-scrollbar {
