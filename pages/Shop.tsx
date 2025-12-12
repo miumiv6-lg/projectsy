@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Page } from '../types';
-import { ShoppingBag, Package, Star, ChevronRight, Plus, History, CreditCard, Box, Gift, Lock, ArrowUpRight } from 'lucide-react';
+import { ShoppingBag, Search, Plus, History, CreditCard, Gift, ChevronRight, Command, Download, Check, Star } from 'lucide-react';
 import CaseOpeningModal from '../components/CaseOpeningModal';
 import { sessionState } from '../utils/sessionState';
 
@@ -13,6 +13,7 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
   const [showHistory, setShowHistory] = useState(false);
   const [isCaseModalOpen, setIsCaseModalOpen] = useState(false);
   const [dailyCaseClaimed, setDailyCaseClaimed] = useState(sessionState.dailyCaseClaimed);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleOpenCase = () => {
     if (dailyCaseClaimed) return;
@@ -25,103 +26,90 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
     sessionState.dailyCaseClaimed = true;
   };
 
-  // --- HISTORY VIEW ---
+  // --- HISTORY VIEW (Output Log Style) ---
   if (showHistory) {
     return (
-      <div className="w-full min-h-screen pt-safe-top pt-4 pb-24 px-4 bg-background">
-        <div className="max-w-md mx-auto">
-          <div className="flex items-center gap-3 mb-8">
-            <button 
-              onClick={() => setShowHistory(false)}
-              className="w-8 h-8 flex items-center justify-center rounded-lg border border-border text-zinc-400 hover:text-white hover:border-border-hover transition-colors"
-            >
+      <div className="w-full min-h-screen bg-background pt-safe-top font-mono text-sm">
+        <div className="border-b border-border p-3 flex items-center gap-3 bg-surface/50 sticky top-0 backdrop-blur-sm z-10">
+           <button onClick={() => setShowHistory(false)} className="text-muted hover:text-white transition-colors">
               <ChevronRight size={16} className="rotate-180" />
-            </button>
-            <h1 className="text-lg font-semibold text-white tracking-tight">История операций</h1>
+           </button>
+           <span className="text-xs font-medium text-white">OUTPUT</span>
+           <span className="text-xs text-muted">History Log</span>
+        </div>
+        
+        <div className="p-4 space-y-1">
+          <div className="flex gap-3 text-xs opacity-50 mb-4 border-b border-border/50 pb-2">
+            <div className="w-24">TIMESTAMP</div>
+            <div className="w-24">TYPE</div>
+            <div className="flex-1">DESCRIPTION</div>
+            <div>AMOUNT</div>
+          </div>
+
+          <div className="flex gap-3 text-xs group hover:bg-surface-hover p-1 -mx-1 rounded cursor-default">
+            <div className="w-24 text-zinc-500">10:42:15</div>
+            <div className="w-24 text-green-400">DEPOSIT</div>
+            <div className="flex-1 text-zinc-300">GM Donate Integration</div>
+            <div className="text-white">+500 SY</div>
           </div>
           
-          <div className="space-y-2">
-            <div className="cursor-card p-4 rounded-xl flex items-center justify-between group">
-              <div className="flex items-center gap-4">
-                <div className="p-2 rounded-lg border border-border text-white/70 group-hover:text-white transition-colors">
-                  <Plus size={16} />
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium text-white">Пополнение</h3>
-                  <span className="text-xs text-muted">10.12.2025 • GM Donate</span>
-                </div>
-              </div>
-              <span className="text-sm font-medium text-white">+500 SY</span>
-            </div>
-            
-            <div className="cursor-card p-4 rounded-xl flex items-center justify-between group">
-              <div className="flex items-center gap-4">
-                <div className="p-2 rounded-lg border border-border text-white/70 group-hover:text-white transition-colors">
-                  <ShoppingBag size={16} />
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium text-white">SYSub Premium</h3>
-                  <span className="text-xs text-muted">05.12.2025 • Подписка</span>
-                </div>
-              </div>
-              <span className="text-sm font-medium text-muted">-100 SY</span>
-            </div>
-            
-            <div className="mt-8 p-4 rounded-xl border border-dashed border-border text-center">
-              <p className="text-xs text-muted mb-3">Не нашли транзакцию?</p>
-              <button 
-                onClick={() => setPage?.(Page.TICKETS)}
-                className="cursor-button-secondary text-xs font-medium px-4 py-2 rounded-lg"
-              >
-                Написать в поддержку
-              </button>
-            </div>
+          <div className="flex gap-3 text-xs group hover:bg-surface-hover p-1 -mx-1 rounded cursor-default">
+            <div className="w-24 text-zinc-500">09:15:00</div>
+            <div className="w-24 text-blue-400">PURCHASE</div>
+            <div className="flex-1 text-zinc-300">SYSub Premium (Monthly)</div>
+            <div className="text-muted">-100 SY</div>
+          </div>
+          
+          <div className="mt-8 pt-4 border-t border-border text-xs text-zinc-500 font-sans">
+             &gt; Транзакция не найдена? <button onClick={() => setPage?.(Page.TICKETS)} className="text-accent hover:underline">Создать тикет</button>
           </div>
         </div>
       </div>
     );
   }
 
-  // --- TOP UP VIEW ---
+  // --- TOP UP VIEW (Config Form Style) ---
   if (showTopUp) {
     return (
-      <div className="w-full min-h-screen pt-safe-top pt-4 pb-24 px-4 bg-background">
-        <div className="max-w-md mx-auto">
-          <div className="flex items-center gap-3 mb-6">
-            <button 
-              onClick={() => setShowTopUp(false)}
-              className="w-8 h-8 flex items-center justify-center rounded-lg border border-border text-zinc-400 hover:text-white hover:border-border-hover transition-colors"
-            >
+      <div className="w-full min-h-screen bg-background pt-safe-top pb-12">
+        <div className="border-b border-border p-3 flex items-center gap-3 bg-surface/50 sticky top-0 z-10">
+           <button onClick={() => setShowTopUp(false)} className="text-muted hover:text-white transition-colors">
               <ChevronRight size={16} className="rotate-180" />
-            </button>
-            <h1 className="text-lg font-semibold text-white tracking-tight">Пополнение</h1>
+           </button>
+           <span className="text-xs font-medium text-white">BALANCE CONFIGURATION</span>
+        </div>
+
+        <div className="p-4 max-w-2xl mx-auto">
+          <div className="cursor-card-bordered p-4 mb-6">
+            <div className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider mb-1">Current Balance</div>
+            <div className="text-3xl font-light text-white tracking-tight">1,250 <span className="text-zinc-600 text-lg">SY</span></div>
           </div>
 
-          <div className="cursor-card rounded-xl p-6 mb-8 relative overflow-hidden">
-             <div className="absolute top-0 right-0 p-4 opacity-5">
-                <CreditCard size={64} className="text-white" />
-             </div>
-            <div className="text-xs text-muted mb-2 font-medium tracking-wide uppercase">Баланс</div>
-            <div className="text-4xl font-light text-white tracking-tighter">1,250 <span className="text-muted text-2xl">SY</span></div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 mb-8">
+          <h3 className="text-xs font-medium text-zinc-400 uppercase mb-3 pl-1">Select Amount</h3>
+          <div className="grid grid-cols-3 gap-2 mb-6">
             {[100, 300, 500, 1000, 2500, 5000].map((amount) => (
-              <button key={amount} className="cursor-card p-4 text-center rounded-xl active:scale-[0.98]">
-                <div className="text-lg font-semibold text-white mb-1">{amount} SY</div>
-                <div className="text-xs text-muted">{amount} ₽</div>
+              <button key={amount} className="cursor-card-bordered p-3 text-center hover:border-zinc-600 active:bg-zinc-800 transition-colors">
+                <div className="text-sm font-medium text-white">{amount}</div>
+                <div className="text-[10px] text-zinc-500">{amount} ₽</div>
               </button>
             ))}
           </div>
 
-          <div className="space-y-3">
-            <button className="w-full cursor-button py-3.5 rounded-xl flex items-center justify-center gap-2 text-sm font-semibold">
-              <CreditCard size={16} />
-              <span>Банковская карта</span>
+          <h3 className="text-xs font-medium text-zinc-400 uppercase mb-3 pl-1">Payment Method</h3>
+          <div className="space-y-2">
+            <button className="w-full flex items-center justify-between p-3 cursor-card-bordered hover:bg-surface-hover group">
+              <div className="flex items-center gap-3">
+                 <CreditCard size={16} className="text-zinc-400 group-hover:text-white" />
+                 <span className="text-sm text-zinc-300 group-hover:text-white">Bank Card</span>
+              </div>
+              <div className="w-3 h-3 rounded-full border border-zinc-600 group-hover:border-accent"></div>
             </button>
-            <button className="w-full cursor-button-secondary py-3.5 rounded-xl flex items-center justify-center gap-2 text-sm font-semibold">
-              <span className="font-bold text-[10px] bg-white text-black px-1 rounded-sm">G</span>
-              <span>GM Donate</span>
+             <button className="w-full flex items-center justify-between p-3 cursor-card-bordered hover:bg-surface-hover group">
+              <div className="flex items-center gap-3">
+                 <span className="font-bold text-[10px] bg-zinc-200 text-black px-1 rounded-sm">G</span>
+                 <span className="text-sm text-zinc-300 group-hover:text-white">GM Donate</span>
+              </div>
+              <div className="w-3 h-3 rounded-full border border-zinc-600 group-hover:border-accent"></div>
             </button>
           </div>
         </div>
@@ -129,113 +117,125 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
     );
   }
 
-  // --- MAIN SHOP VIEW ---
+  // --- MAIN SHOP VIEW (Marketplace) ---
   return (
-    <div className="w-full min-h-screen pt-safe-top pt-6 pb-24 px-4 bg-background">
-      <div className="max-w-md mx-auto">
+    <div className="w-full min-h-screen bg-background pt-safe-top pb-12 flex flex-col">
+      
+      {/* Marketplace Header */}
+      <div className="sticky top-0 bg-background z-20 border-b border-border">
+         <div className="p-3">
+            <div className="relative group">
+               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-white transition-colors" />
+               <input 
+                 type="text" 
+                 placeholder="Search extensions in Marketplace"
+                 value={searchQuery}
+                 onChange={(e) => setSearchQuery(e.target.value)}
+                 className="cursor-input w-full pl-9 pr-12 py-1.5 text-sm"
+               />
+               <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1">
+                  <div className="px-1.5 py-0.5 rounded border border-border bg-surface text-[10px] text-zinc-500 font-mono">⌘K</div>
+               </div>
+            </div>
+         </div>
+         <div className="flex px-3 gap-4 overflow-x-auto no-scrollbar border-b border-transparent">
+            <button className="text-[11px] font-medium text-white border-b border-accent pb-2">Featured</button>
+            <button className="text-[11px] font-medium text-muted hover:text-zinc-300 pb-2 transition-colors">Most Popular</button>
+            <button className="text-[11px] font-medium text-muted hover:text-zinc-300 pb-2 transition-colors">Recent</button>
+            <button className="text-[11px] font-medium text-muted hover:text-zinc-300 pb-2 transition-colors">Installed</button>
+         </div>
+      </div>
+
+      <div className="p-2 space-y-0.5">
         
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-semibold text-white tracking-tight">Магазин</h1>
-          <div className="flex items-center gap-3">
-            <div className="cursor-card px-3 py-1.5 rounded-lg flex items-center gap-3">
-              <span className="text-sm font-semibold text-white tracking-tight">1,250 SY</span>
-              <button 
-                onClick={() => setShowTopUp(true)}
-                className="w-5 h-5 rounded flex items-center justify-center bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity"
-              >
-                <Plus size={12} strokeWidth={3} />
-              </button>
+        {/* Balance Row */}
+        <div className="flex items-center justify-between p-3 rounded hover:bg-surface-hover transition-colors mb-2">
+            <div className="flex flex-col">
+               <span className="text-[10px] text-muted uppercase font-bold tracking-wider">BALANCE</span>
+               <span className="text-sm font-mono text-white">1,250 SY</span>
             </div>
-            <button 
-              onClick={() => setShowHistory(true)}
-              className="w-9 h-9 flex items-center justify-center rounded-lg border border-border text-muted hover:text-white hover:border-border-hover transition-colors"
-            >
-              <History size={18} strokeWidth={1.5} />
-            </button>
-          </div>
+            <div className="flex gap-2">
+               <button onClick={() => setShowHistory(true)} className="cursor-button-secondary px-3 py-1 flex items-center gap-2">
+                  <History size={12} />
+                  <span>Log</span>
+               </button>
+               <button onClick={() => setShowTopUp(true)} className="cursor-button px-3 py-1 flex items-center gap-2">
+                  <Plus size={12} />
+                  <span>Add Funds</span>
+               </button>
+            </div>
         </div>
 
-        {/* Featured Card (SYSub) */}
-        <div 
-          onClick={() => setPage?.(Page.SUBSCRIPTION)}
-          className="cursor-card relative overflow-hidden rounded-2xl p-6 mb-6 cursor-pointer"
-        >
-          <div className="flex items-start justify-between mb-6">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-[11px] font-semibold border border-border text-white">
-              <Star size={12} />
-              <span>Подписка</span>
-            </div>
-            <ArrowUpRight size={18} className="text-muted" />
-          </div>
-          <h3 className="text-xl font-semibold text-white mb-2 tracking-tight">SYSub Premium</h3>
-          <p className="text-muted text-sm leading-relaxed">
-            Эксклюзивный контент, ранний доступ и специальные предложения.
-          </p>
-        </div>
-
-        {/* Skins Link */}
-        <div 
-          onClick={() => setPage?.(Page.SKINS)}
-          className="cursor-card p-5 mb-6 rounded-2xl flex items-center justify-between cursor-pointer"
-        >
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center text-muted border border-border">
-              <Box size={18} />
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold text-white">Каталог скинов</h3>
-              <p className="text-xs text-muted mt-0.5">Осмотр моделей и покупка</p>
-            </div>
-          </div>
-          <ChevronRight size={16} className="text-muted" />
-        </div>
-
-        {/* Daily Case Section */}
-        <div>
-          <div className="flex items-center gap-2 mb-4 px-1">
-            <h3 className="font-medium text-muted text-xs tracking-widest uppercase">Бонусы</h3>
-          </div>
-          
-          <div 
-            onClick={handleOpenCase}
-            className={`cursor-card rounded-2xl p-1 group ${dailyCaseClaimed ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer hover:border-border-hover'}`}
-          >
-            <div className="rounded-xl p-4 flex items-center gap-4">
-              <div className={`w-12 h-12 rounded-lg flex items-center justify-center border transition-colors ${
-                dailyCaseClaimed ? 'bg-[var(--color-surface)] border-border text-muted' : 'bg-[var(--color-accent)] text-white border-[var(--color-accent)]'
-              }`}>
-                <Gift size={20} strokeWidth={1.5} />
+        {/* Extension Item: SYSub */}
+        <div className="group flex items-start gap-3 p-3 rounded hover:bg-surface-hover transition-colors cursor-pointer" onClick={() => setPage?.(Page.SUBSCRIPTION)}>
+           <div className="w-10 h-10 bg-[#2b2d31] rounded flex items-center justify-center text-white shrink-0 mt-0.5">
+              <Star size={20} fill="currentColor" className="text-yellow-500" />
+           </div>
+           <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                 <h3 className="text-sm font-semibold text-white">SYSub Premium</h3>
+                 <div className="px-1.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 text-[10px] font-medium border border-blue-500/20">Verified</div>
               </div>
-              
-              <div className="flex-grow">
-                <div className="flex items-center gap-2 mb-0.5">
-                  <h3 className="font-semibold text-sm text-white">
-                    Ежедневный кейс
-                  </h3>
-                  {!dailyCaseClaimed && (
-                    <span className="w-1.5 h-1.5 bg-[var(--color-accent)] rounded-full"></span>
-                  )}
-                </div>
-                <p className="text-xs text-muted font-light">
-                  {dailyCaseClaimed 
-                    ? 'Доступно через 24ч' 
-                    : 'Бесплатное открытие'}
-                </p>
+              <p className="text-xs text-zinc-400 truncate">Exclusive content, early access, and special offers.</p>
+              <div className="flex items-center gap-3 mt-1.5">
+                 <span className="text-[10px] text-zinc-500 flex items-center gap-1"><Download size={10} /> 12k</span>
+                 <span className="text-[10px] text-zinc-500 flex items-center gap-1"><Star size={10} /> 5.0</span>
               </div>
+           </div>
+           <button className="cursor-button px-3 py-1 self-center">Install</button>
+        </div>
 
-              {dailyCaseClaimed ? (
-                <Lock size={16} className="text-muted" />
-              ) : (
-                <ChevronRight size={16} className="text-muted" />
-              )}
-            </div>
-          </div>
+        {/* Extension Item: Daily Case */}
+        <div className="group flex items-start gap-3 p-3 rounded hover:bg-surface-hover transition-colors cursor-pointer" onClick={handleOpenCase}>
+           <div className="w-10 h-10 bg-[#2b2d31] rounded flex items-center justify-center text-white shrink-0 mt-0.5">
+              <Gift size={20} className={dailyCaseClaimed ? "text-zinc-500" : "text-green-400"} />
+           </div>
+           <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                 <h3 className="text-sm font-semibold text-white">Daily Bonus Case</h3>
+                 {!dailyCaseClaimed && <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>}
+              </div>
+              <p className="text-xs text-zinc-400 truncate">Free daily rewards. Try your luck every 24h.</p>
+              <div className="flex items-center gap-3 mt-1.5">
+                 <span className="text-[10px] text-zinc-500">Publisher: System</span>
+              </div>
+           </div>
+           <button 
+             disabled={dailyCaseClaimed}
+             className={`px-3 py-1 text-xs font-medium rounded border transition-colors self-center ${
+               dailyCaseClaimed 
+                 ? 'bg-transparent border-transparent text-zinc-500 cursor-not-allowed' 
+                 : 'bg-blue-600 border-blue-600 text-white hover:bg-blue-500'
+             }`}
+           >
+             {dailyCaseClaimed ? 'Claimed' : 'Open'}
+           </button>
+        </div>
+
+         {/* Extension Item: Skins */}
+         <div className="group flex items-start gap-3 p-3 rounded hover:bg-surface-hover transition-colors cursor-pointer" onClick={() => setPage?.(Page.SKINS)}>
+           <div className="w-10 h-10 bg-[#2b2d31] rounded flex items-center justify-center text-zinc-300 shrink-0 mt-0.5">
+              <div className="grid grid-cols-2 gap-0.5">
+                 <div className="w-2 h-2 bg-zinc-500 rounded-[1px]"></div>
+                 <div className="w-2 h-2 bg-zinc-500 rounded-[1px]"></div>
+                 <div className="w-2 h-2 bg-zinc-500 rounded-[1px]"></div>
+                 <div className="w-2 h-2 bg-zinc-500 rounded-[1px]"></div>
+              </div>
+           </div>
+           <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                 <h3 className="text-sm font-semibold text-white">Skin Catalog</h3>
+              </div>
+              <p className="text-xs text-zinc-400 truncate">Browse and purchase player models.</p>
+              <div className="flex items-center gap-3 mt-1.5">
+                 <span className="text-[10px] text-zinc-500">v2.4.0</span>
+              </div>
+           </div>
+           <button className="cursor-button-secondary px-3 py-1 self-center">Browse</button>
         </div>
 
       </div>
 
-      {/* Case Opening Modal */}
       <CaseOpeningModal 
         isOpen={isCaseModalOpen} 
         onClose={handleCaseClosed} 

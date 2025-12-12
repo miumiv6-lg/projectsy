@@ -3,21 +3,22 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #000000;
-  --color-surface: #111111;
-  --color-surface-hover: #1a1a1a;
+  /* Cursor / Vercel / Zinc Palette */
+  --color-background: #09090b; /* Zinc 950 */
+  --color-surface: #18181b;    /* Zinc 900 */
+  --color-surface-hover: #27272a; /* Zinc 800 */
   
-  --color-border: #222222;
-  --color-border-hover: #333333;
+  --color-border: #27272a;     /* Zinc 800 */
+  --color-border-hover: #3f3f46; /* Zinc 700 */
   
-  --color-primary: #ffffff;
-  --color-primary-foreground: #000000;
+  --color-primary: #fafafa;    /* Zinc 50 */
+  --color-primary-foreground: #09090b;
 
-  --color-accent: #3399ff;
-  --color-accent-hover: #297acc;
+  --color-accent: #3b82f6;     /* Blue 500 (Cursor Blueish) */
+  --color-accent-hover: #2563eb;
 
-  --color-muted: #888888;
-  --color-muted-foreground: #666666;
+  --color-muted: #a1a1aa;      /* Zinc 400 */
+  --color-muted-foreground: #52525b; /* Zinc 600 */
 
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -33,6 +34,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   margin: 0;
+  font-size: 13px; /* IDE standard size */
+  line-height: 1.5;
 }
 
 /* Utilities */
@@ -45,57 +48,84 @@ body {
     padding-bottom: env(safe-area-inset-bottom);
   }
 
-  .cursor-card {
-    background: var(--color-surface);
+  /* IDE Panel Style */
+  .cursor-panel {
+    background: var(--color-background);
     border: 1px solid var(--color-border);
-    transition: none;
+    border-radius: 6px; /* Tighter radius */
+  }
+
+  .cursor-card {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: background-color 0.1s ease;
   }
 
   .cursor-card:active {
     background: var(--color-surface-hover);
-    border-color: var(--color-border-hover);
-  }
-
-  .cursor-button {
-    background: var(--color-accent);
-    color: #ffffff;
-    border: none;
-    transition: opacity 0.2s ease;
   }
   
-  .cursor-button:active {
-    opacity: 0.8;
-  }
-
-  .cursor-button-secondary {
+  .cursor-card-bordered {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
-    color: var(--color-primary);
-    transition: background-color 0.2s ease;
+    border-radius: 6px;
   }
 
-  .cursor-button-secondary:active {
-    background: var(--color-surface-hover);
-  }
-
+  /* Command Palette Input */
   .cursor-input {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    color: white;
-    border-radius: 8px; /* Standardize radius */
+    background: #18181b; /* Zinc 900 */
+    border: 1px solid #27272a; /* Zinc 800 */
+    color: #fafafa;
+    border-radius: 4px;
+    font-size: 13px;
+    transition: border-color 0.1s ease;
   }
 
   .cursor-input:focus {
     outline: none;
-    border-color: var(--color-accent);
+    border-color: #52525b; /* Zinc 600 */
   }
 
-  /* Replaced glass-panel with a solid flat panel */
-  .flat-panel {
-    background: var(--color-background);
-    border-top: 1px solid var(--color-border);
+  /* IDE Buttons */
+  .cursor-button {
+    background: #fafafa; /* White button */
+    color: #09090b;
+    border: 1px solid #fafafa;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 12px;
+    transition: opacity 0.1s ease;
   }
   
+  .cursor-button:active {
+    opacity: 0.9;
+  }
+
+  .cursor-button-secondary {
+    background: #27272a; /* Zinc 800 */
+    border: 1px solid #27272a;
+    color: #fafafa;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+
+  .cursor-button-secondary:active {
+    background: #3f3f46;
+  }
+  
+  .cursor-button-ghost {
+    background: transparent;
+    color: #a1a1aa;
+    border-radius: 4px;
+  }
+  
+  .cursor-button-ghost:active, .cursor-button-ghost:hover {
+    background: var(--color-surface-hover);
+    color: #fafafa;
+  }
+
+  /* Scrollbar */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
