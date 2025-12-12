@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Box, Gift, ChevronRight } from 'lucide-react';
+import { X, Box, Gift, ChevronRight, Loader2 } from 'lucide-react';
 
 interface CaseItem {
   id: string;
@@ -70,13 +70,13 @@ const CaseOpeningModal: React.FC<CaseOpeningModalProps> = ({ isOpen, onClose }) 
     setIsOpening(true);
 
     if (scrollRef.current) {
-      // Card width (112px) + gap (12px) = 124px
-      const cardWidth = 112;
+      // Card width (96px) + gap (12px) = 108px
+      const cardWidth = 96;
       const gap = 12;
       const itemWidth = cardWidth + gap;
       const targetIndex = 50;
       
-      const randomOffset = Math.floor(Math.random() * 80) - 40;
+      const randomOffset = Math.floor(Math.random() * 60) - 30;
       
       const targetPosition = (targetIndex * itemWidth) + randomOffset;
 
@@ -92,56 +92,64 @@ const CaseOpeningModal: React.FC<CaseOpeningModalProps> = ({ isOpen, onClose }) 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4">
-      <div className="w-full max-w-lg bg-background border border-border rounded-3xl overflow-hidden flex flex-col relative shadow-2xl">
-        <button 
-          onClick={onClose}
-          className="absolute top-4 right-4 z-20 text-muted hover:text-white transition-colors bg-surface rounded-full p-2 border border-border"
-        >
-          <X size={16} />
-        </button>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in">
+      <div className="w-full max-w-md bg-background border border-border rounded-lg shadow-2xl flex flex-col font-sans text-sm">
+        
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface">
+           <div className="flex items-center gap-2">
+              <Gift size={14} className="text-zinc-400" />
+              <span className="font-medium text-white text-xs">daily_bonus_case.exe</span>
+           </div>
+           <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors">
+              <X size={14} />
+           </button>
+        </div>
 
-        {/* Main Content Area */}
-        <div className="relative min-h-[400px] flex flex-col justify-center items-center p-6">
+        {/* Content */}
+        <div className="p-6 relative min-h-[300px] flex flex-col items-center justify-center">
           
           {showWinScreen && winner ? (
-            <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-background p-6">
+            <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-background animate-fade-in p-6">
               <div className="text-center w-full">
-                <div className="text-muted text-xs font-mono mb-6 uppercase tracking-widest">Новый предмет</div>
-                
-                <div className={`w-48 h-48 mx-auto mb-8 rounded-2xl border ${RARITY_COLORS[winner.rarity]} flex items-center justify-center relative bg-surface`}>
-                  <Gift size={64} className="text-white" strokeWidth={1} />
+                <div className="text-green-400 text-xs font-mono mb-6 uppercase tracking-widest flex items-center justify-center gap-2">
+                   <Check size={12} />
+                   <span>Success</span>
                 </div>
                 
-                <h3 className="text-2xl font-medium text-white mb-2 tracking-tight">{winner.name}</h3>
-                <p className={`text-[10px] font-bold uppercase tracking-[0.2em] mb-10 ${
+                <div className={`w-32 h-32 mx-auto mb-6 rounded border ${RARITY_COLORS[winner.rarity]} flex items-center justify-center relative bg-surface`}>
+                  <Box size={48} className="text-white" strokeWidth={1} />
+                </div>
+                
+                <h3 className="text-lg font-medium text-white mb-1">{winner.name}</h3>
+                <p className={`text-[10px] font-mono uppercase mb-8 ${
                   winner.rarity === 'legendary' ? 'text-yellow-500' :
                   winner.rarity === 'epic' ? 'text-purple-500' :
                   winner.rarity === 'rare' ? 'text-blue-500' :
-                  'text-muted'
+                  'text-zinc-500'
                 }`}>
-                  {winner.rarity}
+                  rarity: {winner.rarity}
                 </p>
                 
                 <button 
                   onClick={onClose}
-                  className="w-full cursor-button font-medium py-4 rounded-xl active:scale-[0.98] text-sm tracking-wide"
+                  className="w-full cursor-button font-medium py-2.5 rounded text-xs"
                 >
-                  Забрать награду
+                  Принять и закрыть
                 </button>
               </div>
             </div>
           ) : (
             <>
-              <div className="text-center mb-10">
-                <h2 className="text-xl font-medium text-white mb-2 tracking-tight">Ежедневный кейс</h2>
-                <p className="text-muted text-sm font-light">Испытай удачу и получи эксклюзивные скины</p>
+              <div className="text-center mb-8">
+                <h2 className="text-base font-medium text-white mb-1">Выполнение кейса</h2>
+                <p className="text-zinc-500 text-xs font-mono">./process_reward --random</p>
               </div>
 
               {/* Roulette Window */}
-              <div className="relative h-32 w-full flex items-center overflow-hidden mb-10">
+              <div className="relative h-28 w-full flex items-center overflow-hidden mb-8 border-y border-border bg-surface/30">
                 {/* Center Indicator */}
-                <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-primary z-20 transform -translate-x-1/2"></div>
+                <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-accent z-20 transform -translate-x-1/2 shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
 
                 <div 
                   ref={scrollRef}
@@ -150,11 +158,11 @@ const CaseOpeningModal: React.FC<CaseOpeningModalProps> = ({ isOpen, onClose }) 
                   {rouletteItems.map((item, index) => (
                     <div 
                       key={index}
-                      className={`flex-shrink-0 w-28 h-28 bg-surface border ${RARITY_COLORS[item.rarity]} rounded-xl flex flex-col items-center justify-center relative overflow-hidden`}
+                      className={`flex-shrink-0 w-24 h-24 bg-surface border ${RARITY_COLORS[item.rarity]} rounded flex flex-col items-center justify-center relative overflow-hidden`}
                     >
-                      <div className={`absolute inset-0 ${item.image} opacity-10`}></div>
-                      <Box size={24} className="text-muted mb-3 relative z-10" strokeWidth={1.5} />
-                      <span className="text-[10px] font-medium text-zinc-300 text-center px-1 relative z-10 leading-tight tracking-tight">{item.name}</span>
+                      <div className={`absolute inset-0 ${item.image} opacity-5`}></div>
+                      <Box size={20} className="text-zinc-400 mb-2 relative z-10" strokeWidth={1.5} />
+                      <span className="text-[9px] font-medium text-zinc-300 text-center px-1 relative z-10 leading-tight truncate w-full">{item.name}</span>
                     </div>
                   ))}
                 </div>
@@ -164,18 +172,21 @@ const CaseOpeningModal: React.FC<CaseOpeningModalProps> = ({ isOpen, onClose }) 
               <button
                 onClick={startOpening}
                 disabled={isOpening}
-                className={`w-full py-4 rounded-xl font-medium text-sm transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 ${
+                className={`w-full py-2.5 rounded font-medium text-xs transition-all flex items-center justify-center gap-2 ${
                   isOpening 
-                    ? 'bg-surface text-muted cursor-not-allowed border border-border' 
+                    ? 'bg-surface text-zinc-500 cursor-not-allowed border border-border' 
                     : 'cursor-button'
                 }`}
               >
                 {isOpening ? (
-                   <span className="animate-pulse">Открываем...</span>
+                   <>
+                     <Loader2 size={12} className="animate-spin" />
+                     <span>Обработка...</span>
+                   </>
                 ) : (
                    <>
-                     <span>Открыть бесплатно</span>
-                     <ChevronRight size={14} />
+                     <span>Запустить</span>
+                     <ChevronRight size={12} />
                    </>
                 )}
               </button>

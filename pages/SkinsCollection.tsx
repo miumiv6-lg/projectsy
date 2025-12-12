@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Page } from '../types';
-import { ArrowLeft, Shield, User, Target, AlertTriangle, Crown, ChevronRight, LayoutGrid } from 'lucide-react';
+import { ArrowLeft, Shield, User, Target, AlertTriangle, Crown, ChevronRight, LayoutGrid, Folder, File, Filter } from 'lucide-react';
 import { sessionState } from '../utils/sessionState';
 
 interface SkinsCollectionProps {
@@ -12,31 +12,31 @@ const SkinsCollection: React.FC<SkinsCollectionProps> = ({ setPage }) => {
   const isSubscribed = sessionState.isSubscribed;
 
   const categories = [
-    { id: 'metro', name: 'Метро', icon: Shield, description: 'Скины из вселенной Метро 2033' },
-    { id: 'stalker', name: 'S.T.A.L.K.E.R.', icon: AlertTriangle, description: 'Легенды Зоны' },
-    { id: 'military', name: 'Военные', icon: Target, description: 'Спецподразделения и армия' },
-    { id: 'civilians', name: 'Гражданские', icon: User, description: 'Жители и работники станций' },
+    { id: 'metro', name: 'Метро 2033', icon: Shield, count: 4 },
+    { id: 'stalker', name: 'S.T.A.L.K.E.R.', icon: AlertTriangle, count: 3 },
+    { id: 'military', name: 'Военные', icon: Target, count: 2 },
+    { id: 'civilians', name: 'Гражданские', icon: User, count: 2 },
   ];
 
   const skins: Record<string, Array<{ id: number, name: string, price: number, rarity: string, image: string }>> = {
     metro: [
-      { id: 1, name: 'Артем', price: 50, rarity: 'legendary', image: 'bg-zinc-800' },
-      { id: 2, name: 'Мельник', price: 40, rarity: 'epic', image: 'bg-zinc-800' },
-      { id: 3, name: 'Хантер', price: 35, rarity: 'epic', image: 'bg-zinc-800' },
-      { id: 4, name: 'Бандит', price: 15, rarity: 'common', image: 'bg-zinc-900' },
+      { id: 1, name: 'artem_suit.mdl', price: 50, rarity: 'legendary', image: 'bg-zinc-800' },
+      { id: 2, name: 'miller_coat.mdl', price: 40, rarity: 'epic', image: 'bg-zinc-800' },
+      { id: 3, name: 'hunter_armor.mdl', price: 35, rarity: 'epic', image: 'bg-zinc-800' },
+      { id: 4, name: 'bandit_jacket.mdl', price: 15, rarity: 'common', image: 'bg-zinc-900' },
     ],
     stalker: [
-      { id: 5, name: 'Одиночка', price: 20, rarity: 'common', image: 'bg-zinc-800' },
-      { id: 6, name: 'Долговец', price: 30, rarity: 'rare', image: 'bg-zinc-800' },
-      { id: 7, name: 'Свободовец', price: 30, rarity: 'rare', image: 'bg-zinc-800' },
+      { id: 5, name: 'loner_sunrise.mdl', price: 20, rarity: 'common', image: 'bg-zinc-800' },
+      { id: 6, name: 'duty_psz9.mdl', price: 30, rarity: 'rare', image: 'bg-zinc-800' },
+      { id: 7, name: 'freedom_wind.mdl', price: 30, rarity: 'rare', image: 'bg-zinc-800' },
     ],
     military: [
-      { id: 8, name: 'Спецназ', price: 35, rarity: 'rare', image: 'bg-zinc-800' },
-      { id: 9, name: 'Офицер', price: 25, rarity: 'common', image: 'bg-zinc-900' },
+      { id: 8, name: 'spetsnaz_berill.mdl', price: 35, rarity: 'rare', image: 'bg-zinc-800' },
+      { id: 9, name: 'officer_uniform.mdl', price: 25, rarity: 'common', image: 'bg-zinc-900' },
     ],
     civilians: [
-      { id: 10, name: 'Рабочий', price: 10, rarity: 'common', image: 'bg-zinc-900' },
-      { id: 11, name: 'Торговец', price: 15, rarity: 'common', image: 'bg-zinc-900' },
+      { id: 10, name: 'worker_blue.mdl', price: 10, rarity: 'common', image: 'bg-zinc-900' },
+      { id: 11, name: 'trader_fat.mdl', price: 15, rarity: 'common', image: 'bg-zinc-900' },
     ]
   };
 
@@ -49,109 +49,96 @@ const SkinsCollection: React.FC<SkinsCollectionProps> = ({ setPage }) => {
   };
 
   const currentSkins = selectedCategory ? skins[selectedCategory] : [];
-  const currentCategoryInfo = categories.find(c => c.id === selectedCategory);
 
   return (
-    <div className="w-full min-h-screen pt-safe-top pt-6 pb-24 px-4 bg-background flex flex-col animate-fade-in">
-      <div className="max-w-md mx-auto w-full flex-grow flex flex-col">
+    <div className="w-full min-h-screen pt-safe-top pt-6 pb-24 px-4 bg-background flex flex-col font-sans text-sm animate-fade-in">
+      <div className="max-w-2xl mx-auto w-full flex-grow flex flex-col">
         
         {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex items-center gap-4 mb-6">
           <button 
             onClick={handleBack}
-            className="w-10 h-10 flex items-center justify-center rounded-xl border border-border text-zinc-400 hover:text-white hover:border-border-hover transition-colors bg-[var(--color-surface)]"
+            className="w-8 h-8 flex items-center justify-center rounded text-zinc-400 hover:text-white hover:bg-surface-hover transition-colors"
           >
-            <ArrowLeft size={18} />
+            <ArrowLeft size={16} />
           </button>
           
-          <div className="flex-grow">
-            <h1 className="text-xl font-semibold text-white tracking-tight">
-              {selectedCategory ? currentCategoryInfo?.name : 'Каталог'}
-            </h1>
-            <p className="text-xs text-zinc-500">
-              {selectedCategory 
-                ? `${currentSkins.length} доступно` 
-                : 'Выберите категорию'}
-            </p>
+          <div className="flex items-center gap-2 text-sm text-zinc-400">
+             <span className="hover:text-white cursor-pointer" onClick={() => setPage(Page.SHOP)}>assets</span>
+             <span>/</span>
+             <span className={`hover:text-white cursor-pointer ${!selectedCategory ? 'text-white font-medium' : ''}`} onClick={() => setSelectedCategory(null)}>models</span>
+             {selectedCategory && (
+                <>
+                   <span>/</span>
+                   <span className="text-white font-medium">{selectedCategory}</span>
+                </>
+             )}
           </div>
-
-          {!selectedCategory && (
-            <div className="w-10 h-10 flex items-center justify-center rounded-xl border border-border text-zinc-500 bg-[var(--color-surface)]">
-               <LayoutGrid size={18} />
-            </div>
-          )}
         </div>
 
         {/* View Switcher */}
         {!selectedCategory ? (
-          // --- CATALOG VIEW (CATEGORIES) ---
-          <div className="space-y-3 animate-fade-in">
+          // --- CATALOG VIEW (FOLDERS) ---
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 animate-fade-in">
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className="w-full cursor-card p-5 rounded-2xl flex items-center justify-between active:scale-[0.98]"
+                className="cursor-card-bordered p-3 flex items-center gap-3 hover:bg-surface-hover group transition-all"
               >
-                <div className="flex items-center gap-5">
-                  <div className="w-12 h-12 rounded-xl bg-[var(--color-surface-hover)] border border-border flex items-center justify-center text-zinc-300">
-                    <cat.icon size={20} strokeWidth={1.5} />
-                  </div>
-                  <div className="text-left">
-                    <h3 className="text-base font-semibold text-white mb-0.5">{cat.name}</h3>
-                    <p className="text-xs text-zinc-500">{cat.description}</p>
-                  </div>
+                <Folder size={18} className="text-blue-400 fill-blue-400/20" />
+                <div className="flex-1 text-left">
+                   <div className="text-xs font-medium text-zinc-200 group-hover:text-white">{cat.name}</div>
+                   <div className="text-[10px] text-zinc-500">{cat.count} items</div>
                 </div>
-                
-                <ChevronRight size={18} className="text-zinc-500" />
+                <ChevronRight size={14} className="text-zinc-600 group-hover:text-zinc-400" />
               </button>
             ))}
           </div>
         ) : (
-          // --- DETAIL VIEW (SKINS GRID) ---
-          <div className="grid grid-cols-2 gap-4 animate-slide-up">
+          // --- DETAIL VIEW (FILES GRID) ---
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 animate-slide-up">
             {currentSkins.map((skin) => (
               <div 
                 key={skin.id}
-                className="cursor-card flex flex-col p-3 rounded-2xl"
+                className="cursor-card-bordered p-2 flex flex-col group hover:border-zinc-600 transition-colors"
               >
                 {/* Preview Placeholder */}
-                <div className={`aspect-[3/4] w-full rounded-xl ${skin.image} mb-3 relative overflow-hidden ring-1 ring-white/5`}>
-                  
-                  {/* Rarity Dot */}
-                  <div className={`absolute top-3 left-3 w-1.5 h-1.5 rounded-full ${
-                        skin.rarity === 'legendary' ? 'bg-yellow-500' :
-                        skin.rarity === 'epic' ? 'bg-purple-500' :
-                        skin.rarity === 'rare' ? 'bg-blue-500' :
-                        'bg-zinc-500'
-                     }`}></div>
+                <div className={`aspect-square w-full rounded ${skin.image} mb-2 relative overflow-hidden flex items-center justify-center bg-zinc-900`}>
+                  <File size={24} className="text-zinc-700" />
                   
                   {isSubscribed && (
-                     <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white p-1 rounded-md border border-[var(--color-border)]">
-                        <Crown size={10} fill="currentColor" className="text-yellow-400" />
+                     <div className="absolute top-1 right-1 text-yellow-500">
+                        <Crown size={10} fill="currentColor" />
                      </div>
                   )}
                 </div>
                 
-                <div className="mb-3">
-                  <div className="flex items-center justify-between mb-1">
-                     <h3 className="font-semibold text-white text-sm truncate">{skin.name}</h3>
-                  </div>
-                  <div className="flex items-center justify-between">
-                     <span className="text-[10px] text-zinc-500 capitalize">{skin.rarity}</span>
-                  </div>
+                <div className="mb-2">
+                   <div className="text-xs font-medium text-zinc-300 truncate font-mono">{skin.name}</div>
+                   <div className="flex items-center justify-between mt-1">
+                      <span className={`text-[9px] px-1 rounded border ${
+                         skin.rarity === 'legendary' ? 'border-yellow-500/30 text-yellow-500' :
+                         skin.rarity === 'epic' ? 'border-purple-500/30 text-purple-500' :
+                         skin.rarity === 'rare' ? 'border-blue-500/30 text-blue-500' :
+                         'border-zinc-700 text-zinc-500'
+                      }`}>
+                         {skin.rarity}
+                      </span>
+                   </div>
                 </div>
 
                 {/* Action Button */}
-                <button className={`w-full py-3 rounded-xl font-medium text-xs flex items-center justify-center gap-2 transition-all mt-auto active:scale-[0.98] ${
+                <button className={`w-full py-1.5 rounded text-[10px] font-medium transition-all mt-auto ${
                   isSubscribed
-                    ? 'cursor-button-secondary'
-                    : 'cursor-button'
+                    ? 'bg-zinc-800 text-white hover:bg-zinc-700'
+                    : 'bg-white text-black hover:bg-zinc-200'
                 }`}>
                   {isSubscribed ? (
-                    'Выбрать'
+                    'Установить'
                   ) : (
                     <>
-                      <span>{skin.price} SY</span>
+                      Купить за {skin.price} SY
                     </>
                   )}
                 </button>

@@ -20,7 +20,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ currentPage, setPag
           }`}
         >
           <ShoppingBag size={13} />
-          <span>Marketplace</span>
+          <span>Магазин</span>
         </button>
 
         <button
@@ -30,7 +30,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ currentPage, setPag
           }`}
         >
           <LifeBuoy size={13} />
-          <span>AI Chat</span>
+          <span>Поддержка</span>
         </button>
 
         <button
@@ -40,7 +40,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ currentPage, setPag
           }`}
         >
           <User size={13} />
-          <span>User</span>
+          <span>Профиль</span>
         </button>
 
         <div className="flex-grow" />

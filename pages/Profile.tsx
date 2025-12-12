@@ -30,11 +30,11 @@ const Profile: React.FC = () => {
     <div className="w-full min-h-screen bg-background pt-safe-top pb-24 font-sans text-sm">
        {/* Settings Header - Tab Style */}
        <div className="border-b border-border bg-background sticky top-0 z-10 px-4 pt-4 pb-0">
-          <h1 className="text-lg font-medium text-white mb-4">Settings</h1>
-          <div className="flex gap-6 text-[13px]">
-             <button className="pb-2 border-b-2 border-accent text-white font-medium">General</button>
-             <button className="pb-2 border-b-2 border-transparent text-muted hover:text-zinc-300 transition-colors">Account</button>
-             <button className="pb-2 border-b-2 border-transparent text-muted hover:text-zinc-300 transition-colors">Billing</button>
+          <h1 className="text-lg font-medium text-white mb-4">Настройки</h1>
+          <div className="flex gap-6 text-[13px] overflow-x-auto no-scrollbar">
+             <button className="pb-2 border-b-2 border-accent text-white font-medium whitespace-nowrap">Общие</button>
+             <button className="pb-2 border-b-2 border-transparent text-muted hover:text-zinc-300 transition-colors whitespace-nowrap">Аккаунт</button>
+             <button className="pb-2 border-b-2 border-transparent text-muted hover:text-zinc-300 transition-colors whitespace-nowrap">Биллинг</button>
           </div>
        </div>
 
@@ -42,15 +42,15 @@ const Profile: React.FC = () => {
           
           {/* Section: Profile */}
           <section>
-             <h2 className="text-[13px] font-medium text-white mb-4 border-b border-border pb-2">User Profile</h2>
+             <h2 className="text-[13px] font-medium text-white mb-4 border-b border-border pb-2">Профиль пользователя</h2>
              <div className="flex items-start gap-6">
-                <div className="w-16 h-16 rounded-full bg-surface border border-border overflow-hidden">
+                <div className="w-16 h-16 rounded-full bg-surface border border-border overflow-hidden shrink-0">
                    {user?.photo_url && <img src={user.photo_url} alt="Avatar" className="w-full h-full object-cover" />}
                 </div>
-                <div className="flex-1 space-y-4">
+                <div className="flex-1 space-y-4 min-w-0">
                    <div className="grid grid-cols-1 gap-4">
                       <div className="space-y-1.5">
-                         <label className="text-xs text-zinc-500">Display Name</label>
+                         <label className="text-xs text-zinc-500">Отображаемое имя</label>
                          <input 
                            disabled 
                            value={`${user?.first_name || ''} ${user?.last_name || ''}`}
@@ -65,7 +65,7 @@ const Profile: React.FC = () => {
                               value={user?.id || ''}
                               className="cursor-input w-full px-3 py-1.5 font-mono opacity-60 cursor-not-allowed" 
                             />
-                            <button onClick={handleCopyId} className="cursor-button-secondary px-3">
+                            <button onClick={handleCopyId} className="cursor-button-secondary px-3 shrink-0">
                                {copied ? <Check size={14} className="text-green-400" /> : <Copy size={14} />}
                             </button>
                          </div>
@@ -77,16 +77,16 @@ const Profile: React.FC = () => {
 
           {/* Section: Integrations */}
           <section>
-             <h2 className="text-[13px] font-medium text-white mb-4 border-b border-border pb-2">Integrations</h2>
+             <h2 className="text-[13px] font-medium text-white mb-4 border-b border-border pb-2">Интеграции</h2>
              <div className="space-y-4">
-                <div className="flex items-start justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                    <div className="space-y-1">
-                      <div className="text-sm text-zinc-200">Steam Connection</div>
+                      <div className="text-sm text-zinc-200">Steam Подключение</div>
                       <div className="text-xs text-zinc-500 max-w-xs">
-                         Link your Steam account to automatically receive purchased items on the server.
+                         Привяжите аккаунт Steam для автоматического получения покупок на сервере.
                       </div>
                    </div>
-                   <div className="w-64">
+                   <div className="w-full sm:w-64">
                       <input 
                         placeholder="STEAM_0:1:..." 
                         value={steamId}
@@ -103,31 +103,31 @@ const Profile: React.FC = () => {
 
           {/* Section: Application */}
           <section>
-             <h2 className="text-[13px] font-medium text-white mb-4 border-b border-border pb-2">Application</h2>
+             <h2 className="text-[13px] font-medium text-white mb-4 border-b border-border pb-2">Приложение</h2>
              <div className="flex items-center justify-between py-2">
-                <span className="text-sm text-zinc-300">Theme</span>
+                <span className="text-sm text-zinc-300">Тема</span>
                 <select className="bg-surface border border-border text-xs text-white rounded px-2 py-1 outline-none">
                    <option>Cursor Dark</option>
                 </select>
              </div>
              <div className="flex items-center justify-between py-2">
-                <span className="text-sm text-zinc-300">Language</span>
+                <span className="text-sm text-zinc-300">Язык</span>
                 <select className="bg-surface border border-border text-xs text-white rounded px-2 py-1 outline-none">
-                   <option>Russian</option>
+                   <option>Русский</option>
                 </select>
              </div>
              <div className="flex items-center justify-between py-2">
-                <span className="text-sm text-zinc-300">Version</span>
+                <span className="text-sm text-zinc-300">Версия</span>
                 <span className="text-xs font-mono text-zinc-500">0.4.2-beta</span>
              </div>
           </section>
 
           {/* Save Action */}
           {isDirty && (
-             <div className="fixed bottom-12 right-6 animate-slide-up">
+             <div className="fixed bottom-14 right-6 animate-slide-up z-20">
                 <button className="cursor-button px-4 py-2 shadow-lg flex items-center gap-2">
                    <Save size={14} />
-                   <span>Save Changes</span>
+                   <span>Сохранить</span>
                 </button>
              </div>
           )}
