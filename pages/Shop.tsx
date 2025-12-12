@@ -28,7 +28,7 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
   // --- HISTORY VIEW ---
   if (showHistory) {
     return (
-      <div className="w-full min-h-screen pt-safe-top pt-4 pb-24 px-4 bg-background animate-fade-in">
+      <div className="w-full min-h-screen pt-safe-top pt-4 pb-24 px-4 bg-background">
         <div className="max-w-md mx-auto">
           <div className="flex items-center gap-3 mb-8">
             <button 
@@ -43,12 +43,12 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
           <div className="space-y-2">
             <div className="cursor-card p-4 rounded-xl flex items-center justify-between group">
               <div className="flex items-center gap-4">
-                <div className="p-2 rounded-lg bg-white/5 text-white/70 group-hover:text-white transition-colors">
+                <div className="p-2 rounded-lg border border-border text-white/70 group-hover:text-white transition-colors">
                   <Plus size={16} />
                 </div>
                 <div>
                   <h3 className="text-sm font-medium text-white">Пополнение</h3>
-                  <span className="text-xs text-zinc-500">10.12.2025 • GM Donate</span>
+                  <span className="text-xs text-muted">10.12.2025 • GM Donate</span>
                 </div>
               </div>
               <span className="text-sm font-medium text-white">+500 SY</span>
@@ -56,22 +56,22 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
             
             <div className="cursor-card p-4 rounded-xl flex items-center justify-between group">
               <div className="flex items-center gap-4">
-                <div className="p-2 rounded-lg bg-white/5 text-white/70 group-hover:text-white transition-colors">
+                <div className="p-2 rounded-lg border border-border text-white/70 group-hover:text-white transition-colors">
                   <ShoppingBag size={16} />
                 </div>
                 <div>
                   <h3 className="text-sm font-medium text-white">SYSub Premium</h3>
-                  <span className="text-xs text-zinc-500">05.12.2025 • Подписка</span>
+                  <span className="text-xs text-muted">05.12.2025 • Подписка</span>
                 </div>
               </div>
-              <span className="text-sm font-medium text-zinc-400">-100 SY</span>
+              <span className="text-sm font-medium text-muted">-100 SY</span>
             </div>
             
             <div className="mt-8 p-4 rounded-xl border border-dashed border-border text-center">
-              <p className="text-xs text-zinc-500 mb-3">Не нашли транзакцию?</p>
+              <p className="text-xs text-muted mb-3">Не нашли транзакцию?</p>
               <button 
                 onClick={() => setPage?.(Page.TICKETS)}
-                className="text-xs font-medium text-white bg-white/5 border border-border px-4 py-2 rounded-lg hover:bg-white/10 transition-colors"
+                className="cursor-button-secondary text-xs font-medium px-4 py-2 rounded-lg"
               >
                 Написать в поддержку
               </button>
@@ -85,7 +85,7 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
   // --- TOP UP VIEW ---
   if (showTopUp) {
     return (
-      <div className="w-full min-h-screen pt-safe-top pt-4 pb-24 px-4 bg-background animate-fade-in">
+      <div className="w-full min-h-screen pt-safe-top pt-4 pb-24 px-4 bg-background">
         <div className="max-w-md mx-auto">
           <div className="flex items-center gap-3 mb-6">
             <button 
@@ -101,15 +101,15 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
              <div className="absolute top-0 right-0 p-4 opacity-5">
                 <CreditCard size={64} className="text-white" />
              </div>
-            <div className="text-xs text-zinc-500 mb-2 font-medium tracking-wide uppercase">Баланс</div>
-            <div className="text-4xl font-light text-white tracking-tighter">1,250 <span className="text-zinc-600 text-2xl">SY</span></div>
+            <div className="text-xs text-muted mb-2 font-medium tracking-wide uppercase">Баланс</div>
+            <div className="text-4xl font-light text-white tracking-tighter">1,250 <span className="text-muted text-2xl">SY</span></div>
           </div>
 
           <div className="grid grid-cols-2 gap-3 mb-8">
             {[100, 300, 500, 1000, 2500, 5000].map((amount) => (
               <button key={amount} className="cursor-card p-4 text-center rounded-xl active:scale-[0.98]">
                 <div className="text-lg font-semibold text-white mb-1">{amount} SY</div>
-                <div className="text-xs text-zinc-500">{amount} ₽</div>
+                <div className="text-xs text-muted">{amount} ₽</div>
               </button>
             ))}
           </div>
@@ -131,7 +131,7 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
 
   // --- MAIN SHOP VIEW ---
   return (
-    <div className="w-full min-h-screen pt-safe-top pt-6 pb-24 px-4 bg-background animate-fade-in">
+    <div className="w-full min-h-screen pt-safe-top pt-6 pb-24 px-4 bg-background">
       <div className="max-w-md mx-auto">
         
         {/* Header */}
@@ -149,7 +149,7 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
             </div>
             <button 
               onClick={() => setShowHistory(true)}
-              className="w-9 h-9 flex items-center justify-center rounded-lg border border-border text-zinc-400 hover:text-white hover:border-border-hover transition-colors"
+              className="w-9 h-9 flex items-center justify-center rounded-lg border border-border text-muted hover:text-white hover:border-border-hover transition-colors"
             >
               <History size={18} strokeWidth={1.5} />
             </button>
@@ -162,14 +162,14 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
           className="cursor-card relative overflow-hidden rounded-2xl p-6 mb-6 cursor-pointer"
         >
           <div className="flex items-start justify-between mb-6">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-[11px] font-semibold border border-border bg-white/5 text-white">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-[11px] font-semibold border border-border text-white">
               <Star size={12} />
               <span>Подписка</span>
             </div>
-            <ArrowUpRight size={18} className="text-zinc-400" />
+            <ArrowUpRight size={18} className="text-muted" />
           </div>
           <h3 className="text-xl font-semibold text-white mb-2 tracking-tight">SYSub Premium</h3>
-          <p className="text-zinc-400 text-sm leading-relaxed">
+          <p className="text-muted text-sm leading-relaxed">
             Эксклюзивный контент, ранний доступ и специальные предложения.
           </p>
         </div>
@@ -180,30 +180,30 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
           className="cursor-card p-5 mb-6 rounded-2xl flex items-center justify-between cursor-pointer"
         >
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center text-zinc-300 border border-border bg-[var(--color-surface-hover)]">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center text-muted border border-border">
               <Box size={18} />
             </div>
             <div>
               <h3 className="text-sm font-semibold text-white">Каталог скинов</h3>
-              <p className="text-xs text-zinc-500 mt-0.5">Осмотр моделей и покупка</p>
+              <p className="text-xs text-muted mt-0.5">Осмотр моделей и покупка</p>
             </div>
           </div>
-          <ChevronRight size={16} className="text-zinc-500" />
+          <ChevronRight size={16} className="text-muted" />
         </div>
 
         {/* Daily Case Section */}
         <div>
           <div className="flex items-center gap-2 mb-4 px-1">
-            <h3 className="font-medium text-zinc-600 text-xs tracking-widest uppercase">Бонусы</h3>
+            <h3 className="font-medium text-muted text-xs tracking-widest uppercase">Бонусы</h3>
           </div>
           
           <div 
             onClick={handleOpenCase}
             className={`cursor-card rounded-2xl p-1 group ${dailyCaseClaimed ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer hover:border-border-hover'}`}
           >
-            <div className="rounded-xl p-4 flex items-center gap-4 bg-[var(--color-surface-hover)]">
+            <div className="rounded-xl p-4 flex items-center gap-4">
               <div className={`w-12 h-12 rounded-lg flex items-center justify-center border transition-colors ${
-                dailyCaseClaimed ? 'bg-[var(--color-surface)] border-border text-zinc-500' : 'bg-[var(--color-accent)] text-white border-[var(--color-accent)]'
+                dailyCaseClaimed ? 'bg-[var(--color-surface)] border-border text-muted' : 'bg-[var(--color-accent)] text-white border-[var(--color-accent)]'
               }`}>
                 <Gift size={20} strokeWidth={1.5} />
               </div>
@@ -217,7 +217,7 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
                     <span className="w-1.5 h-1.5 bg-[var(--color-accent)] rounded-full"></span>
                   )}
                 </div>
-                <p className="text-xs text-zinc-500 font-light">
+                <p className="text-xs text-muted font-light">
                   {dailyCaseClaimed 
                     ? 'Доступно через 24ч' 
                     : 'Бесплатное открытие'}
@@ -225,9 +225,9 @@ const Shop: React.FC<ShopProps> = ({ setPage }) => {
               </div>
 
               {dailyCaseClaimed ? (
-                <Lock size={16} className="text-zinc-600" />
+                <Lock size={16} className="text-muted" />
               ) : (
-                <ChevronRight size={16} className="text-zinc-500" />
+                <ChevronRight size={16} className="text-muted" />
               )}
             </div>
           </div>

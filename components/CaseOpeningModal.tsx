@@ -92,11 +92,11 @@ const CaseOpeningModal: React.FC<CaseOpeningModalProps> = ({ isOpen, onClose }) 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-xl p-4 animate-fade-in">
-      <div className="w-full max-w-lg bg-[var(--color-surface)] border border-[var(--color-border)] rounded-3xl overflow-hidden flex flex-col relative shadow-2xl animate-scale-in">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4">
+      <div className="w-full max-w-lg bg-background border border-border rounded-3xl overflow-hidden flex flex-col relative shadow-2xl">
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 text-zinc-400 hover:text-white transition-colors bg-white/5 rounded-full p-2"
+          className="absolute top-4 right-4 z-20 text-muted hover:text-white transition-colors bg-surface rounded-full p-2 border border-border"
         >
           <X size={16} />
         </button>
@@ -105,11 +105,11 @@ const CaseOpeningModal: React.FC<CaseOpeningModalProps> = ({ isOpen, onClose }) 
         <div className="relative min-h-[400px] flex flex-col justify-center items-center p-6">
           
           {showWinScreen && winner ? (
-            <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-[color:rgba(18,21,28,0.95)] backdrop-blur-sm animate-fade-in p-6">
+            <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-background p-6">
               <div className="text-center w-full">
-                <div className="text-zinc-500 text-xs font-mono mb-6 uppercase tracking-widest">Новый предмет</div>
+                <div className="text-muted text-xs font-mono mb-6 uppercase tracking-widest">Новый предмет</div>
                 
-                <div className={`w-48 h-48 mx-auto mb-8 rounded-2xl border ${RARITY_COLORS[winner.rarity]} flex items-center justify-center relative bg-[var(--color-surface-hover)]`}>
+                <div className={`w-48 h-48 mx-auto mb-8 rounded-2xl border ${RARITY_COLORS[winner.rarity]} flex items-center justify-center relative bg-surface`}>
                   <Gift size={64} className="text-white" strokeWidth={1} />
                 </div>
                 
@@ -118,7 +118,7 @@ const CaseOpeningModal: React.FC<CaseOpeningModalProps> = ({ isOpen, onClose }) 
                   winner.rarity === 'legendary' ? 'text-yellow-500' :
                   winner.rarity === 'epic' ? 'text-purple-500' :
                   winner.rarity === 'rare' ? 'text-blue-500' :
-                  'text-zinc-500'
+                  'text-muted'
                 }`}>
                   {winner.rarity}
                 </p>
@@ -135,13 +135,13 @@ const CaseOpeningModal: React.FC<CaseOpeningModalProps> = ({ isOpen, onClose }) 
             <>
               <div className="text-center mb-10">
                 <h2 className="text-xl font-medium text-white mb-2 tracking-tight">Ежедневный кейс</h2>
-                <p className="text-zinc-500 text-sm font-light">Испытай удачу и получи эксклюзивные скины</p>
+                <p className="text-muted text-sm font-light">Испытай удачу и получи эксклюзивные скины</p>
               </div>
 
               {/* Roulette Window */}
               <div className="relative h-32 w-full flex items-center overflow-hidden mb-10">
                 {/* Center Indicator */}
-                <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-white/70 z-20 transform -translate-x-1/2"></div>
+                <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-primary z-20 transform -translate-x-1/2"></div>
 
                 <div 
                   ref={scrollRef}
@@ -150,10 +150,10 @@ const CaseOpeningModal: React.FC<CaseOpeningModalProps> = ({ isOpen, onClose }) 
                   {rouletteItems.map((item, index) => (
                     <div 
                       key={index}
-                      className={`flex-shrink-0 w-28 h-28 bg-[var(--color-surface-hover)] border ${RARITY_COLORS[item.rarity]} rounded-xl flex flex-col items-center justify-center relative overflow-hidden`}
+                      className={`flex-shrink-0 w-28 h-28 bg-surface border ${RARITY_COLORS[item.rarity]} rounded-xl flex flex-col items-center justify-center relative overflow-hidden`}
                     >
                       <div className={`absolute inset-0 ${item.image} opacity-10`}></div>
-                      <Box size={24} className="text-zinc-400 mb-3 relative z-10" strokeWidth={1.5} />
+                      <Box size={24} className="text-muted mb-3 relative z-10" strokeWidth={1.5} />
                       <span className="text-[10px] font-medium text-zinc-300 text-center px-1 relative z-10 leading-tight tracking-tight">{item.name}</span>
                     </div>
                   ))}
@@ -166,7 +166,7 @@ const CaseOpeningModal: React.FC<CaseOpeningModalProps> = ({ isOpen, onClose }) 
                 disabled={isOpening}
                 className={`w-full py-4 rounded-xl font-medium text-sm transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 ${
                   isOpening 
-                    ? 'bg-[var(--color-surface-hover)] text-zinc-500 cursor-not-allowed border border-[var(--color-border)]' 
+                    ? 'bg-surface text-muted cursor-not-allowed border border-border' 
                     : 'cursor-button'
                 }`}
               >

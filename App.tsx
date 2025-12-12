@@ -24,13 +24,13 @@ const AppContent: React.FC = () => {
       tg.expand();
       
       // Set header color to match app background
-      tg.setHeaderColor('#0b0d10');
-      tg.setBackgroundColor('#0b0d10');
+      tg.setHeaderColor('#000000');
+      tg.setBackgroundColor('#000000');
       // Set bottom bar color if supported (for full immersion)
       // @ts-ignore
       if (tg.setBottomBarColor) {
         // @ts-ignore
-        tg.setBottomBarColor('#0b0d10');
+        tg.setBottomBarColor('#000000');
       }
     }
   }, []);

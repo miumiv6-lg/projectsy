@@ -44,7 +44,7 @@ const renderInline = (text: string): React.ReactNode[] => {
         nodes.push(
           <code
             key={`code-${i}`}
-            className="font-mono text-[12px] bg-white/5 px-1 py-0.5 rounded border border-[var(--color-border)]"
+            className="font-mono text-[12px] bg-surface px-1 py-0.5 rounded border border-[var(--color-border)]"
           >
             {code}
           </code>

@@ -3,49 +3,24 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #0b0d10;
-  --color-surface: #12151c;
-  --color-surface-hover: #171b24;
+  --color-background: #000000;
+  --color-surface: #111111;
+  --color-surface-hover: #1a1a1a;
   
-  --color-border: #232a36;
-  --color-border-hover: #2f394a;
+  --color-border: #222222;
+  --color-border-hover: #333333;
   
-  --color-primary: #f5f7fb;
-  --color-primary-foreground: #0b0d10;
+  --color-primary: #ffffff;
+  --color-primary-foreground: #000000;
 
-  --color-accent: #2aabee;
-  --color-accent-hover: #1f9ad6;
+  --color-accent: #3399ff;
+  --color-accent-hover: #297acc;
 
-  --color-muted: #a2aabb;
-  --color-muted-foreground: #6c7486;
+  --color-muted: #888888;
+  --color-muted-foreground: #666666;
 
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-
-  --animate-fade-in: fade-in 0.2s ease-out forwards;
-  --animate-slide-up: slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  --animate-scale-in: scale-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  --animate-pulse-slow: pulse-slow 3s infinite ease-in-out;
-
-  @keyframes fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes slide-up {
-    from { transform: translateY(8px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-  
-  @keyframes scale-in {
-    from { transform: scale(0.97); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-  }
-
-  @keyframes pulse-slow {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
-  }
 }
 
 /* Base */
@@ -73,59 +48,52 @@ body {
   .cursor-card {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
-    transition: background-color 0.15s ease-out, border-color 0.15s ease-out;
+    transition: none;
   }
 
-  .cursor-card:hover {
-    border-color: var(--color-border-hover);
+  .cursor-card:active {
     background: var(--color-surface-hover);
+    border-color: var(--color-border-hover);
   }
 
   .cursor-button {
     background: var(--color-accent);
     color: #ffffff;
-    border: 1px solid transparent;
-    transition: background-color 0.15s ease-out, transform 0.1s ease-out;
+    border: none;
+    transition: opacity 0.2s ease;
   }
   
-  .cursor-button:hover {
-    background: var(--color-accent-hover);
-  }
-
   .cursor-button:active {
-    transform: scale(0.98);
+    opacity: 0.8;
   }
 
   .cursor-button-secondary {
-    background: transparent;
+    background: var(--color-surface);
     border: 1px solid var(--color-border);
-    color: var(--color-muted);
-    transition: background-color 0.15s ease-out, border-color 0.15s ease-out, color 0.15s ease-out;
+    color: var(--color-primary);
+    transition: background-color 0.2s ease;
   }
 
-  .cursor-button-secondary:hover {
-    border-color: var(--color-border-hover);
-    color: var(--color-primary);
-    background: rgba(255, 255, 255, 0.04);
+  .cursor-button-secondary:active {
+    background: var(--color-surface-hover);
   }
 
   .cursor-input {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     color: white;
-    transition: background-color 0.15s ease-out, border-color 0.15s ease-out;
+    border-radius: 8px; /* Standardize radius */
   }
 
   .cursor-input:focus {
     outline: none;
-    border-color: var(--color-border-hover);
-    background: var(--color-surface-hover);
+    border-color: var(--color-accent);
   }
 
-  .glass-panel {
-    background: rgba(11, 13, 16, 0.88);
-    backdrop-filter: blur(16px);
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  /* Replaced glass-panel with a solid flat panel */
+  .flat-panel {
+    background: var(--color-background);
+    border-top: 1px solid var(--color-border);
   }
   
   .no-scrollbar::-webkit-scrollbar {
